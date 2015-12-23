@@ -1,0 +1,143 @@
+<div class="modal-header">
+  <h3 class="modal-title">Let's Chat!</h3>
+</div>
+<div class="modal-body">
+  <div 
+    ng-hide="modalPlayPracticeSetCtrl.showComplete">
+    <h3
+      class="center"
+      popover-trigger="mouseenter"
+      popover-title="What now?"
+      popover="After a question is played click the microphone to record and answer">
+      <i class="fa fa-2x fa-comments"></i>
+      <span ng-show="modalPlayPracticeSetCtrl.practiceSession.lastQuestion">Last Question!</span>
+    </h3>
+  </div>
+
+  <!-- AUDIO PLAYER -->
+  <div 
+    ng-hide="modalPlayPracticeSetCtrl.showComplete"
+    id="centered-player">
+        <div class="inline-block">
+          <div class="inline-block">
+            <div class="">
+              <user-pin user="modalPlayPracticeSetCtrl.practiceSession.currentQuestion.currentRecording.submitted_by">
+              </user-pin>
+            </div>
+            <div class="">
+              <h5><span>asks</span></h5>
+            </div>
+          </div>
+
+          <div class="bubble-left inline-block">
+            <p>{{ modalPlayPracticeSetCtrl.practiceSession.currentQuestion.text.translations[modalPlayPracticeSetCtrl.learningCode] }}</p>
+              <div 
+                ng-show="modalPlayPracticeSetCtrl.showPlayer"
+                class="player inline-block padded">
+                <audio-player 
+                  on-play="modalPlayPracticeSetCtrl.playerStarted()"
+                  on-stop="modalPlayPracticeSetCtrl.playerFinished()"
+                  context="question"
+                  auto-play="true"
+                  url="{{ modalPlayPracticeSetCtrl.audioUrl }}">
+                </audio-player>
+              </div>
+          </div>
+        </div>
+
+    <!-- recorder -->
+    <div
+      ng-show="modalPlayPracticeSetCtrl.showRecorder"
+      class="recorder inline-block">
+      <recorder 
+        question="modalPlayPracticeSetCtrl.recordingQuestion" 
+        question-type="object"
+        context="answer"
+        auto-play="true"
+        language="{{ modalPlayPracticeSetCtrl.learningCode }}"
+        on-start-record="modalPlayPracticeSetCtrl.recordingStarted()"
+        on-stop-record="modalPlayPracticeSetCtrl.recordingFinished()"
+        on-save="modalPlayPracticeSetCtrl.audioSaved(newRecording)">
+      </recorder>
+    </div>
+    <!-- end recorder -->
+
+  </div>
+  <!-- END AUDIO PLAYER -->
+
+  <div>
+    <a
+     ng-show="modalPlayPracticeSetCtrl.speechDetection"
+     ng-click="modalPlayPracticeSetCtrl.toggleSpeechDetection()"
+     class="fa fa-toggle-on nounderline"></a>
+    <a
+     ng-hide="modalPlayPracticeSetCtrl.speechDetection"
+     ng-click="modalPlayPracticeSetCtrl.toggleSpeechDetection()"
+     class="fa fa-toggle-off nounderline"></a>
+    <span
+      popover="Enables speech detection to assist in proper pronunciation. 
+      While not perfect, its kind of fun!  Give a shot
+      before you start recording your response."
+      popover-trigger="mouseenter"
+      popover-title="Speech Detection"
+      class="date-sm"
+      >Speech Detection</span>
+  </div>
+ 
+  <h5
+    ng-show="modalPlayPracticeSetCtrl.showTranscription"
+    class="center">{{modalPlayPracticeSetCtrl.speechRecognitionResults}}</h5>
+
+  <div 
+    ng-show="modalPlayPracticeSetCtrl.showComplete">
+    <h3>Nice work!</h3>
+    <p>Now you can submit this practice session for grading and see how well you did.</p>
+    <div class="center">
+      <a
+        ng-click="$close()"
+        class="padded fa fa-3x fa-thumbs-down nounderline"></a>
+      <a
+        ng-click="modalPlayPracticeSetCtrl.savePracticeSession(); $close();"
+        class="padded fa fa-3x fa-thumbs-up nounderline"></a>
+      </div>
+  </div>
+   
+  <hr />
+
+  <a
+    ng-click="modalPlayPracticeSetCtrl.showQuestions = !modalPlayPracticeSetCtrl.showQuestions"
+    tooltip="Delete All Questions"
+    class="nounderline">
+      <i ng-hide="modalPlayPracticeSetCtrl.showQuestions" class="fa fa-plus-square-o"></i>
+      <i ng-show="modalPlayPracticeSetCtrl.showQuestions" class="fa fa-minus-square-o"></i>
+  </a>
+  <h4 class="inline-block">Questions ({{ modalPlayPracticeSetCtrl.playingPracticeSet.questions.length  }}) </h4>
+  <ul 
+    ng-show="modalPlayPracticeSetCtrl.showQuestions"
+    class="list-unstyled">
+    <li ng-repeat="question in modalPlayPracticeSetCtrl.playedQuestions">
+
+        <div class="">
+          <div class="inline-block">
+            <div class="pull-left">
+              <user-pin user="question.currentRecording.submitted_by">
+              </user-pin>
+            </div>
+            <div class="pull-right">
+              <h5><span>asks</span></h5>
+              <p class="date-sm">{{  question.currentRecording._created | niceDate }}</p> 
+            </div>
+          </div>
+
+          <div class="bubble-left inline-block">
+            <p>{{ question.text.translations[modalPlayPracticeSetCtrl.learningCode] }}</p>
+          </div>
+        </div>
+
+
+    </li><!-- end ng-repeat questions -->
+  </ul><!-- end question-list -->
+</div>
+<div class="modal-footer">
+  <button class="btn btn-default" ng-click="$close()">Cancel</button>      
+</div>

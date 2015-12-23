@@ -1,0 +1,64 @@
+<!-- AUDIO PLAYER -->
+<div id="centered-player">
+  <div
+    ng-show="audioPlayerCtrl.processing"
+    class="inline-block"
+    id="spinner">
+    <div id="block_1" class="spinner_block"></div>
+    <div id="block_2" class="spinner_block"></div>
+    <div id="block_3" class="spinner_block"></div>
+  </div>
+  <div 
+    class="inline-block">
+    <a
+      ng-show="audioPlayerCtrl.playingQuestion"
+      ng-click="audioPlayerCtrl.pauseQuestion()"
+      class="fa fa-2x fa-pause nounderline"></a>
+    <a
+      tooltip="play question"
+      ng-show="audioPlayerCtrl.showPlayQuestion"
+      ng-click="audioPlayerCtrl.playQuestion()"
+      class="fa fa-2x fa-play nounderline"></a>
+    <a
+      tooltip="play answer"
+      ng-show="audioPlayerCtrl.showPlayAnswer"
+      ng-click="audioPlayerCtrl.playAnswer()"
+      class="fa fa-2x fa-play nounderline"></a>
+    <a
+      ng-show="audioPlayerCtrl.playingAnswer"
+      ng-click="audioPlayerCtrl.pauseAnswer()"
+      class="fa fa-2x fa-pause nounderline"></a>
+  </div>
+
+  <div
+    ng-show="audioPlayerCtrl.timeline"
+    class="">
+    <div class="input-group">
+        <span 
+          tooltip="add timeline comment"
+          popup-placement="top"
+          popup-show="views/popover-timeline-comment.html"
+          class="input-group-addon timeline-input-group-addon">
+          <i class="fa fa-comment"></i>
+        </span>
+        <input 
+          class='form-control timeline-form-control' 
+          type=range 
+          min=0 
+          max=1 
+          step=0.01 
+          ng-model='audioPlayerCtrl.player.progress'>
+    </div>
+    <div class="col-sm-12">
+        <div class='timeline-comments-container'>
+          <comment-timeline 
+            class="timeline-comments" 
+            comments="audioPlayerCtrl.comments"
+            recording="audioPlayerCtrl.recording"
+            type="info"></progressbar> 
+        </div>
+    </div>
+  </div>
+
+</div>
+<!-- END AUDIO PLAYER -->

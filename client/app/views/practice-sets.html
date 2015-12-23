@@ -1,0 +1,78 @@
+<div class="container">
+
+  <h2>Practice Sets </h2>
+  <p><a 
+    ng-click="practiceSetsCtrl.showHelp()"
+    class="fa fa-question-circle nounderline"> <small>Help</small></a></p>
+  <p><a 
+    ng-click="practiceSetsCtrl.createPracticeSetModal()"
+    class="fa fa-plus-circle nounderline"> <small>Create Practice Set</small></a></p>
+  
+  <div id="practice-set-list-container"> 
+    <ul 
+      class="list-inline inline-block"
+      ng-repeat="practiceSet in practiceSetsCtrl.practiceSets track by practiceSet._id">
+
+      <li class="list-unstyled">
+        <div class="practice-set">
+        <h3 class="inline-block">{{ practiceSet.title }} </h3>
+        <a
+          ng-click="practiceSetsCtrl.removePracticeSet(practiceSet._id)"
+          class="fa fa-trash-o nounderline"></a>
+
+        <div class="practice-set-tools center">
+          <div class="btn-group">
+            <label 
+              ng-click="practiceSetsCtrl.playPracticeSetModal(practiceSet)"
+              class="btn btn-success fa fa-play nounderline"> Play</label>
+            <label 
+              ng-click="practiceSetsCtrl.schedulePracticeSetModal(practiceSet)"
+              class="btn btn-primary fa fa-calendar nounderline"> Schedule</label>
+          </div>
+        </div>
+        <div>
+          <a
+            ng-click="practiceSet.showQuestions = !practiceSet.showQuestions"
+            class="nounderline">
+              <i ng-hide="practiceSet.showQuestions" class="fa fa-plus-square-o"></i>
+              <i ng-show="practiceSet.showQuestions" class="fa fa-minus-square-o"></i>
+          </a>
+          <h6 class="inline-block">Preview Questions ({{ practiceSet.questions.length  }}) </h6>
+          <a
+            ng-click="practiceSet.clearQuestions()"
+            tooltip="Delete All Questions"
+            class="nounderline"><i class="fa fa-trash-o"></i></a>
+        </div>
+        <ul
+          ng-show="practiceSet.showQuestions"
+          class="practice-set-question-list list-unstyled">
+          <li class="row" ng-repeat="question in practiceSet.questions">
+            <question-card question="question">
+            </question-card>
+          </li><!-- end question-li -->
+        </ul>
+        </div>
+      </li><!-- end practice-set -->
+
+    </ul><!-- end practice-set-list -->
+  </div><!-- end practice-set-list-container -->
+
+</div><!-- end container -->
+
+<!-- Modal -->
+<div class="modal fade" id="add-practice-set-modal" tamodelex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">                                                                  
+        <div class="modal-content">                                                                      
+            <div class="modal-header">                                                                   
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>   
+                <h4 class="modal-title" id="myModalLabel">Add Practice Set</h4>                        
+            </div>
+            <div class="modal-body">
+
+            </div><!-- end modal-body -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->                                                                   
+    </div><!-- /.modal-dialog -->                                                                        
+</div><!-- /.modal --> 

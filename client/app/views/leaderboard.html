@@ -1,0 +1,23 @@
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h2 class="panel-title">Leaderboard</h2>
+    </div>
+    <div class="panel-body">
+      <ul class="leader-list list-unstyled">
+        <li ng-repeat="user in leaderboardCtrl.leaders">
+          <div class="row">
+            <div class="col-sm-2">
+              <user-pin user="user"></user-pin>
+            </div>
+            <div class="col-sm-3">
+              <h5>{{ user.username }}</h5>
+            </div>
+            <div class="col-sm-6 center" style="top: -20px">
+               <h2><strong>{{ user.points }}</strong>
+               <span class="small-text">points</span></h2>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>

@@ -1,0 +1,60 @@
+<div class="container">
+
+  <div class="col-sm-6 col-md-6 pull-right">
+    <form class="navbar-form" role="search">
+      <div class="input-group input-search">
+        <input
+          ng-model="questionsCtrl.searchText"
+          type="text" 
+          class="form-control" 
+          placeholder="Search">
+
+        <div class="input-group-btn">
+          <button
+            ng-click="questionsCtrl.search()"
+            class="btn btn-default" 
+            type="submit">
+            <i class="fa fa-search"></i>
+          </button>
+
+          <button 
+            tooltip="filter"
+            ng-click="questionsCtrl.showQuestionFilterModal()"
+            class="btn btn-default"> 
+            <i class="fa fa-filter"></i>
+          </button>
+
+        </div>
+
+      </div>
+    </form>
+  </div>
+
+  <h2 class="">Questions</h2>
+  <p><a 
+    ng-click="questionsCtrl.showHelp()"
+    class="fa fa-question-circle nounderline"> <small>Help</small></a></p>
+  <p><a 
+    ng-show="questionsCtrl.isAdmin" 
+    ng-click="questionsCtrl.createQuestionModal()"
+    class="fa fa-plus-circle nounderline"> <small>Add Question</small></a></p>
+  <p><a 
+    ng-show="questionsCtrl.isAdmin" 
+    ng-click="questionsCtrl.editTagsModal()"
+    class="fa fa-tags nounderline"> <small>Edit Tags</small></a></p>
+  
+  <ul 
+    when-scrolled="questionsCtrl.loadMoreQuestions()"
+    class="question-list list-unstyled"> 
+    <li 
+      class="question-list-item list-unstyled"
+      ng-repeat="question in questionsCtrl.questions">
+      <div class="col-md-6">
+        <question-card question="question">
+        </question-card>
+      </div>
+    </li><!-- end question-list -->
+  </ul><!-- end question-list-container -->
+
+</div><!-- end container -->
+

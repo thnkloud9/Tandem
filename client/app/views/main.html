@@ -1,0 +1,234 @@
+<div class="container">
+
+  <div id="welcome-continaer" ng-hide="isAuthenticated">
+    <h1>Welcome to TandemNet</h1>
+    <div class="row">
+      <div id="welcome-left" class="col-xs-12 col-sm- col-md-8">
+        <div class="row">
+          <div class"col-xs-12 col-sm-12 col-md-8"> 
+            <p>TandemNet allow you to set your own practice schedule, no matter the time of day or night, any where you are in the world, to practice speaking and understanding a foreign language through listening and speaking.  Connect to native speakers and meet new people through asyncronous audio communications.  Pick a partner (or several), or just practice with the community at large.</p>
+            <p><a class="btn btn-primary btn-lg" href="#/about" role="button">Learn more</a></p>
+          </div>
+        </div><!-- end welcome-left -->
+      </div><!-- end row -->
+
+      <div id="welcome-right" ng-controller="LoginCtrl as loginCtrl"> 
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-4">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h3 class="panel-title">
+                    Log in</h3>
+              </div>
+              <div class="panel-body">
+                <div class="row">
+                  <div class="col-xs-12 col-sm-12 col-md-12 login-box">
+                    <div ng-messages="messages"></div>
+                    <form role="form">
+                      <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                        <input type="text" class="form-control" 
+                            placeholder="Username" 
+                            ng-model="loginCtrl.username"
+                            required autofocus />
+                      </div>
+                      <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                        <input type="password" class="form-control" 
+                            placeholder="Password" 
+                            ng-model="loginCtrl.password"
+                            required />
+                      </div>
+                      <p><a href="#/lostpassword">Lost your password?</a></p>
+                      Don't have an account? <a href="#/signup">Sign up here</a>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-footer">
+                <div class="row">
+                  <div class="col-xs-6 col-sm-6 col-md-6">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" value="Remember">
+                        Remember me
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-xs-6 col-sm-6 col-md-6" >
+                    <button ng-click="loginCtrl.login()" type="button" class="btn btn-labeled btn-success">
+                    <span class="btn-label"><i class="glyphicon glyphicon-ok"></i></span>Login</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- end welcome-right -->
+    </div><!-- end row -->
+  </div><!-- end welcome container -->
+
+  <div class="container" ng-show="isAuthenticated">
+    <div class="row">
+      <div class="col-sm-12 col-md-4 pull-right">
+        <leaderboard></leaderboard> 
+      </div>
+
+      <div class="col-sm-12 col-md-8 toppad" >
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h2 class="panel-title">Getting Started</h2>
+          </div>
+          <div class="panel-body">
+            <div class="row">
+
+              <div class="col-sm-6">
+                
+                <div class="row">
+                  <div class="col-sm-8">
+                    <h3>Progress</h3>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-8">
+                    <h6><small>Profile Complete</small></h6>
+                    <progressbar 
+                      class="progress-striped active" 
+                      max="100"
+                      value="mainCtrl.user.percentComplete" 
+                      type="{{ mainCtrl.user.profileStatus }}">
+                      {{ mainCtrl.user.percentComplete }}%
+                    </progressbar>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-12">
+                    <h6>
+                      <a
+                        ng-hide="mainCtrl.user.percentComplete === 100"
+                        href="#/profile" 
+                        class="fa fa-plus-circle nounderline"> Add {{ mainCtrl.user.missing[0] }}</a>
+                    </h6>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-12">
+                    <h6>You have <span class="badge">{{ mainCtrl.user.points }}</span> points</h6>
+                    <h6
+                        ng-show="mainCtrl.user.points < 30">
+                      <a
+                        ng-click="mainCtrl.playIntroductionPracticeSetModal()"
+                        class="fa fa-plus-circle nounderline alert alert-danger"> Practice now to get more points!</a>
+                    </h6>
+                  </div> 
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <h6>You have <span class="badge">{{ mainCtrl.user.totalResponses }}</span> <a ng-click="mainCtrl.showMyResponses()" class="nounderline">responses</a></h6>
+                    <h6
+                        ng-show="mainCtrl.user.totalResponses < 30">
+                      <a
+                        href="#/questions" 
+                        class="fa fa-plus-circle nounderline"> Add question audio to get more responses!</a>
+                    </h6>
+                  </div> 
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <h6>You have <span class="badge">{{ mainCtrl.user.totalComments }}</span> <a ng-click="mainCtrl.showMyComments()" class="nounderline">comments</a></h6>
+                  </div> 
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <h6>You've recorded <span class="badge">{{ mainCtrl.user.totalQuestions }}</span> <a href="#/questions" class="nounderline">questions</a></h6>
+                    <h6
+                        ng-show="mainCtrl.user.totalQuestions < 30">
+                      <a
+                        href="#/questions" 
+                        class="fa fa-plus-circle nounderline"> Add question audio to get more question points!</a>
+                    </h6>
+                  </div> 
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-12">
+                    <h6>You've recorded <span class="badge">{{ mainCtrl.user.totalAnswers }}</span> answers</h6>
+                    <h6
+                        ng-show="mainCtrl.user.totalAnswers < 30">
+                      <a
+                        href="#/practice-sets" 
+                        class="fa fa-plus-circle nounderline"> Play a practice set to get more answer points!</a>
+                    </h6>
+                  </div> 
+                </div>
+              </div>
+            
+              <div class="col-sm-6">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <h3>What's next</h3>
+                  </div>
+                </div>
+
+                <div class="row bottom-border">
+                  <div class="col-sm-2">
+                    <i class="fa fa-4x fa-graduation-cap"></i>
+                  </div>
+                  <div class="col-sm-10">
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;Let our tutor build a practice for you.</p>
+                    <a 
+                      class="btn btn-success btn-sm pull-right"
+                      ng-click="mainCtrl.showTutorModal()">
+                      Start Tutor </a>
+                  </div>
+                </div>
+
+                <div class="row bottom-border">
+                  <div class="col-sm-2">
+                    <i class="fa fa-4x fa-comments"></i>
+                  </div>
+                  <div class="col-sm-10">
+                    <p>Start speaking now by answering some introduction questions.</p>
+                    <a 
+                      class="btn btn-success btn-sm pull-right"
+                      ng-click="mainCtrl.playIntroductionPracticeSetModal()">
+                      Practice Now </a>
+                  </div>
+                </div>
+
+                <div class="row bottom-border">
+                  <div class="col-sm-2">
+                    <i class="fa fa-4x fa-cloud"></i>
+                  </div>
+                  <div class="col-sm-10">
+                    <p>Create themed Practice Sets.</p>
+                    <a 
+                      class="btn btn-primary btn-sm pull-right"
+                      href="#/practice-sets">My Practice Sets</a>
+                  </div>
+                </div>
+
+                <div class="row bottom-border">
+                  <div class="col-sm-2">
+                    <i class="fa fa-4x fa-question-circle"></i>
+                  </div>
+                  <div class="col-sm-10">
+                    <p>Pick questions for your Practice Sets.</p>
+                    <a 
+                      class="btn btn-info btn-sm pull-right"
+                      href="#/questions">Pick Questions</a></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+          </div><!-- end panel-body -->
+        </div><!-- end panel -->
+      </div><!-- end col -->
+    </div><!-- end row -->
+  </div><!-- end container -->
+
+</div>

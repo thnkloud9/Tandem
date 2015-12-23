@@ -1,0 +1,100 @@
+<div class="container">
+  <div id="profile-container" class="row">
+
+    <div class="col-sm-12 col-md-4 pull-right">
+      <leaderboard></leaderboard> 
+    </div>
+
+    <div class="col-sm-12 col-md-8 toppad" >
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h2 class="panel-title">{{ usersCtrl.user.username }}</h2>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-3" align="center">
+
+              <img 
+                ng-show="usersCtrl.user.image"
+                alt="User Pic" 
+                src="data:image/png;base64,{{ usersCtrl.user.image }}" 
+                class="img-circle profile-img-md">
+              <i
+                ng-hide="usersCtrl.user.image"
+                ng-class="userPinCtrl.noImageClass" 
+                class="fa fa-4x fa-user user-pin-icon"></i>
+
+              <div class="emphasis">
+                <h2><strong> {{ usersCtrl.user.understandable }}% </strong></h2>
+                <p><small>Understandable</small></p>
+                <button class="btn btn-success btn-block">
+                  <span class="fa fa-thumbs-up"></span> Ratings </button>
+              </div>
+
+              <div class="text-left">
+                <span class="small-text">Member since: {{ usersCtrl.user._created | niceDate }}</span>
+              </div>
+              <div class="text-left">
+                <span class="small-text">Last Login: {{ usersCtrl.user.last_login | niceDate }}</span>
+              </div>
+              <div 
+                ng-show="usersCtrl.user.city &&  usersCtrl.user.country"
+                class="text-left">
+                <span class="small-text">{{ usersCtrl.user.city }},  {{ usersCtrl.user.country }}</span>
+              </div>
+               
+            </div>
+            
+            <div class="col-sm-9"> 
+              <div>
+                <div class="col-sm-4 center">
+                  <p><i class="fa fa-comments"></i> Speaks</p>
+                  <i class="fa-4x {{ usersCtrl.speaksFlagClass }}"></i>
+                </div>
+                <div class="col-sm-4 center">
+                  <p><i class="fa fa-graduation-cap"></i> Learning</p>
+                  <i class="fa-4x {{ usersCtrl.learningFlagClass }}"></i>  
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xs-12 divider text-center">
+                  <div class="col-xs-12 col-sm-3 emphasis">
+                    <h2><strong> {{ usersCtrl.user.points }} </strong></h2>
+                    <p><small>Points</small></p>
+                  </div>
+                  <div class="col-xs-12 col-sm-3 emphasis">
+                    <h2><strong> {{ usersCtrl.user.totalRecording }} </strong></h2>
+                    <p><small>Recording Submissions</small></p>
+                  </div>
+                  <div class="col-xs-12 col-sm-3 emphasis">
+                    <h2><strong> {{ usersCtrl.user.totalResponses }} </strong></h2>
+                    <p><small>Responses</small></p>
+                  </div>
+                  <div class="col-xs-12 col-sm-3 emphasis">
+                    <h2><strong> {{ usersCtrl.user.totalQuestions }} / {{ usersCtrl.questionsTotal }} </strong></h2>
+                    <p><small>Questions Recorded</small></p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xs-12 divider">
+                  <h4>Recent Activity</h4>
+                  <ul class="list-unstyled">
+                    <li ng-repeat="activity in usersCtrl.userActivities">
+                      <span class="fa fa-sm fa-clock-o date-sm"> {{ activity._created | niceDate }}</span>
+                      <span>{{ activity.action }}</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+          </div>
+        </div><!-- end panel body -->
+
+      </div><!-- end panel -->
+    </div><!-- end col -->
+
+  </div><!-- end row -->
+</div>

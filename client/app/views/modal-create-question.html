@@ -1,0 +1,28 @@
+<div class="modal-header">
+  <h3 class="modal-title">Create a Question</h3>
+</div>
+<div class="modal-body">
+  <div class="form-group">
+    <input 
+       ng-model="questionsCtrl.newQuestion.speaksText"
+       type="text" 
+       class="form-control input-lg" 
+       placeholder="{{questionsCtrl.speaksCode}} Text" 
+       tamodelex="3">
+  </div>
+  <div class="form-group">
+    <input 
+       ng-model="questionsCtrl.newQuestion.learningText"
+       type="text" 
+       class="form-control input-lg" 
+       placeholder="{{questionsCtrl.learningCode}} Text" 
+       tamodelex="3">
+  </div>
+</div>
+<div class="modal-footer">
+  <button 
+    ng-click="questionsCtrl.createQuestion(); $close();"
+    class="btn btn-success">Create</button>
+  <button class="btn btn-default" ng-click="$close()">Cancel</button>      
+</div>
+

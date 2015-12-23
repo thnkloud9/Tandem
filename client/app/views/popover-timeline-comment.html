@@ -1,0 +1,20 @@
+<div class="popover-timeline-comment">
+    <div class="timeline-comments-form">
+      <form>
+        <div class="form-group">
+          <textarea 
+            ng-model="audioPlayerCtrl.userComment"
+            placeholder="Enter your comment"
+            class="form-control input-small med-text"></textarea>
+        </div>
+        <button 
+          class="btn btn-xs btn-danger med-text" 
+          ng-click="hidePopover()">Cancel</button>
+        <button 
+          ng-click="audioPlayerCtrl.saveComment(); hidePopover()"
+          type="submit" 
+          class="btn btn-success btn-xs pull-right med-text">Submit</button>
+      </form>
+    </div>
+
+</div>

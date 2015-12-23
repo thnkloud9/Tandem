@@ -1,0 +1,215 @@
+<div class="container">
+
+  <div id="profile-container" class="row">
+    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xs-offset-0 col-sm-offset-0 col-md-offset-2 col-lg-offset-2 toppad" >
+   
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h2 class="panel-title">{{ profileCtrl.user.username }}</h2>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-3 col-lg-3 " align="center">
+
+              <img 
+                ng-show="profileCtrl.user.image"
+                alt="User Pic" 
+                src="data:image/png;base64,{{ profileCtrl.user.image }}" 
+                class="img-circle profile-img-md">
+              <i
+                ng-hide="profileCtrl.user.image"
+                ng-class="userPinCtrl.noImageClass" 
+                class="fa fa-4x fa-user user-pin-icon"></i>
+
+              <div class="text-left">
+                <a class="fa fa-thumbs-up nounderline"> My Ratings </a>
+                <a class="fa fa-question-circle nounderline"> My Questions </a>
+                <a
+                  ng-click="profileCtrl.showMyResponses()"
+                  class="fa fa-users"> My Responses </a>
+                <a class="fa fa-volume-up nounderline"> My Recordings </a>
+                <a class="fa fa-comments nounderline"> My Sessions </a>
+                <a 
+                  href="#/practice-sets"
+                  class="fa fa-comments nounderline"> My Sets </a>
+              </div>
+
+            </div>
+            
+            <div class=" col-md-9 col-lg-9 "> 
+              <table class="table table-user-information">
+                <tbody>
+                  <tr>
+                    <td>Speaks:</td>
+                    <td 
+                      ng-click="profileCtrl.editMode = !profileCtrl.editMode"
+                      ng-hide="profileCtrl.editMode">{{ profileCtrl.speaksText }}</td>
+                    <td ng-show="profileCtrl.editMode">
+                      <select 
+                        ng-model="profileCtrl.user.speaks"
+                        name="speaks"
+                        class="form-control"
+                        tamodelex="1" required>
+                        <option value="" selected disabled>Language Spoken</option>
+                        <option value="en">English</option>
+                        <option value="de">German</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Learning:</td>
+                    <td 
+                      ng-click="profileCtrl.editMode = !profileCtrl.editMode"
+                      ng-hide="profileCtrl.editMode">{{ profileCtrl.learningText }}</td>
+                    <td ng-show="profileCtrl.editMode">
+                      <select 
+                        ng-model="profileCtrl.user.learning"
+                        name="speaks"
+                        class="form-control "
+                        tamodelex="2" required>
+                        <option value="" selected disabled>Language Learning</option>
+                        <option value="de">German</option>
+                        <option value="en">English</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Member since:</td>
+                    <td>{{ profileCtrl.user._created | niceDate }}</td>
+                  </tr>
+                  <tr>
+                    <td>Gender</td>
+                    <td 
+                      ng-click="profileCtrl.editMode = !profileCtrl.editMode"
+                      ng-hide="profileCtrl.editMode">{{ profileCtrl.user.gender }}</td>
+                    <td ng-show="profileCtrl.editMode">
+                      <select 
+                        ng-model="profileCtrl.user.gender"
+                        name="gender"
+                        class="form-control "
+                        tamodelex="3">
+                        <option value="" selected disabled>Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr ng-hide="profileCtrl.editMode">
+                    <td>City</td>
+                    <td
+                      ng-click="profileCtrl.editMode = !profileCtrl.editMode">
+                      {{ profileCtrl.user.city }}
+                    </td>
+                  </tr>
+                  <tr ng-show="profileCtrl.editMode">
+                    <td>City</td>
+                    <td>
+                      <input 
+                        ng-model="profileCtrl.user.city"
+                        name="city"
+                        type="text" 
+                        class="form-control " 
+                        tamodelex="4">
+                    </td>
+                  </tr>
+                  <tr ng-hide="profileCtrl.editMode">
+                    <td>Country</td>
+                    <td
+                      ng-click="profileCtrl.editMode = !profileCtrl.editMode">
+                      {{ profileCtrl.user.country }}
+                    </td>
+                  </tr>
+                  <tr ng-show="profileCtrl.editMode">
+                    <td>Country</td>
+                    <td>
+                      <input 
+                        ng-model="profileCtrl.user.country"
+                        name="city"
+                        type="text" 
+                        class="form-control " 
+                        tamodelex="5">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Email</td>
+                    <td 
+                      ng-click="profileCtrl.editMode = !profileCtrl.editMode"
+                      ng-hide="profileCtrl.editMode">{{ profileCtrl.user.email }}</td>
+                    <td ng-show="profileCtrl.editMode">
+                      <input 
+                        ng-model="profileCtrl.user.email"
+                        name="email"
+                        type="text" 
+                        class="form-control " 
+                        tamodelex="6">
+                    </td>
+                  </tr>
+                    <td>Mobile</td>
+                    <td 
+                      ng-click="profileCtrl.editMode = !profileCtrl.editMode"
+                      ng-hide="profileCtrl.editMode">{{ profileCtrl.user.mobile }}</td>
+                    <td ng-show="profileCtrl.editMode">
+                      <input 
+                        ng-model="profileCtrl.user.mobile"
+                        international-phone-number
+                        preferred-countries="us, gb, de"
+                        name="mobile"
+                        type="text" 
+                        class="form-control " 
+                        tamodelex="7">
+                    </td>
+                  </tr>
+                 
+                </tbody>
+              </table>
+
+              <div class="pull-right">
+                <div class="btn-group dropup btn-block">
+                  <button type="button" class="btn btn-primary"><span class="fa fa-gear"></span> Options </button>
+                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <ul class="dropdown-menu text-left" role="menu">
+                    <li>
+                      <div 
+                        class="dropdown-link" 
+                        ng-file-select="" 
+                        ng-model="files" 
+                        ng-file-change="profileCtrl.updateProfileImage(files)" 
+                        ng-multiple="false">
+                        <i class="fa fa-file-image-o"></i>
+                         Update Image 
+                      </div>
+                    </li>
+                    <li><a href="#"><span class="fa fa-warning"></span> Update Password  </a></li>
+                    <li class="divider"></li>
+                    <li>
+                      <a 
+                        ng-click="profileCtrl.editMode = !profileCtrl.editMode"
+                        class="fa fa-user"></span> Edit Profile </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li><a href="#" class="btn disabled" role="button"> Remove Account </a></li>
+                  </ul>
+                </div>
+              </div><!-- end options bar -->
+
+              <button 
+                ng-show="profileCtrl.editMode"
+                ng-click="profileCtrl.editMode = !profileCtrl.editMode" 
+                class="btn btn-default">Cancel</button>
+              <button 
+                ng-show="profileCtrl.editMode"
+                ng-click="profileCtrl.saveProfile()" 
+                class="btn btn-success">Save</button>
+
+            </div>
+          </div>
+        </div><!-- end panel body -->
+
+      </div><!-- end panel -->
+    </div><!-- end col -->
+  </div><!-- end row -->
+</div>

@@ -1,0 +1,2 @@
+api: gunicorn --chdir ./tandem_api -w 4 -b 0.0.0.0:5000 wsgi:application
+scheduler: python ./scheduler/app.py

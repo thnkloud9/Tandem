@@ -1,0 +1,110 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h5 class="fa fa-lg fa-comments"> Recording Comments</h5>
+  </div>
+  <div class="panel-body">
+
+    <div>
+      <h5>{{ commentsCtrl.recording.question_text }}</h5>
+    </div>
+
+    <div class="right-text">
+      <audio-player
+        url="{{ commentsCtrl.recordingUrl }}"
+        recording="commentsCtrl.recording",
+        auto-play="true"
+        timeline="true"
+        context="question">
+      </audio-player>
+    </div>
+
+    <div class="row no-margin">
+      <div class="well col-sm-12">
+      <div class="col-sm-2 no-margin">
+        <user-pin 
+          image-class="img-circle profile-img-xsm"
+          no-image-class="fa fa-user user-pin-icon"
+          user="commentsCtrl.recording.submitted_by"></user-pin>
+      </div>
+      <div class="col-sm-5 no-margin">
+        <span class="date-sm"><strong>submitted</strong></span>
+        <span class="fa fa-sm fa-clock-o date-sm" > {{ commentsCtrl.recording._updated | niceDate }}</span>
+      </div>
+      <div class="col-sm-5 no-margin">
+        <ratings 
+          element="commentsCtrl.recording"  
+          context="question"></ratings>
+      </div>
+      </div>
+    </div>
+
+    <div class="row no-margin">
+      <div class="pull-left">
+        <h5 class="inline-block">Comments</h5>
+        <a
+          ng-click="commentsCtrl.showAdd = !commentsCtrl.showAdd"
+          ng-hide="commentsCtrl.showAdd"
+          class="fa fa-plus-circle nounderline inline-block"></a>
+        <a
+          ng-click="commentsCtrl.showAdd = !commentsCtrl.showAdd"
+          ng-show="commentsCtrl.showAdd"
+          class="fa fa-minus-circle nounderline inline-block"></a>
+      </div>
+      <div class="pull-right">
+        <h5>{{ commentsCtrl.comments.length }} Total</h5>
+      </div>
+    </div>
+
+    <div
+      ng-show="commentsCtrl.showAdd">
+      <div>
+        <h5>Add a comment</h5>
+      </div>
+      <div class="comments-form">
+        <form>
+          <div class="form-group">
+            <textarea 
+              ng-model="commentsCtrl.userComment"
+              class="form-control"></textarea>
+          </div>
+          <button 
+            ng-click="commentsCtrl.saveComment()"
+            type="submit" 
+            class="btn btn-success pull-right">Submit</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="comments-container">
+      <ul class="comments-list list-unstyled">
+        <li ng-repeat="comment in commentsCtrl.comments">
+          <div class="comment-container">
+            <div class="row">
+              <div class="col-sm-2">
+                <user-pin 
+                  image-class="img-circle profile-img-xsm"
+                  no-image-class="fa fa-user user-pin-icon"
+                  user="comment.submitted_by"></user-pin> 
+              </div>
+              <div class="col-sm-4 center">
+                <small class="date-sm"><b>said</b></small>
+              </div>
+              <div class="col-sm-6">
+                <span class="fa fa-sm fa-clock-o date-sm"> {{ comment._created | niceDate }}</span>
+              </div>
+            </div>
+            <div class="comment-text">
+              <p><small>{{ comment.text }}</small></p>
+            </div>
+          </div>
+        </li> 
+      </ul>
+    </div>
+
+  </div>
+  <div class="panel-footer center">
+    <button 
+      ng-click="$close()"
+      class="btn btn-default">Close</button>
+  </div>
+</div>

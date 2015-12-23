@@ -1,0 +1,33 @@
+<div class="modal-header">
+  <h3 class="modal-title">My Responses</h3>
+</div>
+<div
+  when-scrolled="modalMyResponsesCtrl.loadMoreResponses()"
+  class="modal-body response-list">
+  <div
+    ng-repeat="response in modalMyResponsesCtrl.responses">
+    <div class="row response-list-item">
+      <div class="col-md-1 response-list-profile">
+        <user-pin user="response.submitted_by"></user-pin>
+      </div>
+      <div class="col-md-2">
+        <p class="date-sm">on {{ response._created | niceDate }} answered</p>
+      </div>
+      <div class="col-md-5">
+        <h5>{{ response.question_text }}</h5>
+      </div>
+      <div class="col-md-3 center">
+        <a
+          class="fa fa-lg fa-comments text-primary nounderline spaced" 
+          ng-click="modalMyResponsesCtrl.showComment(response)"
+          tooltip="comment"></a>
+        <ratings element="response" context="answer"></ratings>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button 
+    ng-click="$close();"
+    class="btn btn-success">Done</button>
+</div>
