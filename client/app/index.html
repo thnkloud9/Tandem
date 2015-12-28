@@ -8,7 +8,6 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css" />
     <link rel="stylesheet" href="bower_components/intl-tel-input/build/css/intlTelInput.css" />
     <link rel="stylesheet" href="bower_components/angularjs-toaster/toaster.css" />
@@ -16,6 +15,7 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/bootstrap.css">
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/flag-icon.css">
     <link rel="stylesheet" href="styles/flag-docs.css">
@@ -175,6 +175,7 @@
     <script src="bower_components/angular-ui-select/dist/select.js"></script>
     <script src="bower_components/restangular/dist/restangular.js"></script>
     <script src="bower_components/intl-tel-input/build/js/intlTelInput.min.js"></script>
+    <script src="bower_components/intl-tel-input/lib/libphonenumber/build/utils.js"></script>
     <script src="bower_components/international-phone-number/releases/international-phone-number.js"></script>
     <script src="bower_components/angularjs-toaster/toaster.js"></script>
     <script src="bower_components/angular-aside/dist/js/angular-aside.js"></script>
@@ -187,6 +188,7 @@
         <script src="scripts/services/config.js"></script>
         <script src="scripts/directives/compare-to.js"></script>
         <script src="scripts/directives/question-card.js"></script>
+        <script src="scripts/directives/question-row.js"></script>
         <script src="scripts/controllers/question-card.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/about.js"></script>
@@ -206,6 +208,7 @@
         <script src="scripts/services/User.js"></script>
         <script src="scripts/controllers/practice-sets.js"></script>
         <script src="scripts/controllers/modal-play-practice-set.js"></script>
+        <script src="scripts/controllers/modal-configure-practice-set.js"></script>
         <script src="scripts/controllers/modal-review-practice-session.js"></script>
         <script src="scripts/services/PracticeSet.js"></script>
         <script src="scripts/services/PracticeSession.js"></script>
@@ -238,6 +241,8 @@
         <script src="scripts/controllers/modal-tutor.js"></script>
         <script src="scripts/controllers/tags.js"></script>
         <script src="scripts/services/Tag.js"></script>
+        <script src="scripts/services/mymemory.js"></script>
+        <script src="scripts/services/duolingo.js"></script>
         <!-- endbuild -->
 
     <!-- recordmp3 init code-->

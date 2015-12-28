@@ -41,11 +41,17 @@ def init_app(app):
         if not user:
             return jsonify(status=False)
 
-        _fs = GridFS(app.data.driver.db)
-        _file = _fs.get(user.get('image', None))
-        if not _file:
+        try:
+            _fs = GridFS(app.data.driver.db)
+            _file = _fs.get(user.get('image', None))
+            if not _file:
+                content = None
+                mimeType = None
+            else:
+                content = _file.read()
+                mimeType = str(_file.content_type)
+        except:
             content = None
-        else:
-            content = _file.read()
-
-        return Response(content, mimetype=str(_file.content_type))
+            mimeType = None
+            
+        return Response(content, mimetype=mimeType)

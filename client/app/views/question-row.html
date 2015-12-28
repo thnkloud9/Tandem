@@ -1,0 +1,10 @@
+<div
+  class="question"
+  ng-mouseover="questionCardCtrl.onHover()"
+  ng-mouseleave="questionCardCtrl.onHoverEnd()">
+
+  <p>
+    {{ questionCardCtrl.question.text.translations[questionCardCtrl.learningCode] }} - 
+    {{ questionCardCtrl.question.text.translations[questionCardCtrl.speaksCode] }}
+  </p>
+</div>

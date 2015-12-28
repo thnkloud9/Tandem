@@ -17,6 +17,11 @@ entity = {
                 }
             }
         },
+        'category': {
+            'type': 'string',
+            'allowed': ['word','phrase'],
+            'default': 'phrase'
+        },
         'status': {
             'type': 'string',
             'allowed': ['submitted','approved','rejected'],

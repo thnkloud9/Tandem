@@ -55,10 +55,20 @@ angular.module('tandemWebApp')
       });
     };
 
+    self.configurePracticeSetModal = function (practiceSet) {
+      session.configuringPracticeSet = practiceSet;
+      $modal.open({
+        controller: 'ModalConfigurePracticeSetCtrl',
+        controllerAs: 'modalConfigurePracticeSetCtrl',
+        templateUrl: 'views/modal-configure-practice-set.html'
+      });
+    };
+
     self.createPracticeSet = function () {
       var newPracticeSet = {
         title: self.newPracticeSet.title,
-        submitted_by: session.userId
+        submitted_by: session.userId,
+        category: self.newPracticeSet.category
       };
       PracticeSet.post(newPracticeSet).then(function (practiceSet) {
         self.practiceSets.add(practiceSet);

@@ -85,18 +85,20 @@ angular
       // TODO: use config setting here, not hard coded
       RestangularProvider.setBaseUrl('http://localhost:5000/api/v1');
       RestangularProvider.setRestangularFields({
-        id: "_id",
-        selfLink: "self.href"
+        id: '_id',
+        selfLink: 'self.href'
       });
-      RestangularProvider.setRequestInterceptor(function(element, operation, route, url) {
+      RestangularProvider.addFullRequestInterceptor(function(element, operation, route, url, headers) {
         if ((operation === 'patch') || (operation === 'put')) {
-            delete element._id;
-            delete element._created;
-            delete element._updated;
-            delete element._links;
-            delete element._etag;
+          delete element._id;
+          delete element._created;
+          delete element._updated;
+          delete element._links;
+          delete element._etag;
         }
-        return element;
+        return {
+          element: element
+        }
       });
       RestangularProvider.setResponseExtractor(function(response, operation) {
         if (operation === 'getList') {

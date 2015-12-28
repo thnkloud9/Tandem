@@ -30,6 +30,7 @@ angular.module('tandemWebApp').service('recorder', [
         // error callback
         function (e) {
           console.log('No live audio input: ' + e);
+          // TODO: test if we should reject the deferedInit here
         }
       );
 

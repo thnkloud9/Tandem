@@ -4,6 +4,11 @@ entity = {
             'type': 'string',
             'required': True
         },
+        'category': {
+            'type': 'string',
+            'allowed': ['memorize','tandem','live'],
+            'default': 'tandem'
+        },
         'status': {
             'type': 'string',
             'allowed': ['submitted','approved','rejected'],

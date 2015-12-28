@@ -150,7 +150,7 @@ angular.module('tandemWebApp')
             method: 'PATCH',
             url: config.API.full + '/users/' + model._id,
             headers: {
-              'If-Match': model.etag,
+              'If-Match': model._etag,
               'Content-Type': undefined
             },
             transformRequest: function(data) { 

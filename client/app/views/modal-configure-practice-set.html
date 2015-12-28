@@ -1,0 +1,39 @@
+<div class="modal-header">
+  <h4>Configure Practice Set</h4>
+</div>
+<div class="modal-body"> 
+  <div class="form-group">
+    <select 
+      ng-model="modalConfigurePracticeSetCtrl.practiceSet.category"
+      name="category"
+      class="form-control"
+      tamodelex="1" required>
+      <option value="" selected disabled>Category</option>
+      <option value="memorize">Memorize</option>
+      <option value="tandem">Tandem</option>
+      <option value="live">Live</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <h4>Questions</h4>
+    <p><a 
+      ng-show="modalConfigurePracticeSetCtrl.isAdmin" 
+      ng-click="modalConfigurePracticeSetCtrl.createQuestionModal()"
+      class="fa fa-plus-circle nounderline"> <small>Add Question</small></a></p>
+    
+    <ul
+      ng-repeat="question in modalConfigurePracticeSetCtrl.practiceSet.questions" 
+      class="list-unstyled">
+      <li class="row">
+        <question-row question="question">
+        </question-row>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="modal-footer">
+  <button
+    class="btn btn-success"
+    ng-click="modalConfigurePracticeSetCtrl.savePracticeSet(); $close()">Save</button>
+  <button class="btn btn-default" ng-click="$close()">Cancel</button>      
+</div>
