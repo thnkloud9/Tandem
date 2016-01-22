@@ -18,18 +18,20 @@ angular.module('tandemWebApp').factory('authInterceptor', [
 
         return {
             request: function (config) {
+                // TODO: use config object for URI matching
                 var token,
-                    session = $injector.get('session');
+                    session = $injector.get('session'),
+                    isLocal = config.url.match(/localhost\:5000/g);
 
                 // do not add auth to logout
-                // TODO: make this regex and ignore host, just look for logout
                 if (config.url === 'http://localhost:5000/logout') {
                     return config;
                 }
 
                 config.headers = config.headers || {};
 
-                if (session.token) {
+                // only add this if we know we are accessing our api
+                if ((isLocal) && (session.token)) {
                     config.headers.Authorization = 'Basic ' + btoa(session.token + ':');
                     // TODO: remove this
                     console.log(btoa(session.token + ':'));

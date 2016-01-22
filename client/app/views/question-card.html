@@ -71,14 +71,14 @@
             class="fa fa-2x fa-plus-square nounderline"></a>
           <a 
             ng-hide="questionCardCtrl.question.hasUserRecording"
-            tooltip="Add to Practice Set"
+            tooltip="Add Audio" 
             ng-click="questionCardCtrl.addQuestion(questionCardCtrl.question)" 
             class="fa fa-2x fa-microphone nounderline"></a>
         </div>
         <div class="spaced pull-right">
           <a
             ng-show="questionCardCtrl.isAdmin && questionCardCtrl.hovering"
-            ng-click="questionCardCtrl.removeQuestion(questionCardCtrl.question.id)"
+            ng-click="questionCardCtrl.removeQuestion(questionCardCtrl.question._id)"
             class="fa fa-2x fa-trash-o nounderline"></a>
         </div>
         <div class="pull-right">
@@ -94,6 +94,10 @@
     <div 
       ng-hide="questionCardCtrl.question.hasQuestionRecording[questionCardCtrl.learningCode]"
       class="tool-bar pull-right">
+      <a
+        ng-show="questionCardCtrl.isAdmin && questionCardCtrl.hovering"
+        ng-click="questionCardCtrl.removeQuestion(questionCardCtrl.question._id)"
+        class="fa fa-2x fa-trash-o nounderline"></a>
       <a 
         tooltip="Add Recording"
         ng-click="questionCardCtrl.addQuestion(questionCardCtrl.question)"
@@ -172,7 +176,7 @@
         <div class="spaced pull-right">
           <a
             ng-show="questionCardCtrl.isAdmin && questionCardCtrl.hovering"
-            ng-click="questionCardCtrl.removeQuestion(questionCardCtrl.question.id)"
+            ng-click="questionCardCtrl.removeQuestion(questionCardCtrl.question._id)"
             class="fa fa-2x fa-trash-o nounderline"></a>
         </div>
       </div>
@@ -180,6 +184,10 @@
     <div 
       ng-hide="questionCardCtrl.question.hasQuestionRecording[questionCardCtrl.speaksCode]"
       class="tool-bar pull-right">
+      <a
+        ng-show="questionCardCtrl.isAdmin && questionCardCtrl.hovering"
+        ng-click="questionCardCtrl.removeQuestion(questionCardCtrl.question._id)"
+        class="fa fa-2x fa-trash-o nounderline"></a>
       <a 
         tooltip="Add Recording"
         ng-click="questionCardCtrl.addQuestion(questionCardCtrl.question)"

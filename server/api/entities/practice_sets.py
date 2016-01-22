@@ -28,6 +28,20 @@ entity = {
         'tags': {
             'type': 'list'
         },
+        'description': {
+            'type': 'dict',
+            'schema': {
+                'languages': {
+                    'type': 'integer',
+                },
+                'original_language': {
+                    'type': 'string',
+                },
+                'translations': {
+                    'type': 'dict',
+                }
+            }
+        },
         'submitted_by' : {
             'type': 'objectid',
             'data_relation': {

@@ -26,6 +26,7 @@ angular
     'ui.select',
     'internationalPhoneNumber',
     'toaster',
+    'dndLists',
   ]).config([
     '$routeProvider',
     '$httpProvider',

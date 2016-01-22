@@ -21,7 +21,7 @@ def init_app(app):
         # TODO: check if the username is already in the sessions collection
 
         users = app.data.driver.db['users']
-        lookup = {'username': username}
+        lookup = {'username': str(username)}
         user = users.find_one(lookup)
 
         if not user:
@@ -44,8 +44,8 @@ def init_app(app):
         token = Session.createSession(user)
         # update last_login
         user['last_login'] = datetime.datetime.now()
-
         users.save(user)
+
         response = {
             "status": True,
             "token": token,

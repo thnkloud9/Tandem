@@ -18,14 +18,28 @@ angular.module('tandemWebApp')
   'toaster',
   'config',
   'Question',
+  'PracticeSet',
   'session',
-   function ($q, $http, $modal, $aside, mymemory, duolingo, toaster, config, Question, session) {
+   function (
+     $q,
+     $http,
+     $modal,
+     $aside,
+     mymemory,
+     duolingo,
+     toaster,
+     config,
+     Question,
+     PracticeSet,
+     session) {
     var self = this;
 
     self.isAdmin = (session.roles === "admin");
     self.page = 1;
     self.maxResults = 10;
     self.searchParams = null;
+    self.speaksCode = session.speaks; // used in views
+    self.learingingCode = session.learning; // used in views
 
     Question.getList({embedded: {tags: 1}, max_results: self.maxResults, page: self.page}).then(function (questions) {
       self.questions = questions; 
@@ -138,9 +152,31 @@ angular.module('tandemWebApp')
       Question.post(questionData).then(function (question) {
         self.questions.add(question);
         toaster.pop('success', "Question Added", "Thanks for contributing!  Your question has been added.");
+
+        // see if we need to save this question to a practice_set
+        if (session.saveToPracticeSetId) {
+          // save new question id to practice_set
+          PracticeSet.one(session.saveToPracticeSetId).get().then(function (practiceSet) {
+            // TODO: this is dumb, why doesn't practiceSet.save() work?  wtf
+            var questions = (practiceSet.questions) ? practiceSet.questions : [];
+            var practiceSetData = {
+              questions: []
+            };
+            questions.push(question._id);
+            practiceSetData.questions = questions            
+            PracticeSet.one(practiceSet._id).patch(practiceSetData).then(function () {
+              toaster.pop('success', "Added to PracticeSet", "Question has been added to your practiceSet");
+            }, function () {
+              toaster.pop('error', "Failed to add to PracticeSet", "Failed adding question to your practiceSet");
+            });
+          });
+          session.saveToPracticeSetId = undefined;
+        }
+
       }, function (response) {
         toaster.pop('error', "Server Problem", "There was a server problem.  Please try again in a few moments.");
       });
+
     };
 
     /**
@@ -151,6 +187,7 @@ angular.module('tandemWebApp')
       mymemory.translateText(text, origin).then(function (matches) {
         var translation = matches[0].translation;
         var hintsOrigin = null;
+
         if (origin === 'speaks') {
           self.newQuestion.learningText = translation;
           self.newQuestion.learningTranslations = matches;
@@ -168,6 +205,7 @@ angular.module('tandemWebApp')
         }, function () {
           // TODO: what should we do if we fail getting hints
         });
+
       }, function (response) {
         toaster.pop('error', "Translation Problem", "There was a problem with the translation service.  Please try again in a few minutes");
       });

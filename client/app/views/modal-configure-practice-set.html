@@ -3,6 +3,13 @@
 </div>
 <div class="modal-body"> 
   <div class="form-group">
+    <input
+      name="title"
+      class="form-control"
+      ng-model="modalConfigurePracticeSetCtrl.practiceSet.title"
+      tamodelex="1" required>
+  </div>
+  <div class="form-group">
     <select 
       ng-model="modalConfigurePracticeSetCtrl.practiceSet.category"
       name="category"
@@ -20,15 +27,66 @@
       ng-show="modalConfigurePracticeSetCtrl.isAdmin" 
       ng-click="modalConfigurePracticeSetCtrl.createQuestionModal()"
       class="fa fa-plus-circle nounderline"> <small>Add Question</small></a></p>
+  </div>
     
-    <ul
-      ng-repeat="question in modalConfigurePracticeSetCtrl.practiceSet.questions" 
-      class="list-unstyled">
-      <li class="row">
-        <question-row question="question">
-        </question-row>
-      </li>
-    </ul>
+  <div class="row question-selector">
+
+      <div class="col-md-6">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <h3 class="panel-title">Added</h3>
+          </div>
+          <div class="panel-body">
+            <ul 
+              class="list-unstyled" 
+              dnd-list="modalConfigurePracticeSetCtrl.practiceSet.questions">
+              <li
+                ng-repeat="item in modalConfigurePracticeSetCtrl.practiceSet.questions"
+                dnd-draggable="item"
+                dnd-moved="list.splice($index, 1)"
+                dnd-effect-allowed="move"
+                dnd-selected="modalConfigurePracticeSetCtrl.selected = item"
+                ng-class="{'selected': modalConfigurePracticeSetCtrl.selected === item}">
+                <div class="handle">:::</div>
+                <div class="question-nodrag" dnd-nodrag>
+                  <h5>
+                    {{ item.text.translations[modalConfigurePracticeSetCtrl.learningCode] }}
+                  </h5>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <h3 class="panel-title">Available</h3>
+          </div>
+          <div class="panel-body">
+            <ul
+              class="list-unstyled" 
+              dnd-list="modalConfigurePracticeSetCtrl.availableQuestions">
+              <li 
+                ng-repeat="item in modalConfigurePracticeSetCtrl.availableQuestions"
+                dnd-draggable="item"
+                dnd-moved="list.splice($index, 1)"
+                dnd-effect-allowed="move"
+                dnd-selected="modalConfigurePracticeSetCtrl.selected = item"
+                ng-class="{'selected': modalConfigurePracticeSetCtrl.selected === item}">
+                <div class="handle">:::</div>
+                <div class="question-nodrag" dnd-nodrag>
+                  <h5>
+                    {{ item.text.translations[modalConfigurePracticeSetCtrl.learningCode] }}
+                  </h5>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
   </div>
 </div>
 <div class="modal-footer">

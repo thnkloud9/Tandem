@@ -22,6 +22,31 @@ entity = {
             'allowed': ['submitted','approved','rejected'],
             'default': 'submitted'
         },
+        'icon': {
+            'type': 'string',
+            'default': ''
+        },
+        'image': {
+            'type': 'media',
+            'default': ''
+        },
+        'description': {
+            'type': 'dict',
+            'schema': {
+                'languages': {
+                    'type': 'integer',
+                    'required': True
+                },
+                'original_language': {
+                    'type': 'string',
+                    'required': True
+                },
+                'translations': {
+                    'type': 'dict',
+                    'required': True
+                }
+            }
+        },
         'submitted_by' : {
             'type': 'objectid',
             'data_relation': {

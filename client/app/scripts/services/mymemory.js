@@ -23,11 +23,7 @@ angular.module('tandemWebApp').service('mymemory', [
       $http({
         method: 'GET',
         url: url,
-        transformRequest: function(data, headersGetter) {
-          var headers = headersGetter();
-          delete headers['Authorization'];
-          return headers;
-        }
+        headers: { 'Accept': 'application/json, text/plain, */*' }
       }).then(function (response) {
         deferedTranslate.resolve(response.data.matches);
       }, function (response) {

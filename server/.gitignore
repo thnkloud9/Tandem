@@ -30,7 +30,7 @@ node_modules
 # Users Environment Variables
 .lock-wscript
 
-tandem_api/settings.py
+api/settings.py
 **.pyc
 **~
 *.egg-info

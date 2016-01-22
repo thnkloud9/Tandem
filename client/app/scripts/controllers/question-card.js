@@ -24,7 +24,9 @@ angular.module('tandemWebApp')
  
     // instantiate object
     if (typeof self.question === 'object') {
-      self.question.loadRecordingIndex();
+      if (typeof self.question.loadRecordingIndex === 'function') {
+        self.question.loadRecordingIndex();
+      }
     } else {
       var params = {
         "embedded": {
@@ -68,7 +70,7 @@ angular.module('tandemWebApp')
 
       modal = modalFactory.confirmLight(title, text);
       modal.result.then(function () {
-        return Question.remove(questionId);
+        return Question.one(questionId).remove();
       }, $q.reject)
       .then(function () {
         toaster.pop('success', "Question Removed", "Question has been removed.");

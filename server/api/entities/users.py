@@ -15,10 +15,6 @@ entity = {
          'mobile': {
              'type': 'string'
          },
-         'gender': {
-             'type': 'string',
-             'allowed': ['male', 'female', 'other']
-         },
          'roles': {
              'type': 'list',
              'allowed': ['user', 'trusted', 'admin'],
@@ -34,10 +30,19 @@ entity = {
              'allowed': ['en', 'de', 'es'],
              'required': True,
         },
+        'first_name': {
+            'type': 'string'
+        },
+        'last_name': {
+            'type': 'string'
+        },
         'city': {
             'type': 'string'
         },
         'country': {
+            'type': 'string'
+        },
+        'introduction': {
             'type': 'string'
         },
         'image': {
@@ -56,9 +61,6 @@ entity = {
         },
         'mobile_verified': {
             'type': 'boolean'
-        },
-        'show_on_load': {
-            'type': 'list'
         }
     },
     'datasource': {

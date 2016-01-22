@@ -140,13 +140,13 @@ angular.module('tandemWebApp').service('session', [
       $window.sessionStorage.removeItem('speaksText');
       $window.sessionStorage.removeItem('profile_image');
 
-        self.token = null; 
-        self.isAuthenticated = false; 
-        self.username = null; 
+      self.token = null; 
+      self.isAuthenticated = false; 
+      self.username = null; 
   
-        $location.path( "/" );
+      $location.path( "/" );
 
-        deferredPost.resolve();
+      deferredPost.resolve();
     }).error(function (responseBody) {
         toaster.pop('error', "Server Problem", "There was a server problem.  Please try again in a few moments.");
         deferredPost.reject(responseBody);

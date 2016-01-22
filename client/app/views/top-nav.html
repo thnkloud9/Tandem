@@ -1,0 +1,38 @@
+<div class="row" id="top-nav">
+  <div class="col-sm-6 col-md-6">
+    <img src="/images/cow.png" height="52px">
+    <h3 class="text-muted inline-block nounderline">
+      <a class="nounderline" href="#/main">TandemNet</a>
+    </h3>
+  </div>
+  <!-- only for authenticated users -->
+  <div id="user-nav" class="pull-right" ng-controller="UserNavCtrl"> 
+    <ul ng-show="isAuthenticated" class="nav nav-pills">
+
+      <li role="presentation">
+        <div class="inline-block">
+          <user-pin user-type="id" user="session.user" />
+          </user-pin>
+        </div>
+        <a 
+          class="dropdown-toggle pull-right" 
+          data-toggle="dropdown" 
+          role="button" 
+          aria-expanded="false">{{ currentUser }} <span class="caret"></span> </a>
+        <ul class="dropdown-menu" role="menu">
+          <li role="presentation">
+            <a class="fa fa-user nounderline" href="#/profile"> Profile</a>
+          </li>
+          <li role="presentation">
+            <a class="fa fa-sign-out nounderline" ng-click="session.clear()"> Logout</a>
+          </li>
+          <!-- TODO: add admin / trusted user resources 
+                     ONLY FOR TRUSTED USERS AND ADMINS
+          <li role="presentation"><a href="#/">Grade Practice Sets</a></li>
+          <li role="presentation"><a href="#/">New Question</a></li>
+          -->
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div><!-- end top-nav id -->
