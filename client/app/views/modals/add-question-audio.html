@@ -1,0 +1,92 @@
+<div class="modal-header">
+   <h3 class="modal-title">Add Question Recording</h3>
+</div>
+<div class="modal-body">
+   <div id="add-question-body">
+      <uib-accordion close-others="true">
+         <uib-accordion-group ng-class="{       'panel-success': addAudio.hasLearningRecording,      'panel-danger': !addAudio.hasLearningRecording       }" is-open="addAudio.learningTabActive">
+            <uib-accordion-heading><i ng-show="addAudio.learningTabActive" class="fa fa-minus-square-o"></i><i ng-hide="addAudio.learningTabActive" class="fa fa-plus-square-o"></i> {{ addAudio.recordingQuestion.text.translations[addAudio.learningCode] }}
+               <span class="pull-right">
+                  <flag-icon language-code="{{ addAudio.learningCode }}"></flag-icon>
+               </span><i ng-show="addAudio.hasLearningRecording" class="pull-right fa fa-check"></i>
+            </uib-accordion-heading>
+            <div ng-hide="addAudio.hasLearningRecording">
+               <h4>Ok, lets add some audio! Just click the microphone and read the question.</h4>
+               <h2>{{ addAudio.recordingQuestion.text.translations[addAudio.learningCode] }}</h2>
+               <recorder question="addAudio.recordingQuestion" question-type="object" context="question" auto-play="true" language="{{ addAudio.learningCode }}" on-stop-record="addAudio.learningRecordStop()"
+               on-save="addAudio.learningSaved()"></recorder>
+            </div>
+            <div ng-show="addAudio.hasLearningRecording">
+               <div class="inline-block">
+                  <div class="pull-left">
+                     <user-pin image-class="img-circle profile-img-sm" user="addAudio.currentUser"></user-pin>
+                  </div>
+                  <div class="pull-right">
+                     <h5>
+                        <span>recorded</span>
+                     </h5>
+                     <p class="date-sm">{{ addAudio.learningRecording._created | niceDate }}</p>
+                  </div>
+               </div>
+               <div class="audio-bubble-left inline-block">
+                  <audio-player on-play="addAudio.playerStarted()" on-stop="addAudio.playerFinished()" context="question" auto-play="false" url="{{ addAudio.learningRecordingUrl }}"></audio-player>
+               </div>
+               <div class="inline-block">
+                  <a uib-tooltip="record over" ng-click="addAudio.hasLearningRecording = !addAudio.hasLearningRecording" class="fa fa-2x fa-repeat nounderline"></a>
+               </div>
+            </div>
+         </uib-accordion-group>
+         <!-- end learning tab-->
+         <uib-accordion-group ng-class="{       'panel-success': addAudio.hasSpeaksRecording,      'panel-danger': !addAudio.hasSpeaksRecording       }" is-open="addAudio.speaksTabActive">
+            <uib-accordion-heading><i ng-show="addAudio.speaksTabActive" class="fa fa-minus-square-o"></i><i ng-hide="addAudio.speaksTabActive" class="fa fa-plus-square-o"></i> {{ addAudio.recordingQuestion.text.translations[addAudio.speaksCode] }}
+               <span class="pull-right">
+                  <flag-icon language-code="{{ addAudio.speaksCode }}"></flag-icon>
+               </span><i ng-show="addAudio.hasSpeaksRecording" class="pull-right fa fa-check"></i>
+            </uib-accordion-heading>
+            <div ng-hide="addAudio.hasSpeaksRecording">
+               <h2>{{ addAudio.recordingQuestion.text.translations[addAudio.speaksCode] }}</h2>
+               <recorder question="addAudio.recordingQuestion" question-type="object" context="question" auto-play="true" language="{{ addAudio.speaksCode }}" on-stop-record="addAudio.speaksRecordStop()"
+               on-save="addAudio.speaksSaved()"></recorder>
+            </div>
+            <div ng-show="addAudio.hasSpeaksRecording">
+               <div class="inline-block">
+                  <div class="pull-left">
+                     <user-pin user="addAudio.currentUser"></user-pin>
+                  </div>
+                  <div class="pull-right">
+                     <h5>
+                        <span>recorded</span>
+                     </h5>
+                     <p class="date-sm">{{ addAudio.speaksRecording._created | niceDate }}</p>
+                  </div>
+               </div>
+               <div class="audio-bubble-left inline-block">
+                  <audio-player on-play="addAudio.playerStarted()" on-stop="addAudio.playerFinished()" context="question" auto-play="false" url="{{ addAudio.speaksRecordingUrl }}"></audio-player>
+               </div>
+               <div class="inline-block">
+                  <a tooltip="record over" ng-click="addAudio.hasSpeaksRecording = !addAudio.hasSpeaksRecording" class="fa fa-2x fa-repeat nounderline"></a>
+               </div>
+            </div>
+         </uib-accordion-group>
+         <!-- end speaks tab-->
+         <uib-accordion-group is-disabled="addAudio.practiceSetTabDisabled" is-open="addAudio.practiceSetTabActive">
+            <uib-accordion-heading><i ng-show="addAudio.practiceSetTabActive" class="fa fa-minus-square-o"></i><i ng-hide="addAudio.practiceSetTabActive" class="fa fa-plus-square-o"></i>
+               <span class="fa fa-comment"></span>Practice Set</uib-accordion-heading>
+            <h4>Your Practice Sets</h4>
+            <ul ng-repeat="practiceSet in addAudio.practiceSets" class="practice-sets-list list-unstyled">
+               <li>
+                  <div>
+                     <a tooltip="Add to {{ practiceSet.title }}" ng-click="addAudio.addToPracticeSet(practiceSet)" class="fa fa-plus-square nounderline"></a>
+                     <h5 class="inline-block">{{ practiceSet.title }}</h5>
+                  </div>
+               </li>
+            </ul>
+         </uib-accordion-group>
+         <!-- end practice set tab-->
+      </uib-accordion>
+   </div>
+   <!-- end add-question-body-->
+</div>
+<div class="modal-footer">
+   <button ng-click="$close();" class="btn btn-success">Done</button>
+</div>

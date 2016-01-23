@@ -1,0 +1,21 @@
+h3 
+  | Image Select
+  small Select an image from search results, or upload one
+
+.container-fluid
+  .row(ui-scroll-viewport='', style='height:400px; overflow-y: auto;')
+    .col-xs-3(ng-repeat='result in imageSelect.searchResults')
+      .photo
+        div(ng-click='result.showIndex = !result.showIndex')
+          .photo-index(data-ng-if='result.showIndex')
+            p {{ result.snippet }}
+          .photo-wrapper
+            img.img-responsive(src='', ng-src='{{ result.link }}', imageloaded='', loadedclass='photoloaded')
+            .photo-loader
+              .sk-spinner.sk-spinner-rotating-plane
+          .photo-description
+            h5 {{ result. displayLink}}
+            p: small Nice photo, eh.
+.modal-footer
+  button.btn.btn-danger.btn-large(type='button', ng-click='closeThisDialog(0)') Cancel
+  button.btn.btn-success.btn-large(type='button', ng-click='confirm(1)') Save

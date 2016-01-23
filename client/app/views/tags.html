@@ -1,0 +1,35 @@
+<div ng-controller="TagsController as tags" class="row-masonry row-masonry-xl-6 row-masonry-lg-4 row-masonry-md-3 row-masonry-sm-2">
+   <!-- START row-->
+   <div ng-repeat="tag in tags.tags" class="col-masonry">
+      <!-- START new widget -->
+      <div ng-if="$first" class="tag-widget new-tag">
+         <div class="photo-wrapper">
+            <p class="ballon-wrapper text-center">
+               <span class="new-balloon">
+                  <img src="" ng-src="app/img/icons/48/Very_Basic/plus-48.png" ng-click="tags.openCreateTagModal()" />
+               </span>
+            </p>
+         </div>
+         <div class="tag-description text-center">
+            <h4 class="mt0">Add</h4>
+            <p ng-show="app.translation.show" class="mb0 text-muted">Add</p>
+         </div>
+      </div>
+      <!-- END widget-->
+      <!-- START widget -->
+      <div class="tag-widget">
+         <div class="photo-wrapper">
+            <p ng-click="tags.editTag(tag)" class="balloon-wrapper text-center">
+               <span class="balloon">
+                  <img ng-src="data:image/png;base64,{{tag.image}}" />
+               </span>
+            </p>
+         </div>
+         <div class="tag-description text-center">
+            <h4 class="mt0">{{ tag.text.translations[tags.session.learning]}}</h4>
+            <p ng-show="app.translation.show" class="mb0 text-muted">{{ tag.text.translations[tags.session.speaks]}}</p>
+         </div>
+         <!-- END widget-->
+      </div>
+   </div>
+</div>

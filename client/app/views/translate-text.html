@@ -1,0 +1,54 @@
+<!-- toggle to show additional translations-->
+<span ng-show="translate.mmMatches &amp;&amp; !translate.showHints" ng-class="{'animated bounce': translate.mmMatches &amp;&amp; !translate.showHints}">
+   <em href="" ng-click="showTranslations = !showTranslations" ng-class="showTranslations ? 'icon-arrow-up-circle' : 'icon-arrow-down-circle'" class="small"></em>
+</span>
+<!-- initial span-->
+<span href="" ng-click="translate.edit()" ng-hide="translate.editMode || translate.showHints" class="translate-initial"><a>{{ translate.model }}</a>
+</span>
+<!-- edit-mode-->
+<div class="translate-edit">
+   <div ng-show="translate.editMode" class="input-group">
+      <input type="text" ng-model="translate.model" class="form-control" />
+      <!-- without show-change-->
+      <div ng-hide="allowChange" class="input-group-btn">
+         <button type="button" tabindex="-1" ng-click="translate.translate()" class="btn btn-default">
+            <span class="fa fa-language text-muted"></span>
+         </button>
+         <button type="button" ng-click="translate.cancel()" class="btn btn-default">
+            <span class="fa fa-times text-muted"></span>
+         </button>
+      </div>
+      <!-- with show-change-->
+      <div uib-dropdown="" ng-show="allowChange" class="input-group-btn">
+         <button type="button" tabindex="-1" ng-click="translate.translate()" class="btn btn-default">
+            <span class="fa fa-language text-muted"></span>
+         </button>
+         <button type="button" uib-dropdown-toggle="" class="btn btn-default">
+            <span>{{ translate.to }}</span>
+         </button>
+         <ul class="dropdown-menu pull-right">
+            <li><a href="" ng-click="translate.setToSpeaks()">{{ translate.session.speaks }}</a>
+            </li>
+            <li><a href="" ng-click="translate.setToLearning()">{{ translate.session.learning }}</a>
+            </li>
+         </ul>
+         <button type="button" ng-click="translate.cancel()" class="btn btn-default">
+            <span class="fa fa-times text-muted glyphicon glyphicon-remove"></span>
+         </button>
+      </div>
+   </div>
+</div>
+<!-- toggle to show additional translations-->
+<span ng-show="translate.mmMatches &amp;&amp; translate.send" ng-class="{'animated bounce': translate.mmMatches &amp;&amp; translate.send}">
+   <em href="" ng-click="showTranslations = !showTranslations" ng-class="showTranslations ? 'icon-arrow-up-circle' : 'icon-arrow-down-circle'" class="small"></em>
+</span>
+<!-- words with popover hints-->
+<span href="" ng-click="translate.edit()" ng-hide="!translate.showHints || translate.editMode" class="translate-hints">
+   <span ng-repeat="originalWord in translate.originalWords track by $index" uib-popover-html="translate.popoverContent" popover-trigger="mouseenter" popover-placement="bottom" ng-mouseover="translate.giveHints(originalWord)" class="dl-word">{{ originalWord }}</span>
+</span>
+<!-- translations from mymemory here-->
+<div ng-show="showTranslations" class="translate-matches">
+   <p ng-repeat="translation in translate.mmMatches track by $index" class="small small">{{ translation.translation }}
+      <button ng-click="translate.useTranslation(translation.translation)" class="btn btn-xs">use</button>
+   </p>
+</div>

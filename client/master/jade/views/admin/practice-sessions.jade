@@ -1,0 +1,11 @@
+h3 PracticeSessions Admin
+  small All practiceSessions
+
+.container-fluid(ng-controller="PracticeSessionsAdminController as table")
+
+  h4.page-header Practice Sessions
+  .row
+    .col-lg-4.col-md-6
+      input.mb.form-control(placeholder='Filter...', type='text', ng-model='table.gridOptions.quickFilterText')
+   .ag-angle(ag-grid='table.gridOptions', style="width: 100%; height: 400px;")
+

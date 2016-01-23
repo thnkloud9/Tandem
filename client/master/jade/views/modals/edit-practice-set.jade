@@ -1,0 +1,62 @@
+.modal-header
+  h4 Edit Practice Set {{ modalEdit.practiceSet.description.translations[user.speaks] }} ---
+.modal-body
+  .form-group
+    input.form-control(ng-model='modalEdit.practiceSet.title', tamodelex='1', required='')
+  .form-group
+    input.form-control(ng-model='modalEdit.practiceSet.description.translations[user.speaks]')
+  .form-group
+    select.form-control(ng-model='modalEdit.practiceSet.category', name='category', required='')
+      option(value='', selected='', disabled='') Category
+      option(value='memorize') Memorize
+      option(value='tandem') Tandem
+      option(value='live') Live
+   // Add new question START
+  .form-group
+    h4 Questions
+    div
+      a.fa.fa-plus-circle.nounderline(ng-show='modalEdit.isAdmin', ng-click='')
+        small Add Question
+      h4(translate-text, model='modalEdit.newQuestion.speaksText', send='true', model-translation='modalEdit.newQuestion.learningText', to='{{ session.learning }}', allow-change='false', initial-text="click here to enter english version")
+      h4(translate-text, model='modalEdit.newQuestion.learningText', send='true', model-translation='modalEdit.newQuestion.speaksText', to='{{ session.speaks }}', allow-change='false', initial-text="click here to enter german version")
+      button.btn.btn-sm.btn-success(ng-click='modalEdit.saveQuestion()') Add
+   // Add new question END
+
+  .row.question-selector
+    .col-md-6
+      .panel.panel-info
+        .panel-heading
+          h3.panel-title Available
+        .panel-body
+          // search existing
+          .form-group
+            input.form-control(type='text', ng-model='modalEdit.searchText', ng-change='modalEdit.search()', placeholder='Search')
+          //ul.list-unstyled(ui-scroll-viewport='', style='height: 300px; overflow-y: auto;')
+          ul.list-unstyled(infinite-scroll='modalEdit.loadMoreQuestions()', infinite-scroll-distance='3')
+            li(ng-repeat='item in modalEdit.availableQuestions')
+              .row
+                .col-xs-8
+                  h5
+                    | ::: {{ item.text.translations[session.learning] }}
+                  p.small(ng-show='app.translation.show') {{ item.text.translations[session.speaks] }}
+                .col-xs-4
+                  button.btn.btn-sm.btn-default(ng-click='modalEdit.addQuestion(item)') Add
+
+    .col-md-6
+      .panel.panel-info
+        .panel-heading
+          h3.panel-title Added
+        .panel-body
+          ul.list-unstyled
+            li(ng-repeat='item in modalEdit.practiceSet.questions')
+              .row
+                .col-xs-8
+                  h5
+                    | ::: {{ item.text.translations[session.learning] }}
+                  p.small(ng-show='app.translation.show') {{ item.text.translations[session.speaks] }}
+                .col-xs-4
+                  button.btn.btn-sm.btn-default(ng-click='modalEdit.removeQuestion(item)') Remove
+
+.modal-footer
+  button.btn.btn-success(ng-click='modalEdit.savePracticeSet(); $close()') Save
+  button.btn.btn-default(ng-click='$close()') Cancel

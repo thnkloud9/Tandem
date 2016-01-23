@@ -1,215 +1,150 @@
-<div class="container">
-
-  <div id="profile-container" class="row">
-    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xs-offset-0 col-sm-offset-0 col-md-offset-2 col-lg-offset-2 toppad" >
-   
-      <div class="panel panel-primary">
-        <div class="panel-heading">
-          <h2 class="panel-title">{{ profileCtrl.user.username }}</h2>
-        </div>
-        <div class="panel-body">
-          <div class="row">
-            <div class="col-md-3 col-lg-3 " align="center">
-
-              <img 
-                ng-show="profileCtrl.user.image"
-                alt="User Pic" 
-                src="data:image/png;base64,{{ profileCtrl.user.image }}" 
-                class="img-circle profile-img-md">
-              <i
-                ng-hide="profileCtrl.user.image"
-                ng-class="userPinCtrl.noImageClass" 
-                class="fa fa-4x fa-user user-pin-icon"></i>
-
-              <div class="text-left">
-                <a class="fa fa-thumbs-up nounderline"> My Ratings </a>
-                <a class="fa fa-question-circle nounderline"> My Questions </a>
-                <a
-                  ng-click="profileCtrl.showMyResponses()"
-                  class="fa fa-users"> My Responses </a>
-                <a class="fa fa-volume-up nounderline"> My Recordings </a>
-                <a class="fa fa-comments nounderline"> My Sessions </a>
-                <a 
-                  href="#/practice-sets"
-                  class="fa fa-comments nounderline"> My Sets </a>
-              </div>
-
-            </div>
-            
-            <div class=" col-md-9 col-lg-9 "> 
-              <table class="table table-user-information">
-                <tbody>
-                  <tr>
-                    <td>Speaks:</td>
-                    <td 
-                      ng-click="profileCtrl.editMode = !profileCtrl.editMode"
-                      ng-hide="profileCtrl.editMode">{{ profileCtrl.speaksText }}</td>
-                    <td ng-show="profileCtrl.editMode">
-                      <select 
-                        ng-model="profileCtrl.user.speaks"
-                        name="speaks"
-                        class="form-control"
-                        tamodelex="1" required>
-                        <option value="" selected disabled>Language Spoken</option>
-                        <option value="en">English</option>
-                        <option value="de">German</option>
-                      </select>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Learning:</td>
-                    <td 
-                      ng-click="profileCtrl.editMode = !profileCtrl.editMode"
-                      ng-hide="profileCtrl.editMode">{{ profileCtrl.learningText }}</td>
-                    <td ng-show="profileCtrl.editMode">
-                      <select 
-                        ng-model="profileCtrl.user.learning"
-                        name="speaks"
-                        class="form-control "
-                        tamodelex="2" required>
-                        <option value="" selected disabled>Language Learning</option>
-                        <option value="de">German</option>
-                        <option value="en">English</option>
-                      </select>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Member since:</td>
-                    <td>{{ profileCtrl.user._created | niceDate }}</td>
-                  </tr>
-                  <tr>
-                    <td>Gender</td>
-                    <td 
-                      ng-click="profileCtrl.editMode = !profileCtrl.editMode"
-                      ng-hide="profileCtrl.editMode">{{ profileCtrl.user.gender }}</td>
-                    <td ng-show="profileCtrl.editMode">
-                      <select 
-                        ng-model="profileCtrl.user.gender"
-                        name="gender"
-                        class="form-control "
-                        tamodelex="3">
-                        <option value="" selected disabled>Gender</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="other">Other</option>
-                      </select>
-                    </td>
-                  </tr>
-                  <tr ng-hide="profileCtrl.editMode">
-                    <td>City</td>
-                    <td
-                      ng-click="profileCtrl.editMode = !profileCtrl.editMode">
-                      {{ profileCtrl.user.city }}
-                    </td>
-                  </tr>
-                  <tr ng-show="profileCtrl.editMode">
-                    <td>City</td>
-                    <td>
-                      <input 
-                        ng-model="profileCtrl.user.city"
-                        name="city"
-                        type="text" 
-                        class="form-control " 
-                        tamodelex="4">
-                    </td>
-                  </tr>
-                  <tr ng-hide="profileCtrl.editMode">
-                    <td>Country</td>
-                    <td
-                      ng-click="profileCtrl.editMode = !profileCtrl.editMode">
-                      {{ profileCtrl.user.country }}
-                    </td>
-                  </tr>
-                  <tr ng-show="profileCtrl.editMode">
-                    <td>Country</td>
-                    <td>
-                      <input 
-                        ng-model="profileCtrl.user.country"
-                        name="city"
-                        type="text" 
-                        class="form-control " 
-                        tamodelex="5">
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Email</td>
-                    <td 
-                      ng-click="profileCtrl.editMode = !profileCtrl.editMode"
-                      ng-hide="profileCtrl.editMode">{{ profileCtrl.user.email }}</td>
-                    <td ng-show="profileCtrl.editMode">
-                      <input 
-                        ng-model="profileCtrl.user.email"
-                        name="email"
-                        type="text" 
-                        class="form-control " 
-                        tamodelex="6">
-                    </td>
-                  </tr>
-                    <td>Mobile</td>
-                    <td 
-                      ng-click="profileCtrl.editMode = !profileCtrl.editMode"
-                      ng-hide="profileCtrl.editMode">{{ profileCtrl.user.mobile }}</td>
-                    <td ng-show="profileCtrl.editMode">
-                      <input 
-                        ng-model="profileCtrl.user.mobile"
-                        international-phone-number
-                        preferred-countries="us, gb, de"
-                        name="mobile"
-                        type="text" 
-                        class="form-control " 
-                        tamodelex="7">
-                    </td>
-                  </tr>
-                 
-                </tbody>
-              </table>
-
-              <div class="pull-right">
-                <div class="btn-group dropup btn-block">
-                  <button type="button" class="btn btn-primary"><span class="fa fa-gear"></span> Options </button>
-                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                    <span class="caret"></span>
-                    <span class="sr-only">Toggle Dropdown</span>
-                  </button>
-                  <ul class="dropdown-menu text-left" role="menu">
-                    <li>
-                      <div 
-                        class="dropdown-link" 
-                        ng-file-select="" 
-                        ng-model="files" 
-                        ng-file-change="profileCtrl.updateProfileImage(files)" 
-                        ng-multiple="false">
-                        <i class="fa fa-file-image-o"></i>
-                         Update Image 
-                      </div>
-                    </li>
-                    <li><a href="#"><span class="fa fa-warning"></span> Update Password  </a></li>
-                    <li class="divider"></li>
-                    <li>
-                      <a 
-                        ng-click="profileCtrl.editMode = !profileCtrl.editMode"
-                        class="fa fa-user"></span> Edit Profile </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li><a href="#" class="btn disabled" role="button"> Remove Account </a></li>
+<div ng-controller="ProfileViewController as profile" class="unwrap">
+   <toaster-container toaster-options="{'position-class': 'toast-bottom-right', 'time-out': '10000'}"></toaster-container>
+   <div style="background-image: url(app/img/profile-bg.jpg)" class="bg-cover">
+      <div class="p-xl text-center text-white">
+         <a href="" ng-click="profile.openImageCrop()">
+            <img ng-src="{{ user.picture }}" alt="Image" class="img-thumbnail img-circle thumb128" />
+         </a>
+         <h3 class="m0">{{ profile.user.fullName }}</h3>
+         <p>Learning {{ session.learningText }}</p>
+         <p class="form-control-static"><a href="#" editable-textarea="profile.user.introduction" e-rows="3" e-cols="60" onaftersave="profile.showUpdate = true" class="profile-intro-editable">{{ profile.user.introduction }}</a>
+         </p>
+      </div>
+   </div>
+   <div class="text-center bg-gray-dark p-lg mb-xl">
+      <div class="row row-table">
+         <div class="col-xs-4 br">
+            <h3 class="m0">{{ user.totalRecordings }}</h3>
+            <p class="m0">
+               <span class="hidden-xs">Total</span>
+               <span>Recordings</span>
+            </p>
+         </div>
+         <div class="col-xs-4 br">
+            <h3 class="m0">{{ user.totalRatings }}</h3>
+            <p class="m0">Ratings</p>
+         </div>
+         <div class="col-xs-4">
+            <h3 class="m0">{{ user.totalComments }}</h3>
+            <p class="m0">Comments</p>
+         </div>
+      </div>
+   </div>
+   <div class="p-lg">
+      <div class="row">
+         <div class="col-lg-9">
+            <!-- START timeline-->
+            <ul class="timeline">
+               <!-- START timeline item-->
+               <li ng-repeat="event in profile.timeline" ng-class="{'timeline-inverted': $even &amp;&amp; (event.action != 'separator'), 'timeline-separator': event.action == 'separator'}" data-datetime="{{event.date}}">
+                  <div ng-class="event.color" ng-if="event.action != 'separator'" class="timeline-badge">
+                     <em ng-class="event.icon"></em>
+                  </div>
+                  <div ng-if="event.action != 'separator'" class="timeline-panel">
+                     <div ng-class="$odd  ? 'left' : 'right'" class="popover">
+                        <div class="arrow"></div>
+                        <div class="popover-content">
+                           <div class="table-grid table-grid-align-middle mb">
+                              <div class="col col-xs">
+                                 <img ng-src="{{ event.profile }}" alt="Image" class="media-object img-circle thumb48" />
+                              </div>
+                              <div class="col">
+                                 <p class="m0">
+                                    <a href="#" class="text-muted">
+                                       <strong>{{ event.submittedBy }}</strong>
+                                    </a>{{ event.action }}</p>
+                              </div>
+                           </div>
+                           <p>
+                              <em>{{ event.link }}</em>
+                           </p>
+                        </div>
+                     </div>
+                  </div>
+               </li>
+               <!-- END timeline item-->
+               <!-- START timeline item-->
+               <li class="timeline-end">
+                  <a href="#" class="timeline-badge">
+                     <em class="fa fa-plus"></em>
+                  </a>
+               </li>
+               <!-- END timeline item-->
+            </ul>
+            <!-- END timeline-->
+         </div>
+         <div class="col-lg-3">
+            <div class="panel panel-default">
+               <div class="panel-body">
+                  <div class="text-center">
+                     <div ng-show="user.percentComplete &lt; 50" class="radial-bar radial-bar radial-bar-danger m0"></div>
+                     <div ng-show="user.percentComplete &gt; 90" class="radial-bar radial-bar radial-bar-success m0">
+                        <img src="{{ user.picture }}" alt="" />
+                     </div>
+                     <p>
+                        <strong>{{ user.percentComplete }}%</strong>
+                        <span>complete</span>
+                     </p>
+                  </div>
+                  <div class="form-horizontal">
+                     <div class="text-center">
+                        <div class="form-group m0">
+                           <h3 class="form-control-static"><a href="#" editable-text="profile.user.fullName" onaftersave="profile.showUpdate = true">{{ profile.user.fullName }}</a>
+                           </h3>
+                        </div>
+                     </div>
+                  </div>
+                  <hr/>
+                  <ul class="list-unstyled">
+                     <li>
+                        <em class="fa fa-home fa-fw mr-lg"></em><a href="#" editable-text="profile.user.location" onaftersave="profile.showUpdate = true">{{ profile.user.location }}</a>
+                     </li>
+                     <li>
+                        <em class="fa fa-envelope fa-fw mr-lg"></em><a href="#" editable-email="profile.user.email" onaftersave="profile.showUpdate = true">{{ profile.user.email }} </a>
+                     </li>
+                     <li>
+                        <em class="fa fa-graduation-cap fa-fw mr-lg"></em><a href="#" editable-select="profile.user.learning" onaftersave="profile.showUpdate = true" e-ng-options="s.code as s.text for s in profile.languages">{{ profile.showLearningLanguage() }}</a>
+                     </li>
+                     <li>
+                        <em class="fa fa-check fa-fw mr-lg"></em><a href="#" editable-select="profile.user.speaks" onaftersave="profile.showUpdate = true" e-ng-options="s.code as s.text for s in profile.languages">{{ profile.showSpeaksLanguage() }}</a>
+                     </li>
                   </ul>
-                </div>
-              </div><!-- end options bar -->
-
-              <button 
-                ng-show="profileCtrl.editMode"
-                ng-click="profileCtrl.editMode = !profileCtrl.editMode" 
-                class="btn btn-default">Cancel</button>
-              <button 
-                ng-show="profileCtrl.editMode"
-                ng-click="profileCtrl.saveProfile()" 
-                class="btn btn-success">Save</button>
-
+                  <div ng-show="profile.showUpdate" class="pull-right">
+                     <button ng-click="profile.showUpdate = false" class="btn btn-danger btn-xs">Cancel</button>
+                     <button ng-click="profile.update()" class="btn btn-success btn-xs">Save Profile</button>
+                  </div>
+               </div>
             </div>
-          </div>
-        </div><!-- end panel body -->
-
-      </div><!-- end panel -->
-    </div><!-- end col -->
-  </div><!-- end row -->
+            <div class="panel panel-default">
+               <div class="list-group">
+                  <a href="#" class="list-group-item">
+                     <em class="pull-right fa fa-volume-off fa-lg fa-fw text-muted mt"></em>
+                     <h4 class="list-group-item-heading">{{ user.totalRecordings }}</h4>
+                     <p class="list-group-item-text">Recordings</p>
+                  </a>
+                  <a href="#" class="list-group-item">
+                     <em class="pull-right fa fa-rss fa-lg fa-fw text-muted mt"></em>
+                     <h4 class="list-group-item-heading">{{ user.totalAnswers }}</h4>
+                     <p class="list-group-item-text">Answers</p>
+                  </a>
+                  <a href="#" class="list-group-item">
+                     <em class="pull-right fa fa-question fa-lg fa-fw text-muted mt"></em>
+                     <h4 class="list-group-item-heading">{{ user.totalQuestions }}</h4>
+                     <p class="list-group-item-text">Questions</p>
+                  </a>
+                  <a href="#" class="list-group-item">
+                     <em class="pull-right fa fa-comments fa-lg fa-fw text-muted mt"></em>
+                     <h4 class="list-group-item-heading">{{ user.totalResponses }}</h4>
+                     <p class="list-group-item-text">Responses</p>
+                  </a>
+                  <a href="#" class="list-group-item">
+                     <em class="pull-right fa fa-briefcase fa-lg fa-fw text-muted mt"></em>
+                     <h4 class="list-group-item-heading">{{ user.totalPracticeSets }}</h4>
+                     <p class="list-group-item-text">Practice Sets</p>
+                  </a>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
 </div>

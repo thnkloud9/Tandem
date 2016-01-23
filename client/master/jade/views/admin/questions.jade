@@ -1,0 +1,11 @@
+h3 Questions Admin
+  small All questionss
+
+.container-fluid(ng-controller="QuestionssAdminController as table")
+
+  h4.page-header Questions
+  .row
+    .col-lg-4.col-md-6
+      input.mb.form-control(placeholder='Filter...', type='text', ng-model='table.gridOptions.quickFilterText')
+   .ag-angle(ag-grid='table.gridOptions', style="width: 100%; height: 400px;")
+

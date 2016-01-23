@@ -1,0 +1,11 @@
+h3 Users Admin
+  small All users
+
+.container-fluid(ng-controller="UsersAdminController as table")
+
+  h4.page-header Users 
+  .row
+    .col-lg-4.col-md-6
+      input.mb.form-control(placeholder='Filter...', type='text', ng-model='table.gridOptions.quickFilterText')
+   .ag-angle(ag-grid='table.gridOptions', style="width: 100%; height: 400px;")
+

@@ -1,0 +1,22 @@
+<div class="modal-header">
+   <h3>{{ 'modal.CREATEQUESTION' | translate }}</h3>
+</div>
+<div class="modal-body">
+   <div class="container-fluid">
+      <div class="row">
+         <div class="col-md-10">
+            <div class="form-group">
+               <div>
+                  <h4 translate-text="translate-text" model="createQuestion.speaksText" send="true" model-translation="createQuestion.learningText" to="{{ session.learning }}" allow-change="false" initial-text="click here to enter english version"></h4>
+                  <h4 translate-text="translate-text" model="createQuestion.learningText" send="true" model-translation="createQuestion.speaksText" to="{{ session.speaks }}" allow-change="false" initial-text="click here to enter german version"></h4>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<div class="modal-footer">
+   <button type="button" ng-click="createQuestion.saveQuestion()" ng-show="app.debug" class="btn btn-danger btn-large">Test</button>
+   <button type="button" ng-click="createQuestion.cancel()" class="btn btn-danger btn-large">Cancel</button>
+   <button type="button" ng-click="createQuestion.ok()" class="btn btn-success btn-large">Create</button>
+</div>

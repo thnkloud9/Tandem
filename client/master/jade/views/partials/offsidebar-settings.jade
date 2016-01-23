@@ -1,0 +1,59 @@
+h3.text-center.text-thin Settings
+
+.p
+  h4.text-muted.text-thin Language
+    .pull-right
+      .btn-group(uib-dropdown='', is-open='language.listIsOpen')
+        button.btn.btn-default(type='button', uib-dropdown-toggle="")
+          | {{language.selected}}
+          span.caret
+        ul.dropdown-menu.dropdown-menu-right.animated.fadeInUpShort(role='menu')
+          li(ng-repeat='(localeId, langName) in language.available')
+            a(ng-click='language.set(localeId, $event)', href='#') {{langName}}
+
+.p
+  h4.text-muted.text-thin Audio Features
+
+  .clearfix
+    p.pull-left Speech Recognition
+    .pull-right
+      label.switch
+        input(type='checkbox', ng-model="app.audio.speechRecognition")
+        span
+.p
+  h4.text-muted.text-thin Translation Services
+
+  .clearfix
+    p.pull-left Show Translations
+    .pull-right
+      label.switch
+        input(type='checkbox', ng-model="app.translation.show")
+        span
+  .clearfix
+    p.pull-left MyMemory
+    .pull-right
+      label.switch
+        input(type='checkbox', ng-model="app.translation.mymemory")
+        span
+  .clearfix
+    p.pull-left Duolingo Hints
+    .pull-right
+      label.switch
+        input(type='checkbox', ng-model="app.translation.duolingo")
+        span
+  .clearfix
+    p.pull-left Google Search
+    .pull-right
+      label.switch
+        input(type='checkbox', ng-model="app.translation.googleSearch")
+        span
+
+.p
+  h4.text-muted.text-thin Admin Features
+
+  .clearfix
+    p.pull-left Debug
+    .pull-right
+      label.switch
+        input(type='checkbox', ng-model="app.debug")
+        span

@@ -1,0 +1,87 @@
+<div class="modal-header">
+   <h4>Edit Practice Set {{ modalEdit.practiceSet.description.translations[user.speaks] }} ---</h4>
+</div>
+<div class="modal-body">
+   <div class="form-group">
+      <input ng-model="modalEdit.practiceSet.title" tamodelex="1" required="" class="form-control" />
+   </div>
+   <div class="form-group">
+      <input ng-model="modalEdit.practiceSet.description.translations[user.speaks]" class="form-control" />
+   </div>
+   <div class="form-group">
+      <select ng-model="modalEdit.practiceSet.category" name="category" required="" class="form-control">
+         <option value="" selected="" disabled="">Category</option>
+         <option value="memorize">Memorize</option>
+         <option value="tandem">Tandem</option>
+         <option value="live">Live</option>
+      </select>
+   </div>
+   <!-- Add new question START-->
+   <div class="form-group">
+      <h4>Questions</h4>
+      <div>
+         <a ng-show="modalEdit.isAdmin" ng-click="" class="fa fa-plus-circle nounderline">
+            <small>Add Question</small>
+         </a>
+         <h4 translate-text="translate-text" model="modalEdit.newQuestion.speaksText" send="true" model-translation="modalEdit.newQuestion.learningText" to="{{ session.learning }}" allow-change="false" initial-text="click here to enter english version"></h4>
+         <h4 translate-text="translate-text" model="modalEdit.newQuestion.learningText" send="true" model-translation="modalEdit.newQuestion.speaksText" to="{{ session.speaks }}" allow-change="false" initial-text="click here to enter german version"></h4>
+         <button ng-click="modalEdit.saveQuestion()" class="btn btn-sm btn-success">Add</button>
+      </div>
+   </div>
+   <!-- Add new question END-->
+   <div class="row question-selector">
+      <div class="col-md-6">
+         <div class="panel panel-info">
+            <div class="panel-heading">
+               <h3 class="panel-title">Available</h3>
+            </div>
+            <div class="panel-body">
+               <!-- search existing-->
+               <div class="form-group">
+                  <input type="text" ng-model="modalEdit.searchText" ng-change="modalEdit.search()" placeholder="Search" class="form-control" />
+               </div>
+               <!--ul.list-unstyled(ui-scroll-viewport='', style='height: 300px; overflow-y: auto;')-->
+               <ul infinite-scroll="modalEdit.loadMoreQuestions()" infinite-scroll-distance="3" class="list-unstyled">
+                  <li ng-repeat="item in modalEdit.availableQuestions">
+                     <div class="row">
+                        <div class="col-xs-8">
+                           <h5>::: {{ item.text.translations[session.learning] }}</h5>
+                           <p ng-show="app.translation.show" class="small">{{ item.text.translations[session.speaks] }}</p>
+                        </div>
+                        <div class="col-xs-4">
+                           <button ng-click="modalEdit.addQuestion(item)" class="btn btn-sm btn-default">Add</button>
+                        </div>
+                     </div>
+                  </li>
+               </ul>
+            </div>
+         </div>
+      </div>
+      <div class="col-md-6">
+         <div class="panel panel-info">
+            <div class="panel-heading">
+               <h3 class="panel-title">Added</h3>
+            </div>
+            <div class="panel-body">
+               <ul class="list-unstyled">
+                  <li ng-repeat="item in modalEdit.practiceSet.questions">
+                     <div class="row">
+                        <div class="col-xs-8">
+                           <h5>::: {{ item.text.translations[session.learning] }}</h5>
+                           <p ng-show="app.translation.show" class="small">{{ item.text.translations[session.speaks] }}</p>
+                        </div>
+                        <div class="col-xs-4">
+                           <button ng-click="modalEdit.removeQuestion(item)" class="btn btn-sm btn-default">Remove</button>
+                        </div>
+                     </div>
+                  </li>
+               </ul>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<div class="modal-footer">
+   <button ng-click="modalEdit.savePracticeSet(); $close()" class="btn btn-success">Save</button>
+   <button ng-click="$close()" class="btn btn-default">Cancel</button>
+</div>

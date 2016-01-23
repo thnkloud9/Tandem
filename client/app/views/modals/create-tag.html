@@ -1,0 +1,10 @@
+<div class="modal-body">
+   <div class="container-fluid">
+      <h4 translate-text="translate-text" model="newTag.speaksText" send="true" model-translation="newTag.learningText" to="{{ session.learning }}" allow-change="false" initial-text="click here to enter english version"></h4>
+      <h4 translate-text="translate-text" model="newTag.learningText" send="true" model-translation="newTag.speaksText" to="{{ session.speaks }}" allow-change="false" initial-text="click here to enter german version"></h4>
+   </div>
+   <div class="text-center">
+      <button type="button" ng-click="closeThisDialog(0)" class="btn btn-danger btn-large">Cancel</button>
+      <button type="button" ng-click="confirm(1)" class="btn btn-success btn-large">Create</button>
+   </div>
+</div>

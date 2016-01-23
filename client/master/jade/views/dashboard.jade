@@ -1,0 +1,138 @@
+// START widgets box
+.content(ng-controller='DashboardController as dashboard')
+  .row
+    .col-lg-3.col-sm-6
+      // START widget
+      .panel.widget.bg-primary
+        .row.row-table
+          .col-xs-4.text-center.bg-primary-dark.pv-lg
+            em.icon-cloud-upload.fa-3x
+          .col-xs-8.pv-lg
+            .h2.mt0 {{ user.totalRecordings }}
+            .text-uppercase Audio Recordings
+    .col-lg-3.col-sm-6
+      // START widget
+      .panel.widget.bg-purple
+        .row.row-table
+          .col-xs-4.text-center.bg-purple-dark.pv-lg
+            em.icon-globe.fa-3x
+          .col-xs-8.pv-lg
+            .h2.mt0 {{ user.totalPracticeSessions }}
+            .text-uppercase Practice Sessions
+    .col-lg-3.col-md-6.col-sm-12
+      // START widget
+      .panel.widget.bg-green
+        .row.row-table
+          .col-xs-4.text-center.bg-green-dark.pv-lg
+            em.icon-bubbles.fa-3x
+          .col-xs-8.pv-lg
+            .h2.mt0 {{ user.totalRatings }}
+            .text-uppercase Ratings
+    .col-lg-3.col-md-6.col-sm-12
+      // START widget
+      .panel.widget
+        .row.row-table
+          .col-xs-4.text-center.bg-green.pv-lg
+            em.icon-bubbles.fa-3x
+          .col-xs-8.pv-lg
+            .h2.mt0 {{ user.understandable }}%
+            .text-uppercase Understandable
+      // END widget    
+  // END widgets box
+
+  .row
+    // START dashboard main content
+    .col-lg-9
+
+    // START dashboard sidebar
+    aside.col-lg-3
+      
+      // START messages and activity
+      .panel.panel-default
+        .panel-heading
+          .panel-title Latest activities
+        // START list group
+        .list-group
+          // START list group item
+          .list-group-item
+            .media-box
+              .pull-left
+                span.fa-stack
+                  em.fa.fa-circle.fa-stack-2x.text-purple
+                  em.fa.fa-cloud-upload.fa-stack-1x.fa-inverse.text-white
+              .media-box-body.clearfix
+                small.text-muted.pull-right.ml 15m
+                .media-box-heading
+                  a(href="#").text-purple.m0 NEW FILE
+                p.m0: small
+                  a(href="#") Bootstrap.xls
+          // END list group item
+
+          // START list group item
+          .list-group-item
+            .media-box
+              .pull-left
+                span.fa-stack
+                  em.fa.fa-circle.fa-stack-2x.text-info
+                  em.fa.fa-file-text-o.fa-stack-1x.fa-inverse.text-white
+              .media-box-body.clearfix
+                small.text-muted.pull-right.ml 2h
+                .media-box-heading
+                  a(href="#").text-info.m0 NEW DOCUMENT
+                p.m0: small
+                  a(href="#") Bootstrap.doc
+          // END list group item
+
+          // START list group item
+          .list-group-item
+            .media-box
+              .pull-left
+                span.fa-stack
+                  em.fa.fa-circle.fa-stack-2x.text-danger
+                  em.fa.fa-exclamation.fa-stack-1x.fa-inverse.text-white
+              .media-box-body.clearfix
+                small.text-muted.pull-right.ml 5h
+                .media-box-heading
+                  a(href="#").text-danger.m0 BROADCAST
+                p.m0
+                  a(href="#") Read
+          // END list group item
+
+          // START list group item
+          .list-group-item
+            .media-box
+              .pull-left
+                span.fa-stack
+                  em.fa.fa-circle.fa-stack-2x.text-success
+                  em.fa.fa-clock-o.fa-stack-1x.fa-inverse.text-white
+              .media-box-body.clearfix
+                small.text-muted.pull-right.ml 15h
+                .media-box-heading
+                  a(href="#").text-success.m0 NEW MEETING
+                p.m0
+                  small On 
+                    em 10/12/2015 09:00 am
+          // END list group item
+          // START list group item
+          .list-group-item
+            .media-box
+              .pull-left
+                span.fa-stack
+                  em.fa.fa-circle.fa-stack-2x.text-warning
+                  em.fa.fa-tasks.fa-stack-1x.fa-inverse.text-white
+              .media-box-body.clearfix
+                small.text-muted.pull-right.ml 1w
+                .media-box-heading
+                  a(href="#").text-warning.m0 TASKS COMPLETION
+                uib-progressbar.progress-xs.m0(value='22', type='warning') 22%
+
+          // END list group item
+        // END list group
+        // START panel footer
+        .panel-footer.clearfix
+          a(href='#').pull-left
+            small Load more
+        // END panel-footer
+      // END messages and activity
+    // END dashboard sidebar
+

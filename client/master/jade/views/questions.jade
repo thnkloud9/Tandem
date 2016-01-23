@@ -1,0 +1,26 @@
+h3
+  | Questions 
+  small {{ 'dashboard.WELCOME' | translate:{ appName: app.name } }}  !
+
+
+div(ng-controller='QuestionsController as questions')
+
+  .row
+    .pull-right
+      a.btn.btn-default.btn-sm(ng-click="questions.openCreateQuestionModal()") Create Question 
+  
+  .row(infinite-scroll='questions.loadMore()', infinite-scroll-distance='3')
+    .col-lg-4(ng-repeat='question in questions.questions')
+      // START widget
+      .panel.widget
+        .row.row-table.row-flush
+          .col-xs-5
+            picture.lateral-picture
+              img(src="app/img/bg2.jpg", alt="", ng-click='questions.openImageSelectModal(question)')
+          .col-xs-7.align-middle.p-lg
+            h4: strong {{ ::question.text.translations[questions.session.learning] }}
+            p(ng-show='app.translation.show'): small {{ ::question.text.translations[questions.session.speaks] }} 
+            p.pull-right
+              em.btn.btn-sm.fa.fa-microphone(ng-click='questions.openAddQuestionAudioModal(question)')
+              em.btn.btn-sm.fa.fa-plus(ng-click='')
+              em.btn.btn-sm.fa.fa-cog(ng-click='questions.openEditQuestionModal(question)')

@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 def init_app(app):
 
     """ twilio functions """
-    @app.route('/mobile/client', methods=['GET', 'POST'])
+    @app.route('/api/mobile/client', methods=['GET', 'POST'])
     def client():
         """Respond to incoming requests."""
         
@@ -27,7 +27,7 @@ def init_app(app):
 
         return jsonify(token=token)
 
-    @app.route('/mobile/verify', methods=['GET', 'POST'])
+    @app.route('/api/mobile/verify', methods=['GET', 'POST'])
     def verify():
         """Test a mobile phone."""
         response = twiml.Response()
@@ -36,7 +36,7 @@ def init_app(app):
 
         return Response(response.toxml(), mimetype='text/xml')
 
-    @app.route('/mobile/voice', methods=['GET', 'POST'])
+    @app.route('/api/mobile/voice', methods=['GET', 'POST'])
     def voice():
         """Greet / record the caller."""
         response = twiml.Response()
@@ -63,7 +63,7 @@ def init_app(app):
         
         return Response(response.toxml(), mimetype='text/xml')
 
-    @app.route('/mobile/recording', methods=['GET', 'POST'])
+    @app.route('/api/mobile/recording', methods=['GET', 'POST'])
     def recording():
         """Play back the caller's recording."""
 
@@ -90,7 +90,7 @@ def init_app(app):
 
         return Response(response.toxml(), mimetype='text/xml')
 
-    @app.route('/mobile/schedule/<practice_set_id>', methods=['GET', 'POST'])
+    @app.route('/api/mobile/schedule/<practice_set_id>', methods=['GET', 'POST'])
     def schedule(practice_set_id):
         request_json = request.get_json()
 

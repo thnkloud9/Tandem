@@ -1,0 +1,17 @@
+.modal-header
+  h3.modal-title Schedule Practice
+.modal-body
+  h4 When do you want to practice, we'll give you a call
+  .row
+    .col-md-6(style='margin-top: 35px;')
+      p.input-group
+        input.form-control(type='text', uib-datepicker-popup='{{modalSchedule.format}}', ng-model='modalSchedule.scheduleDate', is-open='modalSchedule.opened', min-date='modalSchedule.minDate', datepicker-options='modalSchedule.dateOptions', ng-required='true', close-text='Close')
+        span.input-group-btn
+          button.btn.btn-default(type='button', ng-click='modalSchedule.open($event)')
+            i.glyphicon.glyphicon-calendar
+    .col-md-3
+      uib-timepicker(ng-model='modalSchedule.scheduleDate', hour-step='1', minute-step='1', show-meridian='ismeridian')
+.modal-footer
+  button.btn.btn-success(ng-click='modalSchedule.saveSchedule(); $close()') Save
+  button.btn.btn-default(ng-click='$close()') Cancel
+

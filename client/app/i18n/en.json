@@ -1,0 +1,46 @@
+{
+  "dashboard": {
+    "WELCOME": "Welcome to {{appName}}"
+  },
+  "topbar": {
+    "search": {
+      "PLACEHOLDER": "Type and hit enter.."
+    }
+  },
+  "sidebar": {
+    "WELCOME": "Welcome",
+    "heading": {
+      "HEADER": "Main Navigation"
+    },
+    "nav": {
+      "SINGLEVIEW": "Single View",
+      "DASHBOARD": "Dashboard",
+      "PRACTICESETS": "Practice Sets",
+      "TAGS": "Tags",
+      "QUESTIONS": "Questions",
+      "ADMIN": "Admin",
+      "admin": {
+        "PRACTICESESSIONS": "Practice Sessions",
+        "PRACTICESETS": "Practice Sets",
+        "AUDIO": "Audio",
+        "USERS": "Users",
+        "JOBS": "Jobs",
+        "SESSIONS": "Sessions",
+        "QUESTIONS": "Questions",
+        "TAGS": "Tags",
+        "RATINGS": "Ratings",
+        "COMMENTS": "Comments"
+      },
+      "menu": {
+        "MENU": "Menu",
+        "SUBMENU": "Sub Menu"
+      }
+    }
+  },
+  "label": {
+    "TRANSLATE": "Translate"
+  },
+  "modal": {
+    "CREATEQUESTION": "Create a new Question"
+  }
+}

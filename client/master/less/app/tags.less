@@ -1,0 +1,87 @@
+
+.tags-input {
+  font-size: 36px;
+  height: auto;
+  width: auto;
+}
+
+.tag-widget {
+    //background-color: #fff;
+    //border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: 3px;
+    margin: 0 10px 10px 0;
+    position: relative;
+    .photo-loader {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      padding-top: 40%;  
+      z-index: 1;
+    }
+
+    img {
+      vertical-align: initial;
+      z-index: 2;
+    }
+
+    .tag-index {
+        padding: 10px;
+        background: fade(@gray-dark,75%);
+        color:#fff;
+        position:absolute;
+        height:100%;
+        text-align:center;
+        width:100%;
+        z-index:99;
+    }
+
+    .tag-index p:first-child {
+        margin-top:10px;
+    }
+
+    .photo-wrapper {
+    }
+
+    .tag-description {
+        padding:15px;
+    }
+}
+
+.new-tag {
+  margin-top: 30px;
+}
+
+.balloon-wrapper {
+  opacity:1;
+  text-align:center;
+}
+
+.balloon {
+  background: @brand-info;
+  border-radius: 50%;
+  display: inline-block;
+  text-align: center;
+  height: 75px;
+  line-height: 105px;
+  width: 75px;
+}
+
+.new-balloon {
+  border: 2px dashed #ccc;
+  border-radius: 50%;
+  display: inline-block;
+  text-align: center;
+  height: 75px;
+  line-height: 105px;
+  width: 75px;
+}
+
+.edit-tags-img {
+  vertical-align: initial;
+}
+
+.scroll-table {
+  height: 265px; 
+}

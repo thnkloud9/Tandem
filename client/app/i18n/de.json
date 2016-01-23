@@ -1,0 +1,27 @@
+{
+  "dashboard": {
+    "WELCOME": "Willkommen in {{appName}}"
+  },
+  "topbar": {
+    "search": {
+      "PLACEHOLDER": "Typ und Enter drücken.."
+    }
+  },
+  "sidebar": {
+    "WELCOME": "Willkommen",
+    "heading": {
+      "HEADER": "Hauptnavigation"
+    },
+    "nav": {
+      "SINGLEVIEW": "Einzelansicht",
+      "DASHBOARD": "Armaturenbrett",
+      "PRACTICESETS": "Trainingssätze",
+      "TAGS": "Tags",
+      "QUESTIONS": "Fragen",
+      "menu": {
+        "MENU": "Menu",
+        "SUBMENU": "Sub Menu"
+      }
+    }
+  }
+}

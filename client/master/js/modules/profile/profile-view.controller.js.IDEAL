@@ -1,0 +1,180 @@
+(function() {
+    'use strict';
+
+    angular.module('app.profile').controller('ProfileViewController', [
+      '$filter',
+      '$scope',
+      '$http',
+      '$state',
+      '$q',
+      'toaster',
+      'User',
+      'session',
+      'editableOptions',
+      'editableThemes',
+      'APP_CONFIG',
+      '$uibModal',
+      'Notify',
+      'fileUtils',
+      'RouteHelpers',
+      function ProfileViewController(
+          $filter,
+          $scope,
+          $http,
+          $state,
+          $q,
+          toaster,
+          User,
+          session,
+          editableOptions,
+          editableThemes,
+          APP_CONFIG,
+          $uibModal,
+          Notify,
+          fileUtils,
+          helper) {
+            var self = this;
+
+            activate();
+
+            ////////////////
+
+            function activate() {
+
+              editableOptions.theme = 'bs3';
+              editableThemes.bs3.inputClass = 'input-sm';
+              editableThemes.bs3.buttonsClass = 'btn-xs';
+              editableThemes.bs3.submitTpl = '<button type="submit" class="btn btn-success">' +
+                '<span class="fa fa-check"></span></button>';
+              editableThemes.bs3.cancelTpl = '<button type="button" class="btn btn-default" ' +
+                'ng-click="$form.$cancel()">'+
+                '<span class="fa fa-times text-muted"></span>'+
+                '</button>';
+
+              self.showUpdate = false;
+
+              self.user = {
+                fullName: session.user.first_name + ' ' + session.user.last_name,
+                introduction: session.user.introduction,
+                email: session.user.username,
+                mobile: session.user.mobile,
+                gender: session.user.gender, 
+                speaks: session.speaks,
+                learning: session.learning,
+                location: session.user.city + ', ' + session.user.country 
+              };
+
+              // populate language list from APP_CONFIG
+              self.languages = [];
+              angular.forEach(APP_CONFIG.languages, function(l) {
+                self.languages.push({
+                  code: l.code,
+                  text: l.text.translations[session.speaks]
+                });
+              });
+
+              // options for language select
+              self.showLearningLanguage = function() {
+                var selected = $filter('filter')(self.languages, {code: self.user.learning});
+                return (self.user.learning && selected.length) ? selected[0].text : 'Not set';
+              };
+
+              // options for language select
+              self.showSpeaksLanguage = function() {
+                var selected = $filter('filter')(self.languages, {code: self.user.speaks});
+                return (self.user.speaks && selected.length) ? selected[0].text : 'Not set';
+              };
+
+              // events array for timeline
+              self.timeline = User.initTimeline(session.user);
+
+              // place the message if something goes wrong
+              self.authMsg = '';
+
+              // image crop dialog setup
+              self.imageReset = function() {
+                self.myImage        = '';
+                self.myCroppedImage = '';
+                self.imgcropType    = 'square';
+              };
+
+              self.imageReset();
+
+              // called when image file is changed
+              // via fileOnChange directive
+              self.handleFileSelect = function(evt) {
+                var file=evt.currentTarget.files[0];
+                var reader = new FileReader();
+                reader.onload = function (evt) {
+                  $scope.$apply(function(/*$scope*/){
+                    self.myImage=evt.target.result;
+                  });
+                };
+                if(file) {
+                  reader.readAsDataURL(file);
+                }
+              };
+              
+              /**
+               * Opens image selection and crop dialog
+               */
+              self.openImageCrop = function() {
+                var modalInstance = $uibModal.open({
+                  templateUrl: 'app/views/modals/image-crop.html',
+                  controller: 'ImageCropController',
+                  controllerAs: 'imaageCrop',
+                  size: 'lg',
+                  resolve: helper.resolveFor('ngImgCrop', 'filestyle')
+                })
+
+                var state = $('+modal-state');
+                modalInstance.result.then(function(value){
+                  // make base64 string into a file
+                  var blob = fileUtils.base64toBlob(self.myCroppedImage);
+                  // Perform the save here
+                  session.user.updateImage(blob).then(function (user) {
+                    // update session image
+                    session.updateImage(self.myCroppedImage.split(',')[1]); 
+                    //Notify.alert('Profile image updated.', {status: 'success'});
+                  }, function () {
+                    Notify.alert('There was a problem updating your profile image.', {status: 'error'});
+                  })
+                }, function(value){
+                    //Notify.alert('Profile image not updated.', {status: 'warning'});
+                });
+              };
+
+              /**
+               * Updates profile using profileForm
+               */
+              self.update = function() {
+                var data = {
+                  speaks: [],
+                  learning: []
+                };
+                data.first_name = self.user.fullName.split(' ')[0];
+                data.last_name  = self.user.fullName.split(' ')[1];
+                data.city = self.user.location.split(' ')[0].replace(',','');
+                data.country = self.user.location.split(' ')[1];
+                data.introduction = self.user.introduction;
+                data.speaks.push(self.user.speaks); 
+                data.learning.push(self.user.learning); 
+
+                User.one(session.user._id).patch(data).then(function (user) {
+                    session.updateIdentity().then(function () {
+                      Notify.alert("Profile Updated", {status: 'success'});
+                      self.showUpdate = false;
+                    }, function () {
+                      Notify.alert("There was a server problem. However, your changes have been saved.");
+                    });
+                }, function(response) {
+                    Notify.alert("There was a server problem.  Please try again in a few moments.");
+                });
+
+              };
+
+
+            } // end activate
+        }
+    ]);
+})();

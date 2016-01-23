@@ -1,0 +1,28 @@
+h3 Update Profile Image
+
+.container-fluid
+  .row
+    .col-md-3
+      .panel
+        .panel-heading 
+          a.pull-right(href="#", ng-click="profile.imageReset()"): small.fa.fa-refresh.text-muted
+          | Select an image file 
+        .panel-body
+          .form-group
+            input#fileInput.form-control(filestyle="", type='file', data-class-button='btn btn-default', data-class-input="form-control", data-button-text="" file-on-change="profile.handleFileSelect")
+          p.pv Crop type:
+          .btn-group.btn-group-justified.mb
+            label.btn.btn-default(ng-model='profile.imgcropType', uib-btn-radio="'square'") Square
+            label.btn.btn-default(ng-model='profile.imgcropType', uib-btn-radio="'circle'") Circle
+          br
+          .imgcrop-preview(data-text="Cropped Image")
+            img(ng-src='{{profile.myCroppedImage}}')
+    .col-md-9
+      .panel
+        .panel-body
+          .imgcrop-area
+            img-crop(image='profile.myImage', result-image='profile.myCroppedImage', area-type="{{profile.imgcropType}}")
+
+.modal-footer
+  button.btn.btn-danger.btn-large(type='button', ng-click='closeThisDialog(0)') Cancel
+  button.btn.btn-success.btn-large(type='button', ng-click='confirm(1)') Save

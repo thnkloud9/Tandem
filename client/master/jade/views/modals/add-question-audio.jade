@@ -1,0 +1,78 @@
+.modal-header
+  h3.modal-title Add Question Recording
+.modal-body
+  #add-question-body
+    uib-accordion(close-others='true')
+      uib-accordion-group(ng-class="{ \
+      'panel-success': addAudio.hasLearningRecording,\
+      'panel-danger': !addAudio.hasLearningRecording \
+      }", is-open='addAudio.learningTabActive')
+        uib-accordion-heading
+          i.fa.fa-minus-square-o(ng-show='addAudio.learningTabActive')
+          i.fa.fa-plus-square-o(ng-hide='addAudio.learningTabActive')
+          |           {{ addAudio.recordingQuestion.text.translations[addAudio.learningCode] }}
+          span.pull-right
+            flag-icon(language-code='{{ addAudio.learningCode }}')
+          i.pull-right.fa.fa-check(ng-show='addAudio.hasLearningRecording')
+        div(ng-hide='addAudio.hasLearningRecording')
+          h4 Ok, lets add some audio! Just click the microphone and read the question.
+          h2
+            | {{ addAudio.recordingQuestion.text.translations[addAudio.learningCode] }}
+          recorder(question='addAudio.recordingQuestion', question-type='object', context='question', auto-play='true', language='{{ addAudio.learningCode }}', on-stop-record='addAudio.learningRecordStop()', on-save='addAudio.learningSaved()')
+        div(ng-show='addAudio.hasLearningRecording')
+          .inline-block
+            .pull-left
+              user-pin(image-class='img-circle profile-img-sm', user='addAudio.currentUser')
+            .pull-right
+              h5
+                span recorded
+              p.date-sm {{  addAudio.learningRecording._created | niceDate }}
+          .audio-bubble-left.inline-block
+            audio-player(on-play='addAudio.playerStarted()', on-stop='addAudio.playerFinished()', context='question', auto-play='false', url='{{ addAudio.learningRecordingUrl }}')
+          .inline-block
+            a.fa.fa-2x.fa-repeat.nounderline(uib-tooltip='record over', ng-click='addAudio.hasLearningRecording = !addAudio.hasLearningRecording')
+      // end learning tab
+      uib-accordion-group(ng-class="{ \
+      'panel-success': addAudio.hasSpeaksRecording,\
+      'panel-danger': !addAudio.hasSpeaksRecording \
+      }", is-open='addAudio.speaksTabActive')
+        uib-accordion-heading
+          i.fa.fa-minus-square-o(ng-show='addAudio.speaksTabActive')
+          i.fa.fa-plus-square-o(ng-hide='addAudio.speaksTabActive')
+          |           {{ addAudio.recordingQuestion.text.translations[addAudio.speaksCode] }}
+          span.pull-right
+            flag-icon(language-code='{{ addAudio.speaksCode }}')
+          i.pull-right.fa.fa-check(ng-show='addAudio.hasSpeaksRecording')
+        div(ng-hide='addAudio.hasSpeaksRecording')
+          h2
+            | {{ addAudio.recordingQuestion.text.translations[addAudio.speaksCode] }}
+          recorder(question='addAudio.recordingQuestion', question-type='object', context='question', auto-play='true', language='{{ addAudio.speaksCode }}', on-stop-record='addAudio.speaksRecordStop()', on-save='addAudio.speaksSaved()')
+        div(ng-show='addAudio.hasSpeaksRecording')
+          .inline-block
+            .pull-left
+              user-pin(user='addAudio.currentUser')
+            .pull-right
+              h5
+                span recorded
+              p.date-sm {{  addAudio.speaksRecording._created | niceDate }}
+          .audio-bubble-left.inline-block
+            audio-player(on-play='addAudio.playerStarted()', on-stop='addAudio.playerFinished()', context='question', auto-play='false', url='{{ addAudio.speaksRecordingUrl }}')
+          .inline-block
+            a.fa.fa-2x.fa-repeat.nounderline(tooltip='record over', ng-click='addAudio.hasSpeaksRecording = !addAudio.hasSpeaksRecording')
+      // end speaks tab
+      uib-accordion-group(is-disabled='addAudio.practiceSetTabDisabled', is-open='addAudio.practiceSetTabActive')
+        uib-accordion-heading
+          i.fa.fa-minus-square-o(ng-show='addAudio.practiceSetTabActive')
+          i.fa.fa-plus-square-o(ng-hide='addAudio.practiceSetTabActive')
+          span.fa.fa-comment
+          |           Practice Set
+        h4 Your Practice Sets
+        ul.practice-sets-list.list-unstyled(ng-repeat='practiceSet in addAudio.practiceSets')
+          li
+            div
+              a.fa.fa-plus-square.nounderline(tooltip='Add to {{ practiceSet.title }}', ng-click='addAudio.addToPracticeSet(practiceSet)')
+              h5.inline-block {{ practiceSet.title }}
+      // end practice set tab
+  // end add-question-body
+.modal-footer
+  button.btn.btn-success(ng-click='$close();') Done

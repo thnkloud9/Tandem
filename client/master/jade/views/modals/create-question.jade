@@ -1,0 +1,16 @@
+.modal-header
+  h3 {{ 'modal.CREATEQUESTION' | translate }}
+.modal-body
+  .container-fluid
+
+    .row
+      .col-md-10
+        .form-group
+          div
+            h4(translate-text, model='createQuestion.speaksText', send='true', model-translation='createQuestion.learningText', to='{{ session.learning }}', allow-change='false', initial-text="click here to enter english version")
+            h4(translate-text, model='createQuestion.learningText', send='true', model-translation='createQuestion.speaksText', to='{{ session.speaks }}', allow-change='false', initial-text="click here to enter german version")
+
+.modal-footer
+  button.btn.btn-danger.btn-large(type='button', ng-click='createQuestion.saveQuestion()', ng-show='app.debug') Test 
+  button.btn.btn-danger.btn-large(type='button', ng-click='createQuestion.cancel()') Cancel
+  button.btn.btn-success.btn-large(type='button', ng-click='createQuestion.ok()') Create

@@ -1,0 +1,12 @@
+<h3>Audios Admin
+   <small>All audios</small>
+</h3>
+<div ng-controller="AudiosAdminController as table" class="container-fluid">
+   <h4 class="page-header">Audios</h4>
+   <div class="row">
+      <div class="col-lg-4 col-md-6">
+         <input placeholder="Filter..." type="text" ng-model="table.gridOptions.quickFilterText" class="mb form-control" />
+      </div>
+   </div>
+   <div ag-grid="table.gridOptions" style="width: 100%; height: 400px;" class="ag-angle"></div>
+</div>
