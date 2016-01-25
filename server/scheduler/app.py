@@ -22,8 +22,11 @@ def addJobs(new_jobs_queue):
 
 if __name__ == '__main__':
     app_dir = os.path.dirname(os.path.realpath(__file__))
+    filename= app_dir + '/../log/scheduler.log'
+    f = open(filename, 'w+')
+    f.close()
     logging.basicConfig(
-        filename= app_dir + '/../log/scheduler.log',
+        filename=filename,
         format='%(asctime)s - %(name)s - %(levelname)s: %(message)s', 
         datefmt='%m/%d/%Y %I:%M:%S %p',
         level=logging.DEBUG)
