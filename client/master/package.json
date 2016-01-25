@@ -1,7 +1,7 @@
 {
-  "name": "Angle",
+  "name": "Tandem",
   "version": "0.0.0",
-  "description": "Angle - Bootstrap Admin App + AngularJS",
+  "description": "Tandem - Language Practice App",
   "author": "@themicon_co",
   "dependencies": {},
   "devDependencies": {
