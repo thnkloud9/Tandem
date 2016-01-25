@@ -54,6 +54,10 @@
           console.log('got updated speech results');
           self.speechRecognitionResults = newVal;
           if ((self.correctAnswer) && (newVal !== '...listening')) {
+            var formatedAnswer = self.correctAnswer
+              .toLowerCase()
+              .replace('[-,_]', ' ')
+              .replace(/[.\/#!$%\^&\*;:{}=\`~()]/g,"");
             if (newVal.toLowerCase() === self.correctAnswer.toLowerCase()) {
               self.pass = true;
               self.fail = false;
@@ -61,10 +65,13 @@
               self.submitAnswer();
               clearTimeout(self.failCatch);
             } else {
+              // wait a few seconds before jumping to a fail
+              // because the speechRecognition can take a few
+              // seconds to proces
               self.failCatch = setTimeout(function () {
                 self.fail = true;
                 self.pass = false;
-              }, 5000);
+              }, 4000);
             }
           }
         });

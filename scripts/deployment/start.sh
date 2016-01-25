@@ -1,3 +1,5 @@
 #!/bin/bash
 
-touch /home/mark/started
+sudo start tandem-api
+sudo start scheduler
+sudo service nginx start
