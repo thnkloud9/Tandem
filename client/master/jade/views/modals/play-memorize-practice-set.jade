@@ -1,0 +1,25 @@
+.panel-body
+  .col-sm-2
+    h3 {{ modalPlay.score }}
+    img(src='app/img/friends/yellow-tooth.png', ng-hide='modalPlay.fail')
+    img(src='app/img/friends/yellow-effed-up.png', ng-show='modalPlay.fail')
+  .col-sm-10
+    h4(ng-hide='modalPlay.showComplete') Can you translate this?
+    h4(ng-show='modalPlay.showComplete') Congrats, you finished with {{ modalPlay.score }} points
+    p You can type your answer, or turn on speech detection and try speaking the answer.
+    div(ng-show='modalPlay.fail')
+      p Hmmm, that doesn't sound right to me.  Sorry, {{ modalPlay.answer }} is incorrect.
+    div(ng-show='modalPlay.pass')
+      p Nice, {{ modalPlay.answer }} that works for me!
+    .text-center
+      h2{{ modalPlay.practiceSession.currentQuestion.text.translations[session.learning] }}
+      input(ng-model='modalPlay.answer')
+      button.btn.btn-default(ng-click='modalPlay.submitAnswer()') Submit
+    div
+      a.fa.fa-toggle-on.nounderline(ng-show='app.audio.speechRecognition', ng-click='modalPlay.toggleSpeechRecognition()')
+      a.fa.fa-toggle-off.nounderline(ng-hide='app.audio.speechRecognition', ng-click='modalPlay.toggleSpeechRecognition()')
+      span Speech Detection
+      h5.text-center {{modalPlay.speechRecognitionResults}}
+.modal-footer
+  button.btn.btn-default(ng-click='modalPlay.loadNextQuestion()') Next
+  button.btn.btn-default(ng-click='$close()') Cancel

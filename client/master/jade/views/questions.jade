@@ -14,10 +14,11 @@ div(ng-controller='QuestionsController as questions')
       // START widget
       .panel.widget
         .row.row-table.row-flush
-          .col-xs-5
+          //.col-xs-5
             picture.lateral-picture
               img(src="app/img/bg2.jpg", alt="", ng-click='questions.openImageSelectModal(question)')
-          .col-xs-7.align-middle.p-lg
+          //.col-xs-7.align-middle.p-lg
+          .col-xs-12.align-middle.p-lg
             h4: strong {{ ::question.text.translations[questions.session.learning] }}
             p(ng-show='app.translation.show'): small {{ ::question.text.translations[questions.session.speaks] }} 
             p.pull-right

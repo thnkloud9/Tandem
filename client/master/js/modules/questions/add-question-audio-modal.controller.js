@@ -26,14 +26,8 @@
         recordingQuestion) {
         var self = this;
 
-        self.currentUser = session.user;
-        self.speaksCode = session.speaks;
-        self.learningCode = session.learning;
-        self.speaksText = session.speaksText; 
-        self.learningText = session.learningText;
         self.recordingQuestion = session.recordingQuestion;
 
-        self.practiceSetTabDisabled = true;
         self.learningTabActive = true;
         self.speaksTabActive = false;
         self.practiceSetTabActive = false;
@@ -62,28 +56,24 @@
         }
         Recording.getList(params).then(function (audios) {
           audios.forEach(function (audio) {
-            if (audio.language_code === self.speaksCode) {
+            if (audio.language_code === session.speaks) {
               self.hasSpeaksRecording = true;
+              self.speaksTabActive = false;
+              self.learningTabActive = true;
               self.speaksRecordingUrl = APP_CONFIG.API.rootURI + '/assets/audio/' + audio._id;
               self.speaksRecording = audio;
             }
-            if (audio.language_code === self.learningCode) {
+            if (audio.language_code === session.learning) {
               self.hasLearningRecording = true;
+              self.learningTabActive = false;
+              self.speaksTabActive = true;
               self.learningRecordingUrl = APP_CONFIG.API.rootURI + '/assets/audio/' + audio._id;
               self.learningRecording = audio;
             }
+            if ((self.hasLearningRecording) && (self.hasSpeaksRecording)) {
+              self.practiceSetTabActive = true;
+            }
           });
-
-          if ((self.hasLearningRecording) && (self.hasSpeaksRecording)) {
-            self.practiceSetTabDisabled = false;
-            self.practiceSetTabActive = true;
-          } else {
-            self.learningTabActive = false;
-            setTimeout(function () {
-              self.learningTabActive = true;
-            }, 500);
-          }
-
         });
 
         self.addToPracticeSet = function (practiceSet) {
@@ -95,15 +85,16 @@
         };
 
         self.learningSaved = function () {
-          self.speaksTabActive = true;
+          self.learningTabActive = false;
           self.hasLearningRecording = true;
+          self.speaksTabActive = true;
           // add user points
         };
 
         self.speaksSaved = function () {
-          self.practiceSetTabDisabled = false;
-          self.practiceSetTabActive = true;
+          self.speaksTabActive = false;
           self.hasSpeaksRecording = true;
+          self.practiceSetTabActive = true;
           // add user points
         };
 

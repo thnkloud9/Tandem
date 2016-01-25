@@ -107,6 +107,9 @@
                     };
                     PracticeSession.create(data).then(function (newPracticeSession) {
                       deferedGet.resolve(newPracticeSession);
+                    }, function (response) {
+                      console.log('error creating practice session', response);
+                      deferedGet.reject();
                     });
                   };
                 });

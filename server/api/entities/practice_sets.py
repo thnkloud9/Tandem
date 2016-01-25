@@ -42,6 +42,10 @@ entity = {
                 }
             }
         },
+        'score': {
+            'type': 'integer',
+            'default': 0
+        },
         'submitted_by' : {
             'type': 'objectid',
             'data_relation': {

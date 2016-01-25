@@ -25,30 +25,53 @@
               {headerName: 'Answers', field: 'answers', width: 25},
               {headerName: 'Audio', field: 'audio', width: 25},
               {headerName: 'Platform', field: 'platform', width: 25},
-              {headerName: 'Practice Set', field: 'practice_set', width: 25},
+              {
+                headerName: 'Practice Set',
+                field: 'practice_set',
+                width: 35,
+                valueGetter: function (params) {
+                  return params.data.practice_set.title;
+                }
+              },
+              {
+                headerName: 'category',
+                field: 'practice_set',
+                width: 25,
+                valueGetter: function (params) {
+                  return params.data.practice_set.category;
+                }
+              },
               {headerName: 'Status', field: 'status', width: 25},
               {headerName: 'Created', field: '_created', width: 25},
               {headerName: 'Updated', field: '_updated', width: 25},
-              {headerName: 'Submitted By', field: 'submitted_by', width: 25}
+              {
+                headerName: 'SubmittedBy',
+                field: 'submitted_by',
+                width: 25,
+                valueGetter: function (params) {
+                  return params.data.submitted_by.username;
+                }
+              },
             ];
 
             // set table options 
             self.gridOptions = {
                 columnDefs: columnDefs,
                 rowData: null,
+                enableSorting: true,
                 enableFilter: true,
-                ready: function(api){
-                  api.sizeColumnsToFit();
-                }
+                enableColResize: true
             };
 
             // load data
-            self.page = 1;
-            self.maxResults = 30;
+            self.maxResults = 9999;
             self.practiceSessions = [];
             var params = {
+              embedded: {
+                submitted_by: 1,
+                practice_set: 1
+              },
               max_results: self.maxResults,
-              page: self.page
             };
             PracticeSession.getList(params).then(function (practiceSessions) {
               var fields = _.pluck(columnDefs, 'field');

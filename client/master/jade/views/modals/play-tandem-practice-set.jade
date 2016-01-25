@@ -1,0 +1,59 @@
+.panel-body
+  div(ng-hide='modalPlay.showComplete')
+    h3.center(popover-trigger='mouseenter', popover-title='What now?', uib-popover='After a question is played click the microphone to record and answer')
+      i.fa.fa-2x.fa-comments
+      span(ng-show='modalPlay.practiceSession.lastQuestion') Last Question!
+  // AUDIO PLAYER
+  #centered-player(ng-hide='modalPlay.showComplete')
+    .inline-block
+      .inline-block
+        div
+          user-pin(user='modalPlay.practiceSession.currentQuestion.currentRecording.submitted_by')
+        div
+          h5
+            span asks
+      .bubble-left.inline-block
+        p
+          | {{ modalPlay.practiceSession.currentQuestion.text.translations[modalPlay.learningCode] }}
+        .player.inline-block.padded(ng-show='modalPlay.showPlayer')
+          audio-player(on-play='modalPlay.playerStarted()', on-stop='modalPlay.playerFinished()', context='question', auto-play='true', url='{{ modalPlay.audioUrl }}')
+    // recorder
+    .recorder.inline-block(ng-show='modalPlay.showRecorder')
+      recorder(question='modalPlay.recordingQuestion', question-type='object', context='answer', auto-play='true', language='{{ modalPlay.learningCode }}', on-start-record='modalPlay.recordingStarted()', on-stop-record='modalPlay.recordingFinished()', on-save='modalPlay.audioSaved(newRecording)')
+    // end recorder
+  // END AUDIO PLAYER
+  div
+    a.fa.fa-toggle-on.nounderline(ng-show='modalPlay.speechDetection', ng-click='modalPlay.toggleSpeechDetection()')
+    a.fa.fa-toggle-off.nounderline(ng-hide='modalPlay.speechDetection', ng-click='modalPlay.toggleSpeechDetection()')
+    span.date-sm(uib-popover='Enables speech detection to assist in proper pronunciation. \
+    While not perfect, its kind of fun!  Give a shot\
+    before you start recording your response.', popover-trigger='mouseenter', popover-title='Speech Detection') Speech Detection
+  h5.center(ng-show='modalPlay.showTranscription') {{modalPlay.speechRecognitionResults}}
+  div(ng-show='modalPlay.showComplete')
+    h3 Nice work!
+    p Now you can submit this practice session for grading and see how well you did.
+    .center
+      a.padded.fa.fa-3x.fa-thumbs-down.nounderline(ng-click='$close()')
+      a.padded.fa.fa-3x.fa-thumbs-up.nounderline(ng-click='modalPlay.savePracticeSession(); $close();')
+  hr
+  a.nounderline(ng-click='modalPlay.showQuestions = !modalPlay.showQuestions', tooltip='Delete All Questions')
+    i.fa.fa-plus-square-o(ng-hide='modalPlay.showQuestions')
+    i.fa.fa-minus-square-o(ng-show='modalPlay.showQuestions')
+  h4.inline-block Questions ({{ modalPlay.playingPracticeSet.questions.length  }}) 
+  ul.list-unstyled(ng-show='modalPlay.showQuestions')
+    li(ng-repeat='question in modalPlay.playedQuestions')
+      div
+        .inline-block
+          .pull-left
+            user-pin(user='question.currentRecording.submitted_by')
+          .pull-right
+            h5
+              span asks
+            p.date-sm {{  question.currentRecording._created | niceDate }}
+        .bubble-left.inline-block
+          p {{ question.text.translations[modalPlay.learningCode] }}
+    // end ng-repeat questions
+  // end question-list
+.modal-footer
+  button.btn.btn-default(ng-click='$close()') Cancel
+

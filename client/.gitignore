@@ -1,5 +1,9 @@
-node_modules
 dist
 .tmp
 .sass-cache
-bower_components
+master/node_modules
+master/node_modules/*
+master/bower_components
+master/bower_components/*
+vendor
+vendor/*

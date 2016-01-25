@@ -134,5 +134,5 @@
   "bower_components/sparkline/index.js",
   "bower_components/angular-paging/dist/paging.min.js",
   "bower_components/wavesurfer.js/dist/wavesurfer.min.js",
-  "bower_components/angularAudioRecorder/dist/angular-audio-recorder.min.js"
+  "bower_components/recordmp3/js/libmp3lame.min.js"
 ]

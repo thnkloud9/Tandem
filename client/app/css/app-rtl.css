@@ -13705,3 +13705,7 @@ flatdoc .button .badge {
 .add-question-widget {
   padding: 10px;
 }
+
+.audio-block-picture {
+  width: 60px;
+}

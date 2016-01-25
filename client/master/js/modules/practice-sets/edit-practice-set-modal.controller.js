@@ -26,117 +26,110 @@
      session,
      APP_CONFIG,
      editingSet) {
-      var self = this;
+      var vm = this;
 
-      self.isAdmin = (session.roles === "admin");
-      self.page = 1;
-      self.maxResults = 10;
-      self.searchParams = null;
-      self.availableQuestions = [];
-      self.selectedQuestion = null;
-      self.newQuestion = {};
+      vm.isAdmin = (session.roles === "admin");
+      vm.maxResults = 99999;
+      vm.searchParams = null;
+      vm.availableQuestions = [];
+      vm.selectedQuestion = null;
+      vm.newQuestion = {};
+      vm.selected = [];
+      vm.addedSelected = [];
 
-      self.practiceSet = editingSet;
+      vm.practiceSet = editingSet;
 
-      self.practiceSet.hydrateQuestions().then(function (loadedQuestions) {
+      vm.practiceSet.hydrateQuestions().then(function (addedQuestions) {
+        vm.practiceSet.questionIds = _.pluck(addedQuestions, '_id'); 
+        var where = {
+          "_id": { "$nin": vm.practiceSet.questionIds }
+        }
         var params = {
-          embedded: {tags: 1},
-          max_results: self.maxResults,
-          page: self.page
+          "where": JSON.stringify(where),
+          "embedded": { "tags": 1 },
+          max_results: vm.maxResults,
         }; 
         Question.getList(params).then(function (questions) {
-          // only add questions that are not already in the practice_set
-          angular.forEach(questions, function(question) {
-            if (self.practiceSet.questionIds.indexOf(question._id) === -1) {
-              self.availableQuestions.push(question);
-            }
-          });
+          vm.totalAvailable = questions._meta.total;
+          vm.availableQuestions = questions;
         });
       });
 
-      self.loadMoreQuestions = function () {
-        if (self.page !== 'end') {
-          var params = {};
-          if (self.searchParams) {
-            params = searchParams;
-          }
-          params.max_results = self.maxResults;
-          params.page = (self.page + 1);
-          params.embedded = {
-            tags: 1
-          }
-          Question.getList(params).then(function (questions) {
-            if (questions) {
-              self.page++
-              questions.forEach(function (question) {
-                if (self.practiceSet.questionIds.indexOf(question._id) === -1) {
-                  self.avilableQuestions.add(question);
-                }
-              });
-            } else {
-              self.page = 'end';
-            }
-          });
-        } 
-      }
-
-      self.search = function () {
+      vm.search = function (added) {
         var speaksFilter = {};
         var learningFilter = {};
+        var searchText = (added) ? vm.addedSearchText : vm.searchText;
         var tagsFilter = {
           "tags_index": {
-            "$regex": ".*" + self.searchText + ".*",
+            "$regex": ".*" + searchText + ".*",
             "$options": "i"
           }
         };
         speaksFilter['text.translations.' + session.speaks] = {
-          "$regex": ".*" + self.searchText + ".*",
+          "$regex": ".*" + searchText + ".*",
           "$options": "i"
         };
         learningFilter['text.translations.' + session.learning] = {
-          "$regex": ".*" + self.searchText + ".*",
+          "$regex": ".*" + searchText + ".*",
           "$options": "i"
         };
-        var filter = {
-          "$or": [
-            speaksFilter,
-            learningFilter,
-            tagsFilter
-          ]
-        };
-        var params = {
-          "where": JSON.stringify(filter),
-          "embedded": {
-            "tags": 1
-          }
-        };
 
-        self.searchParams = params;
-        self.page = 1;
-        self.availableQuestions = [];
-        Question.getList(params).then(function (questions) {
-          // only add questions that are not already in the practice_set
-          angular.forEach(questions, function(question) {
-            if (self.practiceSet.questionIds.indexOf(question._id) === -1) {
-              self.availableQuestions.push(question);
+        if (added) {
+          var filter = {
+            "$and": [
+              { "_id": { "$in": vm.practiceSet.questionIds }},
+              { "$or": [ speaksFilter, learningFilter, tagsFilter ] }
+            ]
+          };
+          var params = {
+            "where": JSON.stringify(filter),
+            "embedded": {
+              "tags": 1
             }
+          };
+
+          vm.searchParams = params;
+          vm.availableQuestions = [];
+          Question.getList(params).then(function (questions) {
+            vm.addedTotalAvailable = questions._meta.total
+            vm.practiceSet.questions = questions;
           });
-        });
+        } else {
+          var filter = {
+            "$and": [
+              { "_id": { "$nin": vm.practiceSet.questionIds }},
+              { "$or": [ speaksFilter, learningFilter, tagsFilter ] }
+            ]
+          };
+          var params = {
+            "where": JSON.stringify(filter),
+            "embedded": {
+              "tags": 1
+            }
+          };
+
+          vm.searchParams = params;
+          vm.availableQuestions = [];
+          Question.getList(params).then(function (questions) {
+            vm.totalAvailable = questions._meta.total;
+            vm.availableQuestions = questions;
+          });
+        }
       };
 
-      self.clearNewQuestion = function() {
-        self.newQuestion.speaksText = 'Click here to enter ' + session.speaksText;
-        self.newQuestion.learningText = 'Click here to enter ' + session.learningText;
+      vm.clearNewQuestion = function() {
+        vm.newQuestion.speaksText = 'Click here to enter ' + session.speaksText;
+        vm.newQuestion.learningText = 'Click here to enter ' + session.learningText;
       };
 
       /**
        * Submit a new question to the server api using
        * the Question service
        */  
-      self.saveQuestion = function () {
+      vm.saveQuestion = function () {
         var translations = {};
-        translations[session.speaks] = self.newQuestion.speaksText;
-        translations[session.learning] = self.newQuestion.learningText;
+        translations[session.speaks] = vm.newQuestion.speaksText;
+        translations[session.learning] = vm.newQuestion.learningText;
         var questionData = {
           text: {
             languages: 2,
@@ -144,7 +137,7 @@
             translations: translations
           },
           status: 'submitted',
-          category: self.newQuestion.category,
+          category: vm.newQuestion.category,
           submitted_by: session.userId
         };
 
@@ -154,19 +147,19 @@
           Notify.alert("Question added.", {status: 'success'});
 
           Question.one(question._id).get().then(function (loadedQuestion) {
-            self.practiceSet.questions.push(loadedQuestion);
+            vm.practiceSet.questions.push(loadedQuestion);
         
             // save new question id to practice_set
-            var questions = (self.practiceSet.questions) ?
-              _.pluck(self.practiceSet.questions, '_id') : [];
+            var questions = (vm.practiceSet.questions) ?
+              _.pluck(vm.practiceSet.questions, '_id') : [];
             questions.push(question._id);
             var practiceSetData = {
               questions: []
             };
             practiceSetData.questions = questions            
-            PracticeSet.one(self.practiceSet._id).patch(practiceSetData).then(function () {
+            PracticeSet.one(vm.practiceSet._id).patch(practiceSetData).then(function () {
               Notify.alert("Added to PracticeSet", {status: 'success'});
-              self.clearNewQuestion();
+              vm.clearNewQuestion();
             }, function () {
               Notify.alert("Failed to add to PracticeSet", {status: 'danger'});
             });
@@ -179,19 +172,19 @@
 
       };
 
-      self.addQuestion = function (question) {
+      vm.addQuestion = function (question) {
         // save new question id to practice_set
-        var questions = (self.practiceSet.questions) ?
-          _.pluck(self.practiceSet.questions, '_id') : [];
+        var questions = (vm.practiceSet.questions) ?
+          _.pluck(vm.practiceSet.questions, '_id') : [];
         questions.push(question._id);
         var practiceSetData = {
           questions: []
         };
         practiceSetData.questions = questions
-        PracticeSet.one(self.practiceSet._id).patch(practiceSetData).then(function () {
+        PracticeSet.one(vm.practiceSet._id).patch(practiceSetData).then(function () {
           Notify.alert("Added to PracticeSet", {status: 'success'});
-          self.practiceSet.questions.push(question);
-          self.availableQuestions = self.availableQuestions.filter(function (q) {
+          vm.practiceSet.questions.push(question);
+          vm.availableQuestions = vm.availableQuestions.filter(function (q) {
             return q._id !== question._id;
           });
         }, function () {
@@ -199,18 +192,38 @@
         });
       };
 
-      self.removeQuestion = function (question) {
+      vm.addAllSelected = function () {
+        angular.forEach(vm.availableQuestions, function (question) {
+          if (vm.selected.indexOf(question._id) > -1) {
+            vm.addQuestion(question);
+          }
+        });
+        // Reset the search, otherwise paging gets weird
+        vm.search();
+      };
+
+      vm.removeAllSelected = function () {
+        angular.forEach(vm.tag.questions, function (question) {
+          if (vm.selected.indexOf(question._id) > -1) {
+            vm.removeQuestion(question);
+          }
+        });
+        // Reset the search, otherwise paging gets weird
+        vm.search();
+      };
+
+      vm.removeQuestion = function (question) {
         // save new question id to practice_set
-        var questions = (self.practiceSet.questions) ?
-          _.pluck(self.practiceSet.questions, '_id') : [];
+        var questions = (vm.practiceSet.questions) ?
+          _.pluck(vm.practiceSet.questions, '_id') : [];
         var practiceSetData = {
           questions: []
         };
         practiceSetData.questions = _.without(questions, question._id);
-        PracticeSet.one(self.practiceSet._id).patch(practiceSetData).then(function () {
+        PracticeSet.one(vm.practiceSet._id).patch(practiceSetData).then(function () {
           Notify.alert("Added to PracticeSet", {status: 'success'});
-          self.availableQuestions.push(question);
-          self.practiceSet.questions = self.practiceSet.questions.filter(function (q) {
+          vm.availableQuestions.push(question);
+          vm.practiceSet.questions = vm.practiceSet.questions.filter(function (q) {
             return q._id !== question._id;
           });
         }, function () {
@@ -218,14 +231,52 @@
         });
       };
 
-      self.savePracticeSet = function () {
+      vm.toggleAll = function () {
+        if (vm.allSelected) {
+          vm.selected = [];
+          vm.allSelected = false;
+        } else {
+          vm.selected = _.pluck(vm.availableQuestions, '_id');
+          vm.allSelected = true;
+        }  
+      };
+
+      vm.addedToggleAll = function () {
+        if (vm.addedAllSelected) {
+          vm.addedSelected = [];
+          vm.addedAllSelected = false;
+        } else {
+          vm.addedSelected = _.pluck(vm.practiceSet.questions, '_id');
+          vm.addedAllSelected = true;
+        }  
+      };
+
+      vm.toggleSelected = function (questionId) {
+        var idx = vm.selected.indexOf(questionId);
+        if (idx > -1) {
+          vm.selected.splice(idx, 1);
+        } else {
+          vm.selected.push(questionId);
+        } 
+      };
+
+      vm.addedToggleSelected = function (questionId) {
+        var idx = vm.addedSelected.indexOf(questionId);
+        if (idx > -1) {
+          vm.addedSelected.splice(idx, 1);
+        } else {
+          vm.addedSelected.push(questionId);
+        } 
+      };
+
+      vm.savePracticeSet = function () {
         var practiceSetData = {};
         
-        practiceSetData.category = self.practiceSet.category;
-        practiceSetData.questions = _.pluck(self.practiceSet.questions, '_id');
-        practiceSetData.description = self.practiceSet.description;
-        practiceSetData.title = self.practiceSet.title;
-        PracticeSet.one(self.practiceSet._id).patch(practiceSetData).then(function() {
+        practiceSetData.category = vm.practiceSet.category;
+        practiceSetData.questions = _.pluck(vm.practiceSet.questions, '_id');
+        practiceSetData.description = vm.practiceSet.description;
+        practiceSetData.title = vm.practiceSet.title;
+        PracticeSet.one(vm.practiceSet._id).patch(practiceSetData).then(function() {
           Notify.alert("Practice Set updated.", {status: 'success'});
         }, function () {
           Notify.alert( "Server Problem.", {status: 'success'});

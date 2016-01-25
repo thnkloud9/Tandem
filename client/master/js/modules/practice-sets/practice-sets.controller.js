@@ -42,17 +42,33 @@
               });
 
               self.playPracticeSet = function (set) {
-                 $uibModal.open({
-                  controller: 'PlayPracticeSetModalController',
-                  controllerAs: 'modalPlay',
-                  templateUrl: 'app/views/modals/play-practice-set.html',
-                  resolve: {
-                    playingSet: function () {
-                      return set;
-                    }
-                  },
-                  size: 'lg'
-                });
+                if (set.category === 'tandem') {
+                  $uibModal.open({
+                    controller: 'PlayTandemPracticeSetModalController',
+                    controllerAs: 'modalPlay',
+                    templateUrl: 'app/views/modals/play-tandem-practice-set.html',
+                    resolve: {
+                      playingSet: function () {
+                        return set;
+                      }
+                    },
+                    size: 'lg'
+                  });
+                }
+                if (set.category === 'memorize') {
+                  // TODO: add memorze session modal opne
+                  $uibModal.open({
+                    controller: 'PlayMemorizePracticeSetModalController',
+                    controllerAs: 'modalPlay',
+                    templateUrl: 'app/views/modals/play-memorize-practice-set.html',
+                    resolve: {
+                      playingSet: function () {
+                        return set;
+                      }
+                    },
+                    size: 'lg'
+                  });
+                }
               };
 
               self.editPracticeSet = function (set) {
