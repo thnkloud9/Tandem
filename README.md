@@ -6,5 +6,3 @@
 
 ## How to contribute
 
-Credits:
-
