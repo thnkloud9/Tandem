@@ -12,7 +12,7 @@
     div(ng-show='modalPlay.pass')
       p Nice, {{ modalPlay.answer }} that works for me!
     .text-center
-      h2{{ modalPlay.practiceSession.currentQuestion.text.translations[session.learning] }}
+      h2 {{ modalPlay.practiceSession.currentQuestion.text.translations[session.learning] }}
       input(ng-model='modalPlay.answer')
       button.btn.btn-default(ng-click='modalPlay.submitAnswer()') Submit
     div
