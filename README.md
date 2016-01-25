@@ -5,4 +5,3 @@
 ## REST API documentation
 
 ## How to contribute
-
