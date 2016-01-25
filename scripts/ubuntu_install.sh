@@ -16,5 +16,6 @@ sudo pip install virtualenv
 sudo apt-get install npm
 sudo ln -s `which nodejs` /usr/bin/node
 sudo npm install bower -g
+sudo npm install gulp -g
 
 sudo api-get install git
