@@ -1,4 +1,4 @@
-#1/bin/bash
+#!/bin/bash
 
 unset GIT_WORK_TREE
 
