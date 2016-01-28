@@ -3,7 +3,7 @@
   // START row
   .col-masonry(ng-repeat="tag in tags.tags")
     // START new widget 
-    .tag-widget.new-tag(ng-if='$first')
+    .tag-widget.new-tag(ng-if='$first && (session.roles === "admin")')
       .photo-wrapper
         p.ballon-wrapper.text-center
           span.new-balloon

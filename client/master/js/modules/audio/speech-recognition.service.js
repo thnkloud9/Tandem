@@ -9,6 +9,7 @@ angular.module('app.audio').service('speechRecognition', [
     self.recognition = null;
     self.recognizing = false;
     self.results = null;
+    self.status = null;
 
     self.init = function (language) {
       self.reset();
@@ -20,6 +21,7 @@ angular.module('app.audio').service('speechRecognition', [
         self.recognition.onerror = self.onError;
         self.recognition.onend = self.reset;
         self.recognition.onresult = self.onResult;
+        self.status = 'initiiated';
         return self.recognition.onstart = self.onStart;
       } else {
         self.recognition = {};
@@ -28,11 +30,17 @@ angular.module('app.audio').service('speechRecognition', [
     };
 
     self.start = function () {
-      self.recognition.start();
+      if (self.status !== 'started') {
+        self.recognition.start();
+        self.status = 'started';
+      }
     };
 
     self.stop = function () {
-      self.recognition.stop();
+      if (self.status === 'started') {
+        self.recognition.stop();
+      }
+      self.status = 'stopped';
     };
 
     self.onResult = function (event) {
@@ -69,8 +77,14 @@ angular.module('app.audio').service('speechRecognition', [
       console.log('started speech detection.');
     };
 
+    self.onStop = function (event) {
+      console.log('stopped speech detection.');
+    };
+
     self.onError = function (event, message) {
       console.log('web speech error: ' + message);
+      self.stop();
+      self.start();
     };
     
     self.getLanguage = function (languageCode) {

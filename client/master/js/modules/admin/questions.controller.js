@@ -7,8 +7,14 @@
     'use strict';
 
     angular.module('app.admin').controller('QuestionssAdminController', [
+      'Notify',
+      'APP_CONFIG',
+      'session',
       'Question',
       function QuestionssAdminController(
+        Notify,
+        APP_CONFIG,
+        session,
         Question) {
           var self = this;
 
@@ -39,6 +45,18 @@
                 }
               },
               {
+                headerName: 'tags',
+                field: 'tags',
+                width: 50,
+                valueGetter: function (params) {
+                  var out = '';
+                  angular.forEach(params.data.tags, function (t) {
+                    out += t.text.translations[session.speaks] + '<br>';
+                  });
+                  return out;
+                }
+              },
+              {
                 headerName: 'SubmittedBy',
                 field: 'submitted_by',
                 width: 25,
@@ -47,12 +65,16 @@
                 }
               },
               {headerName: 'Created', field: '_created', width: 25},
-              {headerName: 'Updated', field: '_updated', width: 25, sort: 'asc'}
+              {headerName: 'Updated', field: '_updated', width: 25, sort: 'asc'},
+              {
+                headerName: 'Tools',
+                field: '',
+                width: 25,
+                cellRenderer: function (params) {
+                    return "<button ng-click='table.deleteQuestion(\"" + params.data._id + "\")' class='btn btn-xs btn-danger'>x</button>";
+                }
+              }
             ];
-
-            function textValueGetter(params) {
-              return params.data.text.translations.en;
-            }
 
             // set table options 
             self.gridOptions = {
@@ -60,43 +82,58 @@
               rowData: null,
               enableSorting: true,
               enableFilter: true,
-              enableColResize: true
+              enableColResize: true,
+              getRowHeight: function (params) {
+                return params.data.rowHeight;
+              },
+              angularCompileRows: true
             };
 
             // load data
-            self.page = 1;
-            self.maxResults = 500;
-            self.questionss = [];
+            self.maxResults = 9999;
+            self.questions = [];
             var params = {
               embedded: {
                 submitted_by: 1,
                 tags: 1
               },
-              max_results: self.maxResults,
-              page: self.page
+              "max_results": self.maxResults
             };
-            Question.getList(params).then(function (questionss) {
+            Question.getList(params).then(function (questions) {
               var fields = _.pluck(columnDefs, 'field');
-              angular.forEach(questionss, function (questions) {
-                self.questionss.push(_.pick(questions, fields));
+              fields.push('rowHeight');
+              angular.forEach(questions, function (question) {
+                if (question.tags) {
+                  question.rowHeight = Math.floor(question.tags.length * 25);
+                } else {
+                  question.rowHeight = 25;
+                }
+                self.questions.push(_.pick(question, fields));
               });
               // load table data
-              self.gridOptions.api.setRowData(questionss);
+              self.gridOptions.api.setRowData(questions);
               self.gridOptions.api.sizeColumnsToFit();
-              self.gridOptions.api.enableColResize = true;
             });
             
             // funtions
             self.addQuestion = function () {
-              self.questionss.push(angular.copy(self.editingQuestion));
+              self.questions.push(angular.copy(self.editingQuestion));
             };
 
             self.editQuestion = function(index) {
-              self.questionss.splice(index, 1, angular.copy(self.editingQuestion));
+              self.questions.splice(index, 1, angular.copy(self.editingQuestion));
             };
 
-            self.removePerson = function(index) {
-              self.questionss.splice(index, 1);
+            self.deleteQuestion = function(id) {
+              Question.one(id).remove(id).then(function (response) {
+                Notify.alert("Question deleted", {status: 'success'});
+                self.questions = _.reject(self.questions, function(s) {
+                  return s._id === id;
+                });
+                self.gridOptions.api.setRowData(self.questions);
+              }, function (response) {
+                Notify.alert("There was a problem deleting Question", {status: 'danger'});
+              });
             };
 
           } // activate END

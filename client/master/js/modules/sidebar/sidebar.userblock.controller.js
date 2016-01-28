@@ -22,21 +22,6 @@
             $rootScope.user.picture = 'data:image/png;base64,' + newImage;
           });
 
-          // Hides/show user avatar on sidebar
-          $rootScope.toggleUserBlock = function(){
-            $rootScope.$broadcast('toggleUserBlock');
-          };
-
-          $rootScope.userBlockVisible = true;
-
-          var detach = $rootScope.$on('toggleUserBlock', function(/*event, args*/) {
-
-            $rootScope.userBlockVisible = ! $rootScope.userBlockVisible;
-
-          });
-
-          $scope.$on('$destroy', detach);
-
           $rootScope.logout = function () {
             session.clear(); 
           };

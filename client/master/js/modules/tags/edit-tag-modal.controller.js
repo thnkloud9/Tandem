@@ -150,6 +150,7 @@
             original_language: session.speaks,
             translations: translations
           },
+          // TODO: add category here
           status: 'submitted',
           tags: [ vm.tag._id ],
           submitted_by: session.userId

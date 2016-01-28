@@ -1,7 +1,9 @@
 .modal-body
-  .container-fluid
-    h4(translate-text, model='newTag.speaksText', send='true', model-translation='newTag.learningText', to='{{ session.learning }}', allow-change='false', initial-text="click here to enter english version")
-    h4(translate-text, model='newTag.learningText', send='true', model-translation='newTag.speaksText', to='{{ session.speaks }}', allow-change='false', initial-text="click here to enter german version")
+  .container-fluid.text-center
+    h4.spacey(translate-text, model='newTag.speaksText', send='true', model-translation='newTag.learningText', to='{{ session.learning }}', allow-change='false', initial-text="click here to enter english version")
+    h4.spacey(translate-text, model='newTag.learningText', send='true', model-translation='newTag.speaksText', to='{{ session.speaks }}', allow-change='false', initial-text="click here to enter german version")
   .text-center
-    button.btn.btn-danger.btn-large(type='button', ng-click='closeThisDialog(0)') Cancel
-    button.btn.btn-success.btn-large(type='button', ng-click='confirm(1)') Create
+    button.btn.btn-circle.btn-danger.btn-large(type='button', ng-click='closeThisDialog(0)')
+      i.fa.fa-times
+    button.btn.btn-circle.btn-success.btn-large(type='button', ng-click='confirm(1)')
+      i.fa.fa-check

@@ -3,9 +3,8 @@ h3 Tags Admin
 
 .container-fluid(ng-controller="TagsAdminController as table")
 
-  h4.page-header Tags 
   .row
     .col-lg-4.col-md-6
       input.mb.form-control(placeholder='Filter...', type='text', ng-model='table.gridOptions.quickFilterText')
-   .ag-angle(ag-grid='table.gridOptions', style="width: 100%; height: 400px;")
+   .ag-fresh(ag-grid='table.gridOptions', style="height: 500px;")
 

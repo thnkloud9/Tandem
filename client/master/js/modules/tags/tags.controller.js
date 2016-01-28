@@ -87,28 +87,6 @@
               });  
             };
 
-            vm.openImageSelectModal = function (tag) {
-              var modalInstance = $uibModal.open({
-                templateUrl: 'app/views/modals/image-select.html',
-                controller: 'ImageSelectModalController',
-                controllerAs: 'imageSelect',
-                resolve: {
-                  referenceObject: function () {
-                    return tag;
-                  }
-                },
-                size: 'lg'
-              });
-
-              var state = $('#modal-state');
-              modalInstance.result.then(function () {
-                console.log('dismissed with OK');
-                // update question in questions list
-              }, function () {
-                console.log('dismissed with Cancel');
-              });  
-            };
-
             vm.clearNewTag = function () {
               vm.newTag.speaksText = 'Click here to enter ' + session.speaksText;
               vm.newTag.learningText = 'Click here to enter ' + session.learningText;

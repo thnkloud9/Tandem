@@ -37,10 +37,16 @@
               templateUrl: helper.basepath('dashboard.html'),
               resolve: helper.resolveFor('flot-chart','flot-chart-plugins')
           })
-          .state('app.practice-sets', {
-              url: '/practice-sets',
-              title: 'Practice Sets',
-              templateUrl: helper.basepath('practice-sets.html'),
+          .state('app.tandems', {
+              url: '/tandems',
+              title: 'Tandems',
+              templateUrl: helper.basepath('tandems.html'),
+              resolve: helper.resolveFor('ngDialog')
+          })
+          .state('app.word-lists', {
+              url: '/word-lists',
+              title: 'Word Lists',
+              templateUrl: helper.basepath('word-lists.html'),
               resolve: helper.resolveFor('ngDialog')
           })
           .state('app.questions', {

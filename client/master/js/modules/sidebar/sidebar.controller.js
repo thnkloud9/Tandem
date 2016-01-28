@@ -31,13 +31,8 @@
           // Load menu from json file
           // ----------------------------------- 
 
-          SidebarLoader.getMenu(sidebarReady);
+          $scope.menuItems = SidebarLoader.getMenu();
           
-          function sidebarReady(items) {
-            // TODO: filter out admin items
-            $scope.menuItems = items;
-          }
-
           // Handle sidebar and collapse items
           // ----------------------------------
           

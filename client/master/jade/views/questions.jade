@@ -1,13 +1,8 @@
-h3
-  | Questions 
-  small {{ 'dashboard.WELCOME' | translate:{ appName: app.name } }}  !
+.content(ng-controller='QuestionsController as questions')
 
-
-div(ng-controller='QuestionsController as questions')
-
-  .row
-    .pull-right
-      a.btn.btn-default.btn-sm(ng-click="questions.openCreateQuestionModal()") Create Question 
+  .text-center
+    a.spacey.btn.btn-circle.btn-default.btn-sm(ng-click="questions.openCreateQuestionModal()")
+      i.fa.fa-plus
   
   .row(infinite-scroll='questions.loadMore()', infinite-scroll-distance='3')
     .col-lg-4(ng-repeat='question in questions.questions')
@@ -19,9 +14,7 @@ div(ng-controller='QuestionsController as questions')
               img(src="app/img/bg2.jpg", alt="", ng-click='questions.openImageSelectModal(question)')
           //.col-xs-7.align-middle.p-lg
           .col-xs-12.align-middle.p-lg
-            h4: strong {{ ::question.text.translations[questions.session.learning] }}
+            h3: strong {{ ::question.text.translations[questions.session.learning] }}
             p(ng-show='app.translation.show'): small {{ ::question.text.translations[questions.session.speaks] }} 
             p.pull-right
               em.btn.btn-sm.fa.fa-microphone(ng-click='questions.openAddQuestionAudioModal(question)')
-              em.btn.btn-sm.fa.fa-plus(ng-click='')
-              em.btn.btn-sm.fa.fa-cog(ng-click='questions.openEditQuestionModal(question)')

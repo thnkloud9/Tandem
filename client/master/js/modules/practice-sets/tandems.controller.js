@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    angular.module('app.practiceSets').controller('PracticeSetsController', [
+    angular.module('app.practiceSets').controller('TandemsController', [
       '$scope',
       '$q',
       '$uibModal',
@@ -11,7 +11,7 @@
       'session',
       'modalFactory',
       'Notify',
-      function PracticeSetsController(
+      function TandemsController(
           $scope,
           $q,
           $uibModal,
@@ -31,7 +31,10 @@
 
               self.session = session;
               self.params = {
-                "where": { "submitted_by": session.userId },
+                "where": { 
+                  "submitted_by": session.userId,
+                  "category": "tandem"
+                },
                 "sort": "_created",
               };
 
@@ -42,33 +45,17 @@
               });
 
               self.playPracticeSet = function (set) {
-                if (set.category === 'tandem') {
-                  $uibModal.open({
-                    controller: 'PlayTandemPracticeSetModalController',
-                    controllerAs: 'modalPlay',
-                    templateUrl: 'app/views/modals/play-tandem-practice-set.html',
-                    resolve: {
-                      playingSet: function () {
-                        return set;
-                      }
-                    },
-                    size: 'lg'
-                  });
-                }
-                if (set.category === 'memorize') {
-                  // TODO: add memorze session modal opne
-                  $uibModal.open({
-                    controller: 'PlayMemorizePracticeSetModalController',
-                    controllerAs: 'modalPlay',
-                    templateUrl: 'app/views/modals/play-memorize-practice-set.html',
-                    resolve: {
-                      playingSet: function () {
-                        return set;
-                      }
-                    },
-                    size: 'lg'
-                  });
-                }
+                $uibModal.open({
+                  controller: 'PlayTandemPracticeSetModalController',
+                  controllerAs: 'modalPlay',
+                  templateUrl: 'app/views/modals/play-tandem-practice-set.html',
+                  resolve: {
+                    playingSet: function () {
+                      return set;
+                    }
+                  },
+                  size: 'lg'
+                });
               };
 
               self.editPracticeSet = function (set) {
@@ -110,7 +97,7 @@
                     translations: description
                   },
                   submitted_by: session.userId,
-                  category: (self.newSet.category) ? self.newSet.category : 'memorize'
+                  category: 'tandem'
                 };
 
                 PracticeSet.post(newSet).then(function (practiceSet) {

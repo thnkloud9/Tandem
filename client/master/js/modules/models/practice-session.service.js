@@ -77,7 +77,24 @@
 
                 return model;
               });
-          
+         
+              PracticeSession.reduceToIds = function (list) {
+                var idList = [];
+                angular.forEach(list, function (item) {
+                  if (item.restangularized) {
+                    idList.push(item._id);
+                  } else {
+                    // only push if its a string, otherwise
+                    // do nothing with it
+                    if (typeof item === 'string') {
+                      idList.push(item);
+                    }
+                  } 
+                });
+            
+                return idList;
+              };
+ 
               // checks for an existing non-completed practiceSession for the given
               // practice set
               PracticeSession.initFromPracticeSet = function (practiceSet) {
@@ -100,10 +117,13 @@
                   if (practiceSessions.length > 0) {
                     deferedGet.resolve(practiceSessions[0]);
                   } else {
+                    // if questions are restangularized, convert them back to
+                    // plain old ids
+                    var questionList = PracticeSession.reduceToIds(practiceSet.questions);
                     // create a new PracticeSession
                     var data = {
                       practice_set: practiceSet._id,
-                      questions: practiceSet.questions
+                      questions: questionList
                     };
                     PracticeSession.create(data).then(function (newPracticeSession) {
                       deferedGet.resolve(newPracticeSession);
@@ -133,7 +153,7 @@
                     platform: 'web',
                     audio: [],
                     answers: [],
-                    questions: questions,
+                    questions: PracticeSession.reduceToIds(questions),
                     submitted_by: submittedBy 
                   }
                 };

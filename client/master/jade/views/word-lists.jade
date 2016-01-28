@@ -1,0 +1,29 @@
+.row-masonry.row-masonry-xl-3.row-masonry-lg-3.row-masonry-md-3.row-masonry-sm-2(ng-controller="WordListsController as practice") 
+  // START row
+  .col-masonry(ng-repeat="set in practice.sets")
+    // START new-widget
+    .panel.new-widget(ng-if='$first')
+      .panel-body
+        h3.mt0(translate-text, send='false', model='practice.newSet.title', initial-text='Click here to enter title', ng-click='practice.newSet.editing = true')
+        p.text-muted(translate-text, send='false', model='practice.newSet.description', initial-text='Click here to enter description', ng-click='practice.newSet.editing = true')
+        .text-center
+          button.btn.btn-sm.btn-success(ng-click='practice.createPracticeSet()', ng-class="{ 'muted': !practice.newSet.editing }") Add
+    // END new-widget
+    // START widget
+    .panel.widget
+      .panel-body
+        h3.mt0 {{ set.title }}
+        p.text-muted {{ set.description.translations[user.speaks] }}
+        .progress.progress-striped.progress-xs
+          .progress-bar.progress-bar-warning.progress-60(role='progressbar', aria-valuenow='{{ set.score }}', aria-valuemin='0', aria-valuemax='100')
+            span.sr-only 60% Memorized
+        .text-center
+          p last score: {{ set.score }}
+          p played: {{ set.played }}
+        .text-center
+          button.btn.btn-sm.btn-default(ng-show='set.questions.length > 0', ng-click='practice.playPracticeSet(set)') Play
+          button.btn.btn-sm.btn-default(ng-click='practice.editPracticeSet(set)') Edit
+          button.btn.btn-sm.btn-default(ng-click='practice.deletePracticeSet(set._id)') Delete
+          button.btn.btn-sm.btn-default(ng-show='set.questions.length > 0', ng-click='practice.schedulePracticeSet(set._id)') Schedule
+        
+    // END widget

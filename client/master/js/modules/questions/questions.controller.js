@@ -5,7 +5,9 @@
       '$scope',
       '$q',
       '$uibModal',
+      'ngDialog',
       'RouteHelpers',
+      'APP_CONFIG',
       'Question',
       'session',
       'Notify',
@@ -13,7 +15,9 @@
           $scope,
           $q,
           $uibModal,
+          ngDialog,
           helper,
+          APP_CONFIG,
           Question,
           session,
           Notify) {
@@ -29,7 +33,12 @@
               vm.searchParams = null;
               vm.session = session;
 
-              Question.getList({embedded: {tags: 1}, max_results: vm.maxResults, page: vm.page}).then(function (questions) {
+              Question.getList({
+                embedded: {tags: 1},
+                max_results: vm.maxResults,
+                page: vm.page,
+                sort: '-_created',
+              }).then(function (questions) {
                 vm.questions = questions;
               });
 
@@ -96,21 +105,52 @@
 
             };
 
+            // TODO: change this to an ngDialog like tag create
+            // and add the createQuestion function here
             vm.openCreateQuestionModal = function () {
-              var modalInstance = $uibModal.open({
-                templateUrl: 'app/views/modals/create-question.html',
-                controller: 'CreateQuestionModalController',
-                controllerAs: 'createQuestion',
-                size: 'lg'
+              vm.newQuestion = {};
+              $scope.newQuestion = vm.newQuestion;
+              ngDialog.openConfirm({
+                template: 'app/views/modals/create-question.html',
+                className: 'ngdialog-theme-default',
+                scope: $scope 
+              }).then(function (value) {
+                vm.createQuestion();
+              }, function (reason) {
+                console.log('cancelled create', reason);
               });
+            };
 
-              var state = $('#modal-state');
-              modalInstance.result.then(function () {
-                console.log('dismissed with OK');
-                // add question to questions list
-              }, function () {
-                console.log('dismissed with Cancel');
-              });  
+            vm.clearNewQuestion = function () {
+              vm.newQuestion.speaksText = 'Click here to enter ' + session.speaksText;
+              vm.newQuestion.learningText = 'Click here to enter ' + session.learningText;
+            };
+
+            vm.createQuestion = function () {
+              var translations = {};
+              translations[session.speaks] = vm.newQuestion.speaksText;
+              translations[session.learning] = vm.newQuestion.learningText;
+              var newQuestion = {
+                text: {
+                  languages: APP_CONFIG.languages.length,
+                  original_language: session.speaks,
+                  translations: translations,
+                },
+                category: 'phrase',
+                submitted_by: session.userId,
+                status: 'submitted'
+              };
+
+console.log('adding', newQuestion);
+              Question.post(newQuestion).then(function (question) {
+                _.extend(question, newQuestion);
+                // add to the sets list
+                vm.questions.add(question);
+                vm.clearNewQuestion();
+                Notify.alert('Question added.', {status: 'success'});
+              }, function (response) {
+                Notify.alert('There was a problem adding your tag.', {status: 'error'});
+              });
             };
 
             vm.openAddQuestionAudioModal = function (question) {
@@ -120,28 +160,6 @@
                 controllerAs: 'addAudio',
                 resolve: {
                   recordingQuestion: function () {
-                    return question;
-                  }
-                },
-                size: 'lg'
-              });
-
-              var state = $('#modal-state');
-              modalInstance.result.then(function () {
-                console.log('dismissed with OK');
-                // update question in questions list
-              }, function () {
-                console.log('dismissed with Cancel');
-              });  
-            };
-
-            vm.openImageSelectModal = function (question) {
-              var modalInstance = $uibModal.open({
-                templateUrl: 'app/views/modals/image-select.html',
-                controller: 'ImageSelectModalController',
-                controllerAs: 'imageSelect',
-                resolve: {
-                  referenceObject: function () {
                     return question;
                   }
                 },

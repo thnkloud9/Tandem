@@ -134,10 +134,10 @@
           text: {
             languages: 2,
             original_language: session.speaks,
-            translations: translations
+            translations: translations,
           },
           status: 'submitted',
-          category: vm.newQuestion.category,
+          category: 'word',
           submitted_by: session.userId
         };
 

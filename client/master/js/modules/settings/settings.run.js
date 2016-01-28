@@ -19,13 +19,14 @@
         layout: {
           isFixed: true,
           isCollapsed: false,
-          isBoxed: false,
+          isBoxed: true,
           isRTL: false,
           horizontal: false,
-          isFloat: false,
+          isFloat: true,
           asideHover: false,
           theme: null,
-          asideScrollbar: false
+          asideScrollbar: false,
+          userBlockVisible: true
         },
         translation: {
           mymemory: true,
