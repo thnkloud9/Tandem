@@ -2,107 +2,105 @@
     'use strict';
 
     angular.module('app.questions').controller('QuestionsController', [
+      '$rootScope',
       '$scope',
-      '$q',
       '$uibModal',
       'ngDialog',
       'RouteHelpers',
       'APP_CONFIG',
       'Question',
+      'speechSynth',
       'session',
       'Notify',
       function QuestionsController(
-          $scope,
-          $q,
-          $uibModal,
-          ngDialog,
-          helper,
-          APP_CONFIG,
-          Question,
-          session,
-          Notify) {
-            var vm = this;
+        $rootScope,
+        $scope,
+        $uibModal,
+        ngDialog,
+        helper,
+        APP_CONFIG,
+        Question,
+        speechSynth,
+        session,
+        Notify) {
+          var vm = this;
 
-            activate();
+          activate();
 
-            ////////////////
+          ////////////////
 
-            function activate() {
-              vm.page = 1;
-              vm.maxResults = 20;
-              vm.searchParams = null;
-              vm.session = session;
+          function activate() {
+            vm.page = 1;
+            vm.maxResults = 20;
+            vm.searchParams = null;
+            vm.session = session;
+            vm.cardBack = 1;
 
-              Question.getList({
-                embedded: {tags: 1},
-                max_results: vm.maxResults,
-                page: vm.page,
-                sort: '-_created',
-              }).then(function (questions) {
-                vm.questions = questions;
-              });
+            Question.getList({
+              embedded: {
+                tags: 1,
+                submitted_by: 1
+              },
+              max_results: vm.maxResults,
+              page: vm.page,
+              sort: '-_created',
+            }).then(function (questions) {
+              vm.questions = questions;
+            });
 
-              vm.loadMore = function () {
-                if (vm.page !== 'end') {
-                  var params = {};
-                  if (vm.searchParams) {
-                    params = searchParams;
-                  }
-                  params.max_results = vm.maxResults;
-                  params.page = (vm.page + 1);
-                  params.embedded = {
-                    tags: 1
-                  }
-                  Question.getList(params).then(function (questions) {
-                    if (questions) {
-                      vm.page++
-                      questions.forEach(function (question) {
-                        vm.questions.add(question);
-                      });
-                    } else {
-                      vm.page = 'end';
-                    }
-                  });
-                } 
+            // TODO: figure out what to do with dplicate requests for the
+            // same page, cuz this happens a lot already
+            vm.loadMore = function () {
+              if ((!vm.questions) ||
+                  (vm.waitingForPage) ||
+                  (vm.page >= vm.maxPage)) {
+                return false;
               }
-
-              vm.search = function () {
-                var speaksFilter = {};
-                var learningFilter = {};
-                var tagsFilter = {
-                  "tags_index": {
-                    "$regex": ".*" + vm.searchText + ".*",
-                    "$options": "i"
+              if (vm.page !== 'end') {
+                var params = {};
+                if (vm.searchParams) {
+                  params = vm.searchParams;
+                }
+                params.max_results = vm.maxResults;
+                params.page = (vm.page + 1);
+                params.embedded = {
+                  tags: 1,
+                  submitted_by: 1
+                }
+                vm.waitingForPage = true;
+                Question.getList(params).then(function (questions) {
+                  if (questions) {
+                    vm.page++
+                    questions.forEach(function (question) {
+                      vm.questions.add(question);
+                    });
+                    vm.waitingForPage = false;
+                    vm.maxPage = Math.ceil(questions._meta.total / vm.maxResults);
+                  } else {
+                    vm.page = 'end';
                   }
-                };
-                speaksFilter['text.translations.' + session.speaks] = {
-                  "$regex": ".*" + vm.searchText + ".*",
-                  "$options": "i"
-                };
-                learningFilter['text.translations.' + session.learning] = {
-                "$regex": ".*" + vm.searchText + ".*",
-                "$options": "i"
-              };
-              var filter = {
-                "$or": [
-                  speaksFilter,
-                  learningFilter,
-                  tagsFilter
-                ]
-              };
+                });
+              }
+            };
+
+            vm.changeCardBack = function (index) {
+              vm.cardBack = (vm.cardBack > 5) ? 1 : vm.cardBack + 1;
+              return vm.cardBack;
+            };
+
+            vm.search = function () {
               var params = {
-                "where": JSON.stringify(filter),
                 "embedded": {
-                  "tags": 1
+                  "tags": 1,
+                  "submitted_by": 1
                 }
               };
 
-              vm.searchParams = params;
-              Question.getList(params).then(function (questions) {
+              Question.searchByText(vm.searchText, {}, params).then(function (results) {
                 vm.page = 1;
-                vm.questions = questions;
+                vm.questions = results.questions;
+                vm.searchParams = results.params;
               });
-
             };
 
             // TODO: change this to an ngDialog like tag create
@@ -113,7 +111,7 @@
               ngDialog.openConfirm({
                 template: 'app/views/modals/create-question.html',
                 className: 'ngdialog-theme-default',
-                scope: $scope 
+                scope: $scope
               }).then(function (value) {
                 vm.createQuestion();
               }, function (reason) {
@@ -141,7 +139,6 @@
                 status: 'submitted'
               };
 
-console.log('adding', newQuestion);
               Question.post(newQuestion).then(function (question) {
                 _.extend(question, newQuestion);
                 // add to the sets list
@@ -172,9 +169,18 @@ console.log('adding', newQuestion);
                 // update question in questions list
               }, function () {
                 console.log('dismissed with Cancel');
-              });  
+              });
             };
 
+            $rootScope.$on('topNavSearch', function (event, args) {
+              vm.searchText = args.text
+              vm.search();
+            });
+            
+            vm.speak = function (question) {
+              var text = question.text.translations[session.learning];
+              speechSynth.speak(text, session.learning);
+            }
           } // end activate
         }
     ]);

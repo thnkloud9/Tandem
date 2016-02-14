@@ -15,24 +15,24 @@ angular.module('app.audio').service('recorder', [
     // only set this once for session
     self.audioContext = new AudioContext;
 
+    try {
+      // webkit shim
+      window.AudioContext = window.AudioContext || window.webkitAudioContext;
+      navigator.getUserMedia = ( navigator.getUserMedia ||
+                     navigator.webkitGetUserMedia ||
+                     navigator.mozGetUserMedia ||
+                     navigator.msGetUserMedia);
+      window.URL = window.URL || window.webkitURL;
+
+      console.log('Audio context set up.');
+      console.log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
+    } catch (e) {
+      alert('No web audio support in this browser!');
+    }
+
     self.initRecorder = function () {
       var deferedInit = $q.defer();
       var recorder;
-
-      try {
-        // webkit shim
-        window.AudioContext = window.AudioContext || window.webkitAudioContext;
-        navigator.getUserMedia = ( navigator.getUserMedia ||
-                       navigator.webkitGetUserMedia ||
-                       navigator.mozGetUserMedia ||
-                       navigator.msGetUserMedia);
-        window.URL = window.URL || window.webkitURL;
-
-        console.log('Audio context set up.');
-        console.log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
-      } catch (e) {
-        alert('No web audio support in this browser!');
-      }
 
       navigator.getUserMedia({audio: true},
         // success callback 
@@ -56,9 +56,9 @@ angular.module('app.audio').service('recorder', [
       self.initRecorder().then(function (recorder) {
         self.recorder = recorder;
         self.recorder.record();
+        self.recording = true;
         console.log('Started recording');
       });
-      self.recording = true;
     };
 
     self.stop = function () {

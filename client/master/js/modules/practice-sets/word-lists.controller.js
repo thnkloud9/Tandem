@@ -87,18 +87,10 @@
               };
 
               self.createPracticeSet = function () {
-                var description = {};
-                description[session.speaks] = self.newSet.description;
-                var newSet = {
-                  title: self.newSet.title,
-                  description: {
-                    languages: APP_CONFIG.languages.length,
-                    original_language: session.speaks,
-                    translations: description
-                  },
-                  submitted_by: session.userId,
-                  category: 'memorize'
-                };
+                var newSet = PracticeSet.newEmptySet();
+                newSet.description.translations[session.speaks] = self.newSet.description;
+                newSet.title = self.newSet.title;
+                newSet.category = 'memorize';
 
                 PracticeSet.post(newSet).then(function (practiceSet) {
                   // TODO: not sure why we don't get all our fields back after a post

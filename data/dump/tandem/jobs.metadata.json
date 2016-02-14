@@ -1,0 +1,1 @@
+{ "indexes" : [ { "v" : 1, "key" : { "_id" : 1 }, "name" : "_id_", "ns" : "tandem.jobs" }, { "v" : 1, "key" : { "next_run_time" : 1 }, "name" : "next_run_time_1", "ns" : "tandem.jobs", "sparse" : true } ] }

@@ -76,59 +76,20 @@
       });
 
       vm.search = function (added) {
-        var speaksFilter = {};
-        var learningFilter = {};
         var searchText = (added) ? vm.addedSearchText : vm.searchText;
-        var tagsFilter = {
-          "tags_index": {
-            "$regex": ".*" + searchText + ".*",
-            "$options": "i"
+        var filter = (added) ?  { "tags": vm.tag._id } : { "tags": { "$ne": vm.tag._id } };
+       
+        vm.tag.questions = [];
+        Question.searchByText(searchText, filter, { "max_results": vm.maxResults })
+          .then(function (results) {
+          if (added) {
+            vm.addedTotalAvailable = results.questions._meta.total;
+            vm.tag.questions = results.questions;
+          } else {
+            vm.totalAvailable = results.questions._meta.total;
+            vm.availableQuestions = results.questions;
           }
-        };
-        speaksFilter['text.translations.' + session.speaks] = {
-          "$regex": ".*" + searchText + ".*",
-          "$options": "i"
-        };
-        learningFilter['text.translations.' + session.learning] = {
-          "$regex": ".*" + searchText + ".*",
-          "$options": "i"
-        };
-
-        if (added) {
-          var filter = {
-            "$and": [
-              { "tags": vm.tag._id },
-              { "$or": [ speaksFilter, learningFilter, tagsFilter ] }
-            ]
-          };
-          var params = {
-            "where": JSON.stringify(filter),
-            "max_results": vm.maxResults
-          };
-          vm.addedSearchParams = params;
-          vm.tag.questions = [];
-          Question.getList(params).then(function (questions) {
-            vm.addedTotalAvailable = questions._meta.total;
-            vm.tag.questions = questions;
-          });
-        } else {
-          var filter = {
-            "$and": [
-              { "tags": { "$ne": vm.tag._id } },
-              { "$or": [ speaksFilter, learningFilter, tagsFilter ] }
-            ]
-          };
-          var params = {
-            "where": JSON.stringify(filter),
-            "max_results": vm.maxResults
-          };
-          vm.searchParams = params;
-          vm.availableQuestions = [];
-          Question.getList(params).then(function (questions) {
-            vm.totalAvailable = questions._meta.total;
-            vm.availableQuestions = questions;
-          });
-        }
+        }); 
       };
 
       vm.clearNewQuestion = function() {
@@ -270,13 +231,26 @@
       };
 
       vm.saveTag = function () {
+        vm.tag.text.languages = 2;
+        vm.tag.text.original_language = session.speaks;
+        if (!vm.tag.description) {
+          vm.tag.description = {
+            languages: 2,
+            original_language: session.speaks,
+            translations: {}
+          }
+          vm.tag.description.transations[session.speaks] = '';
+          vm.tag.description.transations[session.learning] = '';
+        }
         var tagData = {
-          text: vm.tag.text
+          text: vm.tag.text,
+          description: vm.tag.description,
+          search_index: vm.tag.search_index
         }
         Tag.one(vm.tag._id).patch(tagData).then(function() {
           Notify.alert("Tag updated.", {status: 'success'});
         }, function () {
-          Notify.alert( "Server Problem.", {status: 'success'});
+          Notify.alert( "Server Problem.", {status: 'danger'});
         });
       };
 

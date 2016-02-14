@@ -6,9 +6,10 @@
         .factory('Tag', [
             '$q',
             '$http',
+            '$window',
             'Restangular',
             'APP_CONFIG',
-            function ($q, $http, Restangular, APP_CONFIG) {
+            function ($q, $http, $window, Restangular, APP_CONFIG) {
               var Tag = Restangular.all('tags');
              
               // extend collection 
@@ -77,6 +78,45 @@
                 return model;
 
               }); 
+
+              Tag.getSearchableTags = function () {
+                var deferedGet = $q.defer();
+                var searchableTags = [];
+                var tagsString = [];
+                var sessionSpeaks = $window.sessionStorage.getItem('speaks'); 
+                var sessionLearning = $window.sessionStorage.getItem('learning'); 
+
+                // load tag list
+                Tag.getList({
+                  max_results: 9999
+                }).then(function (tags) {
+                  angular.forEach(tags, function (tag) {
+                    var speaks = tag.text.translations[sessionSpeaks]
+                      .toLowerCase()
+                      .replace('[-,_]', ' ')
+                      .replace(/[.\/#!$%\^&\*;:{}=\`~()]/g,"");
+                    var learning = tag.text.translations[sessionLearning]  
+                      .toLowerCase()
+                      .replace('[-,_]', ' ')
+                      .replace(/[.\/#!$%\^&\*;:{}=\`~()]/g,"");
+                    tagsString.push(speaks);
+                    tagsString.push(learning);
+                    searchableTags.push({ _id: tag._id, text: tag.text, string: speaks });
+                    searchableTags.push({ _id: tag._id, text: tag.text, string: learning });
+                    angular.forEach(tag.search_index, function (text) {
+                      tagsString.push(text);
+                      searchableTags.push({ _id: tag._id, text: tag.text, string: text });
+                    });
+                  });
+
+                  deferedGet.resolve({ tags: searchableTags, string: tagsString });
+                }, function () {
+                  deferedGet.reject();
+                });
+
+                return deferedGet.promise;
+              };
+
               return Tag;
             }
     

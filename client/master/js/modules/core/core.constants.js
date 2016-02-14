@@ -21,6 +21,10 @@
               endpoint: '/api/v1/',
               full: 'https://tandem.dev/api/v1'
           },
+          facebook: {
+            appIdLive: '1587548301476396',
+            appIdTest: '1756009591296932'
+          },
           mymemory: {
               rootURI: 'https://api.mymemory.translated.net/'
           },
@@ -32,6 +36,11 @@
           gcse: {
               apiURI: 'https://www.googleapis.com/customsearch/v1',
               apiKey: 'AIzaSyCqtneeGqDwpeWJHEvm2daOBNrAmJOdNn0&cx=006561381899366895267:dtmrsefnen0'
+          },
+          voicerss: {
+            apiURI: 'https://api.voicerss.org/',
+            apiKey: '6427a1b8b54a402e8e534ed5d179d30d',
+            format: '44khz_16bit_mono'
           },
           leo: {
             linkURI: 'https://dict.leo.org/ende/index_de.html#/search=' 

@@ -10,7 +10,13 @@
             'Recording',
             'PracticeSet',
             'APP_CONFIG',
-            function ($q, $window, Restangular, Recording, PracticeSet, APP_CONFIG) {
+            function (
+              $q,
+              $window,
+              Restangular,
+              Recording,
+              PracticeSet,
+              APP_CONFIG) {
               var Question = Restangular.all('questions');
              
               // extend collection 
@@ -101,11 +107,6 @@
                   return deferedGet.promise;
                 };
 
-                model.flipCard = function() {
-                  model.flipped = !model.flipped;
-                  model.cardClass = (model.flipped) ? 'flipped' : null;
-                };
-
                 /**
                  * Return promise of audio blob url
                  *
@@ -172,6 +173,8 @@
                     var url = URL.createObjectURL(blob);
                     model.currentRecording = firstRecording;
                     deferedGet.resolve(url); 
+                  }, function (response) {
+                    deferedGet.reject(response);
                   });
 
                   return deferedGet.promise;
@@ -190,6 +193,85 @@
                 return model;
 
               }); 
+
+              /**
+               * search all text based fields in all languages
+               * takes json mongo filter as optional additional
+               * filter
+               * return promise
+               */
+              Question.searchByText = function (text, filter, params) {
+                var deferedGet = $q.defer();
+                var speaksFilter = {};
+                var learningFilter = {};
+                // can't use session here due to circular dependency
+                var speaks = $window.sessionStorage.getItem('speaks');
+                var learning = $window.sessionStorage.getItem('learning');
+                var params = (params) ? params : {};
+
+                // TODO: dont think we need this anymore
+                var tagsFilter = {
+                  "tags_index": {
+                    "$regex": ".*" + text + ".*",
+                    "$options": "i"
+                  }
+                };
+                speaksFilter['text.translations.' + speaks] = {
+                  "$regex": ".*" + text + ".*",
+                  "$options": "i"
+                };
+                learningFilter['text.translations.' + learning] = {
+                  "$regex": ".*" + text + ".*",
+                  "$options": "i"
+                };
+
+                if (filter) {
+                  var finalFilter = {
+                    "$and": [
+                      filter,
+                      { "$or": [ speaksFilter, learningFilter, tagsFilter ] }
+                    ]
+                  };
+                } else {
+                  var finalFilter = { "$or": [ speaksFilter, learningFilter, tagsFilter ] };
+                }
+                params.where = JSON.stringify(finalFilter);
+                // get questions
+                Question.getList(params).then(function (questions) {
+                  deferedGet.resolve({ params: params, questions: questions });
+                }, function (response) {
+                  deferedGet.reject(response);
+                });
+                
+                return deferedGet.promise;
+              };
+
+              Question.searchByTag = function (tagIds, filter, params) {
+                var deferedGet = $q.defer();
+                var params = (params) ? params : {};
+
+                if (filter) {
+                  var finalFilter = {
+                    "$and": [
+                      filter,
+                      { "tags": { "$in" : tagIds } }
+                    ]
+                  };
+                } else {
+                  var finalFilter = { "tags": { "$in" : tagIds } };
+                }
+                params.where = JSON.stringify(finalFilter);
+
+                // get questions
+                Question.getList(params).then(function (questions) {
+                  deferedGet.resolve(questions);
+                }, function (response) {
+                  deferedGet.reject(response);
+                });
+                
+                return deferedGet.promise;
+              };
+
               return Question;
             }
         

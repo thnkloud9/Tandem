@@ -71,7 +71,8 @@ var source = {
   ],
   templates: {
     index: [paths.markup + 'index.*'],
-    views: [paths.markup + '**/*.*', '!' + paths.markup + 'index.*']
+    channel: [paths.markup + 'channel.*'],
+    views: [paths.markup + '**/*.*', '!' + paths.markup + 'index.*', '!' + paths.markup + 'channel.*']
   },
   styles: {
     app:    [ paths.styles + '*.*'],
@@ -86,6 +87,7 @@ var build = {
   styles:  paths.app + 'css',
   templates: {
     index: '../',
+    channel: '../',
     views: paths.app,
     cache: paths.app + 'js/' + 'templates.js',
   }
@@ -255,6 +257,20 @@ gulp.task('templates:index', ['templates:views'], function() {
 });
 
 // JADE
+gulp.task('templates:channel', ['templates:views'], function() {
+    log('Building channel..');
+
+    var tplscript = gulp.src(build.templates.cache, {read: false});
+    return gulp.src(source.templates.channel)
+        .pipe( $.if(useCache, $.inject(tplscript, injectOptions)) ) // inject the templates.js into channel
+        .pipe( $.jade() )
+        .on('error', handleError)
+        .pipe($.htmlPrettify( prettifyOpts ))
+        .pipe(gulp.dest(build.templates.channel))
+        ;
+});
+
+// JADE
 gulp.task('templates:views', function() {
     log('Building views.. ' + (useCache?'using cache':''));
     
@@ -295,6 +311,7 @@ gulp.task('watch', function() {
   gulp.watch(source.styles.themes,   ['styles:themes']);
   gulp.watch(source.templates.views, ['templates:views']);
   gulp.watch(source.templates.index, ['templates:index']);
+  gulp.watch(source.templates.channel, ['templates:channel']);
 
   // a delay before triggering browser reload to ensure everything is compiled
   var livereloadDelay = 1500;
@@ -304,7 +321,8 @@ gulp.task('watch', function() {
       source.styles.watch,
       source.styles.themes,
       source.templates.views,
-      source.templates.index
+      source.templates.index,
+      source.templates.channel
     );
 
   gulp
@@ -332,6 +350,7 @@ gulp.task('clean', function(done) {
                         build.styles,
                         build.scripts,
                         build.templates.index + 'index.html',
+                        build.templates.channel + 'channel.html',
                         build.templates.views + 'views',
                         build.templates.views + 'pages',
                         vendor.app.dest
@@ -392,6 +411,7 @@ gulp.task('assets',[
           'styles:app:rtl',
           'styles:themes',
           'templates:index',
+          'templates:channel',
           'templates:views'
         ]);
 

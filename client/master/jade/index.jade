@@ -21,12 +21,10 @@ html(lang="en", data-ng-app="tandem")
   body(data-ng-class="{ 'layout-fixed' : app.layout.isFixed, 'aside-collapsed' : app.layout.isCollapsed, 'layout-boxed' : app.layout.isBoxed, 'layout-fs': app.useFullLayout, 'hidden-footer': app.hiddenFooter, 'layout-h': app.layout.horizontal, 'aside-float': app.layout.isFloat, 'offsidebar-open': app.offsidebarOpen, 'aside-toggled': app.asideToggled}")
     
     div(data-preloader)
-
     .wrapper(data-ui-view="", data-autoscroll='false')
 
     script(src='app/js/base.js')
     script(src='app/js/app.js')
-    script(src='app/js/facebook-init.js')
     //- templates:js
     //- endinject
     div#fb-root

@@ -5,8 +5,8 @@
         .module('app.preloader')
         .directive('preloader', preloader);
 
-    preloader.$inject = ['$animate', '$timeout', '$q'];
-    function preloader ($animate, $timeout, $q) {
+    preloader.$inject = ['$animate', '$timeout', '$q', '$state'];
+    function preloader ($animate, $timeout, $q, $state) {
 
         var directive = {
             restrict: 'EAC',

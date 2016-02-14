@@ -151,11 +151,15 @@
           self.hints = [];
         };
 
+        // TODO: move this to a function of speechRecognition
+        // service, maybe listen on rootScope?
         self.toggleSpeechRecognition = function () {
           $rootScope.app.audio.speechRecognition = !$rootScope.app.audio.speechRecognition;
           if ($rootScope.app.audio.speechRecognition) {
             speechRecognition.results = '...listening';
-            speechRecognition.start();
+            if (speechRecognition.status !== 'started') {
+              speechRecognition.start();
+            }
           } else {
             speechRecognition.stop();
           }

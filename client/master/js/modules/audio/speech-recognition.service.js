@@ -29,6 +29,13 @@ angular.module('app.audio').service('speechRecognition', [
       }
     };
 
+    // stop recognition when we change routes
+    // because we can't do it with a controller
+    // close function
+    $rootScope.$on('$stateChangeSuccess', function(event) {
+      self.stop();
+    });
+
     self.start = function () {
       if (self.status !== 'started') {
         self.recognition.start();
@@ -82,9 +89,11 @@ angular.module('app.audio').service('speechRecognition', [
     };
 
     self.onError = function (event, message) {
-      console.log('web speech error: ' + message);
+      console.log('web speech recognition error: ' + message);
       self.stop();
-      self.start();
+      if ($rootScope.app.audio.speechRecognition) {
+        self.start();
+      }
     };
     
     self.getLanguage = function (languageCode) {
@@ -94,7 +103,7 @@ angular.module('app.audio').service('speechRecognition', [
       if (languageCode === 'en') {
         return 'en-US';
       };
-      if (languageCode === 'en') {
+      if (languageCode === 'es') {
         return 'es-ES';
       };
     };

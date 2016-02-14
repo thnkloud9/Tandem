@@ -25,7 +25,8 @@
       .text-center(ng-hide='app.audio.speechRecognition')
         .panel-body
           input.spacey.form-control(ng-model='modalPlay.answer')
-          button.btn.btn-success(ng-click='modalPlay.submitAnswer()') Go
+          button.btn-circle.btn.btn-success(ng-click='modalPlay.submitAnswer()')
+            i.fa.fa-2x.fa-check
 .modal-footer
   button.btn.btn-default(ng-click='modalPlay.switchRecognition()') Switch
   button.btn.btn-default(ng-click='modalPlay.loadNextQuestion()') Skip

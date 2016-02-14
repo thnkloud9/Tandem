@@ -11,7 +11,8 @@
           .text-center
             h2
               | {{ addAudio.recordingQuestion.text.translations[session.learning] }}
-            recorder(question='addAudio.recordingQuestion', question-type='object', context='question', auto-play='true', language='{{ session.learning }}', on-stop-record='addAudio.learningRecordStop()', on-save='addAudio.learningSaved()')
+            .more-spacey
+              recorder(question='addAudio.recordingQuestion', question-type='object', context='question', auto-play='true', language='{{ session.learning }}', on-stop-record='addAudio.learningRecordStop()', on-save='addAudio.learningSaved()')
 
       div(ng-show='addAudio.hasLearningRecording')
         .inline-block
@@ -33,7 +34,8 @@
           .text-center
             h2
               | {{ addAudio.recordingQuestion.text.translations[session.speaks] }}
-            recorder(question='addAudio.recordingQuestion', question-type='object', context='question', auto-play='true', language='{{ session.speaks }}', on-stop-record='addAudio.speaksRecordStop()', on-save='addAudio.speaksSaved()')
+            .more-spacey
+              recorder(question='addAudio.recordingQuestion', question-type='object', context='question', auto-play='true', language='{{ session.speaks }}', on-stop-record='addAudio.speaksRecordStop()', on-save='addAudio.speaksSaved()')
 
       div(ng-show='addAudio.hasSpeaksRecording')
         .inline-block
@@ -60,8 +62,12 @@
     // end practice set tab
 
   // end add-question-body
-.modal-footer
-  button.btn.btn-default(ng-click='addAudio.learningTabActive = !addAudio.learningTabActive') Learning
-  button.btn.btn-default(ng-click='addAudio.speaksTabActive = !addAudio.speaksTabActive') Speaks 
-  button.btn.btn-default(ng-click='addAudio.practiceSetTabActive = !addAudio.practiceSetTabActive') Practice Set 
-  button.btn.btn-success(ng-click='$close();') Done
+  .text-center
+    .spacey(ng-show='app.debug')
+      button.btn.btn-default(ng-click='addAudio.learningTabActive = !addAudio.learningTabActive') Learning
+      button.btn.btn-default(ng-click='addAudio.speaksTabActive = !addAudio.speaksTabActive') Speaks 
+      button.btn.btn-default(ng-click='addAudio.practiceSetTabActive = !addAudio.practiceSetTabActive') Practice Set 
+    button.btn-circle.btn.btn-danger(ng-click='$close();')
+      i.fa.fa-times
+    button.btn-circle.btn.btn-success(ng-click='$close();')
+      i.fa.fa-check

@@ -13,6 +13,7 @@
       '$q',
       'APP_CONFIG',
       'Recording',
+      'speechSynth',
       'PracticeSet',
       'PracticeSession',
       'Activity',
@@ -24,6 +25,7 @@
         $q,
         APP_CONFIG, 
         Recording, 
+        speechSynth,
         PracticeSet, 
         PracticeSession, 
         Activity,
@@ -32,7 +34,6 @@
         speechRecognition) {
         var self = this;
      
-        self.speaksCode = session.speaks;
         self.learningCode = session.learning;
         self.speaksText = session.speaksText; 
         self.learningText = session.learningText;
@@ -74,6 +75,14 @@
           self.practiceSession.currentQuestion.getRecordingUrl(self.learningCode, 'random').then(function (url) {
             self.audioUrl = url;
             self.playedQuestions.push(self.practiceSession.currentQuestion);
+          }, function (response) {
+            // since we don't have audio, use text-to-speech
+            // TODO: should we use voicerss and save the audio here?
+            var text = self.practiceSession.currentQuestion.text.translations[session.learning];
+            speechSynth.speak(text, session.learning);
+            self.playedQuestions.push(self.practiceSession.currentQuestion);
+            self.playerFinished();
+            self.showPlayer = false;
           });
         };
 
@@ -100,11 +109,13 @@
 
         self.audioSaved = function (newRecording) {
           self.showRecorder = false;
-
+        
           // push question audio into practiceSession
           // and save the practice session
           self.practiceSession.answers.push(self.practiceSession.currentQuestion._id);
-          self.practiceSession.audio.push(self.practiceSession.currentQuestion.currentRecording._id);
+          if (self.practiceSession.currentQuestion.currentRecording) {
+            self.practiceSession.audio.push(self.practiceSession.currentQuestion.currentRecording._id);
+          }
           self.practiceSession.audio.push(newRecording._id);
           PracticeSession.one(self.practiceSession._id).patch({
             answers: self.practiceSession.answers,
@@ -112,10 +123,12 @@
           });
 
           // and make question audio the parent of the answer audio
-          Recording.one(newRecording._id).patch({
-            "parent_audio": self.practiceSession.currentQuestion.currentRecording._id,
-            "affected_user": self.practiceSession.currentQuestion.currentRecording.submitted_by
-          });
+          if (self.practiceSession.currentQuestion.currentRecording) {
+            Recording.one(newRecording._id).patch({
+              "affected_user": self.practiceSession.currentQuestion.currentRecording.submitted_by,
+              "parent_audio": self.practiceSession.currentQuestion.currentRecording._id
+            });
+          }
 
           // load next question or show complete
           if (self.practiceSession.lastQuestion) {

@@ -17,7 +17,7 @@
                   imgClass: '@',
                 },
                 template: "<img id='file-input-image' class='{{ imgClass }}' ' ng-src='{{ imgSrc }}'>" +
-                  "<input id='file-input' style='display: none' file-on-change='{{ fileOnChange }}' type='file' filestyle=''>"
+                  "<input id='file-input' style='display: none' file-on-change='{{ fileOnChange }}' type='file'>"
             };
             return directive;
 

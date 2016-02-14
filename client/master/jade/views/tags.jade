@@ -1,24 +1,17 @@
-   
-.row-masonry.row-masonry-xl-6.row-masonry-lg-4.row-masonry-md-3.row-masonry-sm-2(ng-controller="TagsController as tags") 
-  // START row
-  .col-masonry(ng-repeat="tag in tags.tags")
-    // START new widget 
-    .tag-widget.new-tag(ng-if='$first && (session.roles === "admin")')
-      .photo-wrapper
-        p.ballon-wrapper.text-center
-          span.new-balloon
-            img(src='', ng-src='app/img/icons/48/Very_Basic/plus-48.png', ng-click='tags.openCreateTagModal()')
-      .tag-description.text-center
-        h4.mt0 Add
-        p.mb0.text-muted(ng-show='app.translation.show') Add
-    // END widget
-    // START widget 
-    .tag-widget
-      .photo-wrapper
-        p.balloon-wrapper.text-center(ng-click='tags.editTag(tag)')
-          span.balloon
-            img(ng-src='data:image/png;base64,{{tag.image}}')
-      .tag-description.text-center
-        h4.mt0 {{ tag.text.translations[tags.session.learning]}}
-        p.mb0.text-muted(ng-show='app.translation.show') {{ tag.text.translations[tags.session.speaks]}}
-      // END widget
+.content(ng-controller="TagsController as tags")   
+  .text-center(ng-show='session.roles === "admin"')
+    a.spacey.btn.btn-circle.btn-default.btn-sm(ng-click="tags.openCreateTagModal()")
+      i.fa.fa-plus
+  .row-masonry.row-masonry-xl-6.row-masonry-lg-4.row-masonry-md-3.row-masonry-sm-2
+    // START row
+    .col-masonry(ng-repeat="tag in tags.tags")
+      // START widget 
+      .tag-widget
+        .photo-wrapper
+          p.balloon-wrapper.text-center(ng-click='tags.editTag(tag)')
+            span.balloon
+              img(ng-src='data:image/png;base64,{{tag.image}}')
+        .tag-description.text-center
+          h4.mt0 {{ tag.text.translations[tags.session.learning]}}
+          p.mb0.text-muted(ng-show='app.translation.show') {{ tag.text.translations[tags.session.speaks]}}
+        // END widget

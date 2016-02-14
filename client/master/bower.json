@@ -114,7 +114,8 @@
     "angular-audio": "~1.7.1",
     "angular-paging": "~2.1.0",
     "wavesurfer.js": "~1.0.51",
-    "recordmp3": "*"
+    "recordmp3": "*",
+    "modernizer": "~2.8.2"
   },
   "resolutions": {
     "angular": "1.4.7",

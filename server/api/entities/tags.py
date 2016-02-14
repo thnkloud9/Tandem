@@ -35,18 +35,24 @@ entity = {
             'schema': {
                 'languages': {
                     'type': 'integer',
-                    'required': True
+                    'default': 2 
                 },
                 'original_language': {
                     'type': 'string',
-                    'required': True
+                    'default': 'en' 
                 },
                 'translations': {
                     'type': 'dict',
-                    'required': True
+                    'default': {}
                 }
             }
         },
+        'search_index': {
+          'type': 'list',
+          'schema': {
+            'type': 'string'
+          }
+        }, 
         'submitted_by' : {
             'type': 'objectid',
             'data_relation': {

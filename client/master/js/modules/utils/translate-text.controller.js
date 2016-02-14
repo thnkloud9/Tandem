@@ -29,7 +29,9 @@
 
             function activate() {
               self.session = session;
-              self.model = (self.initialText) ? self.initialText: 'click to enter content';
+              if (!self.model) {
+                self.model = (self.initialText) ? self.initialText: 'click to enter content';
+              }
               self.popoverContent = null;
               self.originalWords = [];
               self.editMode = false;

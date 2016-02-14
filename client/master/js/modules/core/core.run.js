@@ -5,10 +5,33 @@
         .module('app.core')
         .run(appRun);
 
-    appRun.$inject = ['$rootScope', '$state', '$stateParams',  '$window', '$templateCache', 'Colors', 'checkauth'];
+    appRun.$inject = ['$rootScope', '$state', '$stateParams',  '$window', '$templateCache', 'Colors', 'checkauth', 'APP_CONFIG'];
     
-    function appRun($rootScope, $state, $stateParams, $window, $templateCache, Colors, checkauth) {
+    function appRun($rootScope, $state, $stateParams, $window, $templateCache, Colors, checkauth, APP_CONFIG) {
     
+      // check auth, redirect to login if not authorized 
+      $window.fbAsyncInit = function() {
+        FB.init({ 
+          appId : APP_CONFIG.facebook.appIdTest,
+          channelUrl: 'app/channel.html', 
+          status: true, 
+          cookie: true, 
+          xfbml: true,
+          version : 'v2.2'
+        });
+        // TODO: put check auth here so that we can use FB
+        // to authenticate if the user chooses
+      };
+
+      // IIFE for facebook sdk
+      (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = '//connect.facebook.net/en_US/sdk.js';
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+
       // check auth, redirect to login if not authorized 
       checkauth();
  

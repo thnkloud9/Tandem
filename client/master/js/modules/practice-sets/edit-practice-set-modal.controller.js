@@ -56,65 +56,22 @@
       });
 
       vm.search = function (added) {
-        var speaksFilter = {};
-        var learningFilter = {};
         var searchText = (added) ? vm.addedSearchText : vm.searchText;
-        var tagsFilter = {
-          "tags_index": {
-            "$regex": ".*" + searchText + ".*",
-            "$options": "i"
+        var filter = (added) ? { "_id": { "$in": vm.practiceSet.questionIds }} :
+          { "_id": { "$nin": vm.practiceSet.questionIds }}
+        var params = { "embedded": { "tags": 1 }};
+
+        vm.availableQuestions = [];
+        Question.searchByText(searchText, filter, params).then(function (results) {
+          vm.searchParams = results.params;
+          if (added) {
+            vm.addedTotalAvailable = results.questions._meta.total
+            vm.practiceSet.questions = results.questions;
+          } else {
+            vm.totalAvailable = results.questions._meta.total;
+            vm.availableQuestions = results.questions;
           }
-        };
-        speaksFilter['text.translations.' + session.speaks] = {
-          "$regex": ".*" + searchText + ".*",
-          "$options": "i"
-        };
-        learningFilter['text.translations.' + session.learning] = {
-          "$regex": ".*" + searchText + ".*",
-          "$options": "i"
-        };
-
-        if (added) {
-          var filter = {
-            "$and": [
-              { "_id": { "$in": vm.practiceSet.questionIds }},
-              { "$or": [ speaksFilter, learningFilter, tagsFilter ] }
-            ]
-          };
-          var params = {
-            "where": JSON.stringify(filter),
-            "embedded": {
-              "tags": 1
-            }
-          };
-
-          vm.searchParams = params;
-          vm.availableQuestions = [];
-          Question.getList(params).then(function (questions) {
-            vm.addedTotalAvailable = questions._meta.total
-            vm.practiceSet.questions = questions;
-          });
-        } else {
-          var filter = {
-            "$and": [
-              { "_id": { "$nin": vm.practiceSet.questionIds }},
-              { "$or": [ speaksFilter, learningFilter, tagsFilter ] }
-            ]
-          };
-          var params = {
-            "where": JSON.stringify(filter),
-            "embedded": {
-              "tags": 1
-            }
-          };
-
-          vm.searchParams = params;
-          vm.availableQuestions = [];
-          Question.getList(params).then(function (questions) {
-            vm.totalAvailable = questions._meta.total;
-            vm.availableQuestions = questions;
-          });
-        }
+        });
       };
 
       vm.clearNewQuestion = function() {

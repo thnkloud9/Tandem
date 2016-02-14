@@ -1,3 +1,28 @@
 // START widgets box
 .content(ng-controller='DashboardController as dashboard')
   .row
+    .text-center
+      h2 What would you like to talk about?
+      p.small You can type your answer, or enable speech detection and try speaking the answer.
+      a.fa.fa-2x.fa-toggle-on.nounderline(ng-show='app.audio.speechRecognition', ng-click='dashboard.toggleSpeechRecognition()')
+      a.fa.fa-2x.fa-toggle-off.nounderline(ng-hide='app.audio.speechRecognition', ng-click='dashboard.toggleSpeechRecognition()')
+      span Speech Recognition
+      h5.text-center(ng-show='app.audio.speechRecognition') {{ dashboard.speechRecognitionResults }}
+    .text-center(ng-hide='app.audio.speechRecognition')
+      .panel-body
+        input.spacey.form-control(ng-model='dashboard.answer')
+        button.btn-circle.btn.btn-success(ng-click='dashboard.submitAnswer()')
+          i.fa.fa-2x.fa-check
+
+    h3 Suggested Topics
+    ul
+      li(ng-repeat='tag in dashboard.selectedTags track by tag._id')
+        h4 {{ tag.text.translations[session.speaks] }}
+
+    h3 Suggested Questions
+    ul
+      li(ng-repeat='question in dashboard.tandemQuestions track by $index')
+        h4 {{ question.text.translations[session.learning] }}
+          em.fa.fa-play(ng-click='dashboard.speak(question)')
+        p {{ question.text.translations[session.speaks] }}
+

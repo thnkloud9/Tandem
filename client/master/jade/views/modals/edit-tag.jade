@@ -6,10 +6,16 @@
           image-with-upload(img-src='data:image/png;base64,{{editTag.tag.image}}', file-on-change="editTag.handleFileSelect", img-class='edit-tags-img')
     .col-sm-8
       .form-horizontal
-        h1.form-control-static
-          a(editable-text='editTag.tag.text.translations[user.learning]') {{ editTag.tag.text.translations[user.learning] }}
-        p.form-control-static(ng-show='app.translation.show')
-          a(editable-text='editTag.tag.text.translations[user.speaks]') {{ editTag.tag.text.translations[user.speaks] }}
+        // title
+        h1.form-control-static(translate-text, model='editTag.tag.text.translations[user.learning]', send='editTag.tag.text.translations[user.speaks]', to='{{ session.speaks }}', allow-change='false')
+        p.form-control-static(ng-show='app.translation.show', translate-text, model='editTag.tag.text.translations[user.speaks]', send='editTag.tag.text.translations[user.learning]', to='{{ session.learning}}', allow-change='false')
+
+        // description
+        p.spacey(translate-text, model='editTag.tag.description.translations[user.learning]', send='true', model-translation='editTag.tag.description.translations[user.speaks]', to='{{ session.speaks }}', allow-change='false', initial-text="click here to enter german version")
+        p.spacey(translate-text, model='editTag.tag.description.translations[user.speaks]', send='true', model-translation='editTag.tag.description.translations[user.learning]', to='{{ session.learning }}', allow-change='false', initial-text="click here to enter english version")
+
+        // search tags
+        input.form-control(type='text', tagsinput, ng-value="editTag.tag.search_index.join(',')", ng-model="editTag.tag.search_index")
 
   // Add new question START
   .add-question-widget

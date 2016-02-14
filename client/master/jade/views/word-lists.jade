@@ -18,6 +18,7 @@
           .progress-bar.progress-bar-warning.progress-60(role='progressbar', aria-valuenow='{{ set.score }}', aria-valuemin='0', aria-valuemax='100')
             span.sr-only 60% Memorized
         .text-center
+          p words: {{ set.questions.length }}
           p last score: {{ set.score }}
           p played: {{ set.played }}
         .text-center

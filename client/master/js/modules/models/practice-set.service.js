@@ -5,8 +5,10 @@
         .module('app.models')
         .factory('PracticeSet', [
             '$q',
+            '$rootScope',
             'Restangular',
-            function ($q, Restangular) {
+            'APP_CONFIG',
+            function ($q, $rootScope, Restangular, APP_CONFIG) {
               var PracticeSet = Restangular.all('practice_sets');
 
               // extend collection 
@@ -71,6 +73,55 @@
 
                 return model;
               });
+
+              PracticeSet.newEmptySet = function () {
+                var description = {};
+                description[$rootScope.session.speaks] = '';
+                description[$rootScope.session.learning] = '';
+                var newSet = {
+                  title: '',
+                  score: 0,
+                  played: 0,
+                  description: {
+                    languages: APP_CONFIG.languages.length,
+                    original_language: $rootScope.session.speaks,
+                    translations: description
+                  },
+                  submitted_by: $rootScope.session.userId,
+                  category: ''
+                };
+
+                return newSet;
+              };
+
+              // used during live tandem session by topics
+              // takes the entre questions list from am
+              // array of questions
+              PracticeSet.buildFromQuestions = function (title, questions, total) {
+                var deferedPost = $q.defer();
+                var tags = _.countBy(questions, "tags");
+                var selectedQuestions = _.sample(questions, total);
+                var newSet = PracticeSet.newEmptySet();
+                
+                newSet.title = title;
+                newSet.category = 'tandem';
+                // TODO: make sure at least 1 question from every distinct tag
+                // gets added to the set?
+                newSet.questions = _.pluck(selectedQuestions, '_id');
+
+                // save the new practiceSet
+                PracticeSet.post(newSet).then(function (practiceSet) {
+                  // re-hydrate fields because POST will not include
+                  // them
+                  _.extend(practiceSet, newSet);
+                  practiceSet.questions = selectedQuestions;
+                  deferedPost.resolve(practiceSet);
+                }, function (response) {
+                  deferedPost.reject(response);
+                });
+
+                return deferedPost.promise;
+              };
 
               return PracticeSet;
             }

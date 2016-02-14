@@ -1,0 +1,95 @@
+.question-grid {
+  padding:20px 20px 100px 20px;
+  max-width:1300px;
+  margin:0 auto;
+  list-style:none;
+  text-align:center;
+  li {
+    display:inline-block;
+    width:440px;
+    margin:0;
+    padding:20px;
+    text-align:left;
+    position:relative;
+  }
+  figure {
+    margin:0;
+    position:relative;
+    img {
+      max-width:100%;
+      display:block;
+      position:relative;
+    }
+    div.cover {
+      position: absolute;
+      height: 100%;
+      z-index: 10;
+      color: white;
+      top: 0;
+      left: 0;
+      padding: 0 20px 0 20px;
+      h3 {
+        position: relative;
+        top: 50%;
+        transform: translateY(-75%);
+      }
+      p {
+        position: absolute;
+        bottom: 0;
+      }
+    }
+  }
+  figcaption {
+    position:absolute;
+    top:0;
+    left:0;
+    padding:20px;
+    background:#2c3f52;
+    color:#ed4e6e;
+    h3 {
+      margin:0;
+      padding:0;
+      color:#ffffff;
+    }
+    span:before {
+      content:'by ';
+    }
+    .controls {
+      display:inline-block;
+    }
+  }
+}
+
+
+.cs-style-2 figure img {
+  z-index:10;
+  -webkit-transition:-webkit-transform 0.4s;
+  -moz-transition:-moz-transform 0.4s;
+  transition:transform 0.4s;
+}
+.cs-style-2 figure div.cover {
+  z-index:10;
+  -webkit-transition:-webkit-transform 0.4s;
+  -moz-transition:-moz-transform 0.4s;
+  transition:transform 0.4s;
+}
+.cs-style-2 figcaption {
+  height:90px;
+  width:100%;
+  top:auto;
+  bottom:0;
+  a {
+    position:absolute;
+    right:20px;
+    top:30px;
+  }
+}
+.no-touch .cs-style-2 figure:hover img,
+.cs-style-2 figure.cs-hover img, 
+.no-touch .cs-style-2 figure:hover div.cover,
+.cs-style-2 figure.cs-hover div.cover, {
+  -webkit-transform:translateY(-90px);
+  -moz-transform:translateY(-90px);
+  -ms-transform:translateY(-90px);
+  transform:translateY(-90px);
+}

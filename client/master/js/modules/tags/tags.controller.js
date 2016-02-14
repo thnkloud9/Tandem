@@ -66,7 +66,7 @@
                 templateUrl: 'app/views/modals/edit-tag.html',
                 controller: 'EditTagModalController',
                 controllerAs: 'editTag',
-                resolve: angular.extend(helper.resolveFor('xeditable'),{
+                resolve: angular.extend(helper.resolveFor('xeditable', 'taginput'),{
                   editingTag: function () {
                     return tag;
                   }
@@ -78,6 +78,7 @@
               modalInstance.result.then(function () {
                 console.log('dismissed with OK');
                 // update tag in tag list
+                // TODO: this doesn't work
                 vm.tags = vm.tags.filter(function (t) {
                   return t._id !== tag._id;
                 });
