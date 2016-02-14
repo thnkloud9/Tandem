@@ -1,0 +1,6 @@
+// START Search form
+form.navbar-form(role='search')
+  .form-group.has-feedback
+    input.form-control(type='text', ng-model='search.searchText', placeholder="{{ 'topbar.search.PLACEHOLDER' | translate }}")
+    .fa.fa-times.form-control-feedback(search-dismiss)
+// END Search form

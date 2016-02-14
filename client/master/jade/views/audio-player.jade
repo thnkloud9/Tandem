@@ -1,0 +1,20 @@
+// AUDIO PLAYER
+#centered-player
+  #spinner.inline-block(ng-show='audioPlayerCtrl.processing')
+    #block_1.spinner_block
+    #block_2.spinner_block
+    #block_3.spinner_block
+  .inline-block
+    a.fa.fa-4x.fa-pause.nounderline(ng-show='audioPlayerCtrl.playingQuestion', ng-click='audioPlayerCtrl.pauseQuestion()')
+    a.fa.fa-4x.fa-play.nounderline(uib-tooltip='play question', ng-show='audioPlayerCtrl.showPlayQuestion', ng-click='audioPlayerCtrl.playQuestion()')
+    a.fa.fa-4x.fa-play.nounderline(uib-tooltip='play answer', ng-show='audioPlayerCtrl.showPlayAnswer', ng-click='audioPlayerCtrl.playAnswer()')
+    a.fa.fa-4x.fa-pause.nounderline(ng-show='audioPlayerCtrl.playingAnswer', ng-click='audioPlayerCtrl.pauseAnswer()')
+  div(ng-show='audioPlayerCtrl.timeline')
+    .input-group
+      span.input-group-addon.timeline-input-group-addon(uib-tooltip='add timeline comment', popup-placement='top', popup-show='views/popover-timeline-comment.html')
+        i.fa.fa-comment
+      input.form-control.timeline-form-control(type='range', min='0', max='1', step='0.01', ng-model='audioPlayerCtrl.player.progress')
+    .col-sm-12
+      .timeline-comments-container
+        comment-timeline.timeline-comments(comments='audioPlayerCtrl.comments', recording='audioPlayerCtrl.recording', type='info')
+// END AUDIO PLAYER

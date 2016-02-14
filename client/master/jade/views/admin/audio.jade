@@ -1,0 +1,10 @@
+h3 Audios Admin
+  small All audios
+
+.container-fluid(ng-controller="AudiosAdminController as table")
+
+  .row
+    .col-lg-4.col-md-6
+      input.mb.form-control(placeholder='Filter...', type='text', ng-model='table.gridOptions.quickFilterText')
+   .ag-fresh(ag-grid='table.gridOptions', style="height: 500px;")
+

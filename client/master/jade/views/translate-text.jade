@@ -1,0 +1,47 @@
+// toggle to show additional translations
+span(ng-show='translate.mmMatches && !translate.showHints', ng-class="{'animated bounce': translate.mmMatches && !translate.showHints}" )
+  em.small(href='', ng-click='showTranslations = !showTranslations', ng-class="showTranslations ? 'icon-arrow-up-circle' : 'icon-arrow-down-circle'")
+
+// initial span
+span.translate-initial(href='', ng-click='translate.edit()', ng-hide="translate.editMode || translate.showHints")
+  a {{ translate.model }}
+
+// edit-mode
+div.translate-edit
+  .input-group(ng-show="translate.editMode")
+    input.form-control(type='text', ng-model="translate.model")
+
+    // without show-change
+    .input-group-btn(ng-hide="allowChange")
+      button.btn.btn-default(type='button', tabindex='-1', ng-click="translate.translate()")
+        span.fa.fa-language.text-muted
+      button.btn.btn-default(type='button', ng-click="translate.cancel()")
+        span.fa.fa-times.text-muted
+
+    // with show-change
+    .input-group-btn(uib-dropdown="", ng-show="allowChange")
+      button.btn.btn-default(type='button', tabindex='-1', ng-click="translate.translate()")
+        span.fa.fa-language.text-muted
+      button.btn.btn-default(type='button', uib-dropdown-toggle="")
+        span {{ translate.to }}
+      ul.dropdown-menu.pull-right
+        li
+          a(href='', ng-click="translate.setToSpeaks()") {{ translate.session.speaks }}
+        li
+          a(href='', ng-click="translate.setToLearning()") {{ translate.session.learning }}
+      button.btn.btn-default(type='button', ng-click="translate.cancel()")
+        span.fa.fa-times.text-muted.glyphicon.glyphicon-remove
+
+// toggle to show additional translations
+span(ng-show='translate.mmMatches && translate.send', ng-class="{'animated bounce': translate.mmMatches && translate.send}" )
+  em.small(href='', ng-click='showTranslations = !showTranslations', ng-class="showTranslations ? 'icon-arrow-up-circle' : 'icon-arrow-down-circle'")
+
+// words with popover hints
+span.translate-hints(href='', ng-click='translate.edit()', ng-hide="!translate.showHints || translate.editMode")
+  span(ng-repeat="originalWord in translate.originalWords track by $index", uib-popover-html="translate.popoverContent", popover-trigger="mouseenter", popover-placement="bottom", ng-mouseover="translate.giveHints(originalWord)").dl-word {{ originalWord }}
+
+// translations from mymemory here
+div.translate-matches(ng-show='showTranslations')
+  p.small.small(ng-repeat='translation in translate.mmMatches track by $index') {{ translation.translation }}
+    button.btn.btn-xs(ng-click='translate.useTranslation(translation.translation)') use
+

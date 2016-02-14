@@ -6,7 +6,7 @@ from eve.io.mongo import Mongo
 from gridfs import GridFS
 
 def init_app(app):
-    @app.route('/assets/<file_id>', methods=['GET'])
+    @app.route('/api/assets/<file_id>', methods=['GET'])
     def get_asset(file_id):
 
         _fs = GridFS(app.data.driver.db)
@@ -15,7 +15,7 @@ def init_app(app):
 
         return Response(content, mimetype=str(_file.content_type))
 
-    @app.route('/assets/audio/<audio_id>', methods=['GET'])
+    @app.route('/api/assets/audio/<audio_id>', methods=['GET'])
     def get_audio(audio_id):
 
         audios = app.data.driver.db['audio']
@@ -31,7 +31,7 @@ def init_app(app):
 
         return Response(content, mimetype=str(_file.content_type))
         
-    @app.route('/assets/profile_images/<user_id>', methods=['GET'])
+    @app.route('/api/assets/profile_images/<user_id>', methods=['GET'])
     def get_profile_image(user_id):
 
         users = app.data.driver.db['users']

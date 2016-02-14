@@ -1,0 +1,11 @@
+.modal-body
+  .container-fluid.text-center
+    h3.mt0(translate-text, send='false', model='newSet.title', initial-text='Click here to enter title', ng-click='newSet.editing = true')
+    p.text-muted(translate-text, send='false', model='newSet.description', initial-text='Click here to enter description', ng-click='newSet.editing = true')
+
+  .text-center
+    button.btn.btn-circle.btn-danger.btn-large(type='button', ng-click='closeThisDialog(0)')
+      i.fa.fa-times
+    button.btn.btn-sm.btn-circle.btn-success(ng-click='confirm(1)')
+      i.fa.fa-check
+        

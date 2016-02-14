@@ -1,0 +1,110 @@
+.modal-body
+  .form-group
+    input.form-control(ng-model='modalEdit.practiceSet.title', tamodelex='1', required='')
+  .form-group
+    input.form-control(ng-model='modalEdit.practiceSet.description.translations[user.speaks]')
+  .form-group
+    select.form-control(ng-model='modalEdit.practiceSet.category', name='category', required='')
+      option(value='', selected='', disabled='') Category
+      option(value='memorize') Memorize
+      option(value='tandem') Tandem
+      option(value='live') Live
+
+  // Add new question START
+  .add-question-widget
+    a.fa.fa-plus-circle.nounderline(ng-click='showAddQuestion = !showAddQuestion')
+      small Add Question
+    div(ng-show='showAddQuestion')
+      h4(translate-text, model='modalEdit.newQuestion.speaksText', send='true', model-translation='modalEdit.newQuestion.learningText', to='{{ session.learning }}', allow-change='false', initial-text="click here to enter english version")
+      h4(translate-text, model='modalEdit.newQuestion.learningText', send='true', model-translation='modalEdit.newQuestion.speaksText', to='{{ session.speaks }}', allow-change='false', initial-text="click here to enter german version")
+      button.btn.btn-sm.btn-success(ng-click='modalEdit.saveQuestion()') Add
+   // Add new question END
+
+
+  uib-tabset(type="pills")
+    uib-tab(heading='Added ({{ modalEdit.practiceSet.questions.length }})')
+      .panel.panel-default
+        .panel-heading
+          input.form-control(type='text', ng-model='modalEdit.addedSearchText', ng-change='modalEdit.search(true)', placeholder='Search Added Questions')
+          .small Search Results ({{ modalEdit.addedTotalAvailable }})
+        .table-responsive.scroll-table
+          table.table.table-striped.table-bordered.table-hover
+            thead
+              tr
+                th(check-all)
+                  .checkbox.c-checkbox(data-toggle="tooltip",data-title="Check All")
+                    label
+                      input(type='checkbox', ng-click='modalEdit.addedToggleAll()')
+                      span.fa.fa-check
+                th Description
+                  .btn.btn-sm.btn-info.pull-right(ng-show='modalEdit.addedSelected.length', ng-click='modalEdit.removeAllSelected()') Remove
+            tbody
+              tr(ng-repeat='item in modalEdit.practiceSet.questions')
+                td
+                  .checkbox.c-checkbox
+                    label
+                      input(type='checkbox' value='item._id', ng-click='modalEdit.addedToggleSelected(item._id)', ng-checked='modalEdit.addedSelected.indexOf(item._id) > -1')
+                      span.fa.fa-check
+                td
+                  .media-box
+                      a.pull-left(href='#')
+                        img.media-box-object.img-responsive.img-rounded.thumb64(src="app/img/dummy.png", alt="")
+                      .media-box-body
+                        .pull-right.btn.btn-info.btn-sm(ng-click='modalEdit.removeQuestion(item)') Remove
+                        h4.media-box-heading {{ ::item.text.translations[user.learning] }}
+                        small.text-muted(ng-if='app.translation.show') {{ ::item.text.translations[user.speaks] }}
+                        p {{ ::item.description.translations[user.learning] }} 
+        .panel-footer
+          .row
+            .col-lg-2
+              button.btn.btn-sm.btn-default(ng-click='modalEdit.clearQuestions()') Clear
+            .col-lg-4
+            .col-lg-6.text-right
+    // ADDED Panel END
+
+    uib-tab(heading='Available')
+      // START panel
+      .panel.panel-default
+        .panel-heading
+          input.form-control(type='text', ng-model='modalEdit.searchText', ng-change='modalEdit.search()', placeholder='Search Questions')
+          .small Search Results ({{ modalEdit.totalAvailable }})
+        // START table-responsive
+        .table-responsive.scroll-table
+          table.table.table-striped.table-bordered.table-hover
+            thead
+              tr
+                th(check-all)
+                  .checkbox.c-checkbox(data-toggle="tooltip",data-title="Check All")
+                    label
+                      input(type='checkbox', ng-click='modalEdit.toggleAll()')
+                      span.fa.fa-check
+                th Description
+                  .btn.btn-sm.btn-info.pull-right(ng-show='modalEdit.selected.length', ng-click='modalEdit.addAllSelected()') Add
+            tbody
+              tr(ng-repeat='item in modalEdit.availableQuestions')
+                td
+                  .checkbox.c-checkbox
+                    label
+                      input(type='checkbox' value='item._id', ng-click='modalEdit.toggleSelected(item._id)', ng-checked='modalEdit.selected.indexOf(item._id) > -1')
+                      span.fa.fa-check
+                td
+                  .media-box
+                      a.pull-left(href='#')
+                        img.media-box-object.img-responsive.img-rounded.thumb64(src="app/img/dummy.png", alt="")
+                      .media-box-body
+                        .pull-right.btn.btn-info.btn-sm(ng-click='modalEdit.addQuestion(item)') Add
+                        h4.media-box-heading {{ ::item.text.translations[user.learning] }}
+                        small.text-muted(ng-if='app.translation.show') {{ ::item.text.translations[user.speaks] }}
+                        p {{ ::item.description.translations[user.learning] }} 
+        // END table-responsive
+        .panel-footer
+          .row
+            .col-lg-2
+              button.btn.btn-sm.btn-default Clear
+            .col-lg-1
+            .col-lg-9.text-right
+      // END panel
+
+.modal-footer
+  button.btn.btn-success(ng-click='modalEdit.savePracticeSet(); $close()') Save
+  button.btn.btn-default(ng-click='$close()') Cancel

@@ -1,0 +1,116 @@
+.modal-body
+  .panel-body
+    .col-sm-4.text-center
+      p.balloon-wrapper.text-center
+        span.balloon
+          image-with-upload(img-src='data:image/png;base64,{{editTag.tag.image}}', file-on-change="editTag.handleFileSelect", img-class='edit-tags-img')
+    .col-sm-8
+      .form-horizontal
+        // title
+        h1.form-control-static(translate-text, model='editTag.tag.text.translations[user.learning]', send='editTag.tag.text.translations[user.speaks]', to='{{ session.speaks }}', allow-change='false')
+        p.form-control-static(ng-show='app.translation.show', translate-text, model='editTag.tag.text.translations[user.speaks]', send='editTag.tag.text.translations[user.learning]', to='{{ session.learning}}', allow-change='false')
+
+        // description
+        p.spacey(translate-text, model='editTag.tag.description.translations[user.learning]', send='true', model-translation='editTag.tag.description.translations[user.speaks]', to='{{ session.speaks }}', allow-change='false', initial-text="click here to enter german version")
+        p.spacey(translate-text, model='editTag.tag.description.translations[user.speaks]', send='true', model-translation='editTag.tag.description.translations[user.learning]', to='{{ session.learning }}', allow-change='false', initial-text="click here to enter english version")
+
+        // search tags
+        input.form-control(type='text', tagsinput, ng-value="editTag.tag.search_index.join(',')", ng-model="editTag.tag.search_index")
+
+  // Add new question START
+  .add-question-widget
+    a.fa.fa-plus-circle.nounderline(ng-click='showAddQuestion = !showAddQuestion')
+      small Add Question
+    div(ng-show='showAddQuestion')
+      h4(translate-text, model='editTag.newQuestion.speaksText', send='true', model-translation='editTag.newQuestion.learningText', to='{{ session.learning }}', allow-change='false', initial-text="click here to enter english version")
+      h4(translate-text, model='editTag.newQuestion.learningText', send='true', model-translation='editTag.newQuestion.speaksText', to='{{ session.speaks }}', allow-change='false', initial-text="click here to enter german version")
+      button.btn.btn-xs.btn-success(ng-click='editTag.saveQuestion()') Add
+  // Add new question END
+  //
+  uib-tabset(type="pills")
+    uib-tab(heading='Added ({{ editTag.tag.questions.length }})')
+      .panel.panel-default
+        .panel-heading
+          input.form-control(type='text', ng-model='editTag.addedSearchText', ng-change='editTag.search(true)', placeholder='Search Added Questions')
+          .small Search Results ({{ editTag.addedTotalAvailable }})
+        .table-responsive.scroll-table
+          table.table.table-striped.table-bordered.table-hover
+            thead
+              tr
+                th(check-all)
+                  .checkbox.c-checkbox(data-toggle="tooltip",data-title="Check All")
+                    label
+                      input(type='checkbox', ng-click='editTag.addedToggleAll()')
+                      span.fa.fa-check
+                th Description
+                  .btn.btn-sm.btn-info.pull-right(ng-show='editTag.addedSelected.length', ng-click='editTag.removeAllSelected()') Remove
+            tbody
+              tr(ng-repeat='item in editTag.tag.questions')
+                td
+                  .checkbox.c-checkbox
+                    label
+                      input(type='checkbox' value='item._id', ng-click='editTag.addedToggleSelected(item._id)', ng-checked='editTag.addedSelected.indexOf(item._id) > -1')
+                      span.fa.fa-check
+                td
+                  .media-box
+                      a.pull-left(href='#')
+                        img.media-box-object.img-responsive.img-rounded.thumb64(src="app/img/dummy.png", alt="")
+                      .media-box-body
+                        .pull-right.btn.btn-info.btn-sm(ng-click='editTag.removeQuestion(item)') Remove
+                        h4.media-box-heading {{ ::item.text.translations[user.learning] }}
+                        small.text-muted(ng-if='app.translation.show') {{ ::item.text.translations[user.speaks] }}
+                        p {{ ::item.description.translations[user.learning] }} 
+        .panel-footer
+          .row
+            .col-lg-2
+              button.btn.btn-sm.btn-default(ng-click='editTag.clearQuestions()') Clear
+            .col-lg-4
+            .col-lg-6.text-right
+    // ADDED Panel END
+
+    uib-tab(heading='Available')
+      // START panel
+      .panel.panel-default
+        .panel-heading
+          input.form-control(type='text', ng-model='editTag.searchText', ng-change='editTag.search()', placeholder='Search Questions')
+          .small Search Results ({{ editTag.totalAvailable }})
+        // START table-responsive
+        .table-responsive.scroll-table
+          table.table.table-striped.table-bordered.table-hover
+            thead
+              tr
+                th(check-all)
+                  .checkbox.c-checkbox(data-toggle="tooltip",data-title="Check All")
+                    label
+                      input(type='checkbox', ng-click='editTag.toggleAll()')
+                      span.fa.fa-check
+                th Description
+                  .btn.btn-sm.btn-info.pull-right(ng-show='editTag.selected.length', ng-click='editTag.addAllSelected()') Add
+            tbody
+              tr(ng-repeat='item in editTag.availableQuestions')
+                td
+                  .checkbox.c-checkbox
+                    label
+                      input(type='checkbox' value='item._id', ng-click='editTag.toggleSelected(item._id)', ng-checked='editTag.selected.indexOf(item._id) > -1')
+                      span.fa.fa-check
+                td
+                  .media-box
+                      a.pull-left(href='#')
+                        img.media-box-object.img-responsive.img-rounded.thumb64(src="app/img/dummy.png", alt="")
+                      .media-box-body
+                        .pull-right.btn.btn-info.btn-sm(ng-click='editTag.addQuestion(item)') Add
+                        h4.media-box-heading {{ ::item.text.translations[user.learning] }}
+                        small.text-muted(ng-if='app.translation.show') {{ ::item.text.translations[user.speaks] }}
+                        p {{ ::item.description.translations[user.learning] }} 
+        // END table-responsive
+        .panel-footer
+          .row
+            .col-lg-2
+              button.btn.btn-sm.btn-default Clear
+            .col-lg-1
+            .col-lg-9.text-right
+      // END panel
+
+.modal-footer
+  button.btn.btn-success(ng-click='editTag.saveTag(); $close()') Save
+  button.btn.btn-default(ng-click='$close()') Cancel

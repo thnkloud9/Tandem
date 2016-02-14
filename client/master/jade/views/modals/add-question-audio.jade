@@ -1,0 +1,73 @@
+.panel-body
+  #add-question-body
+    .col-sm-2
+      img(src='app/img/friends/yellow-tooth.png')
+    .col-sm-10
+      // start learning tab
+      div(ng-show='addAudio.learningTabActive')
+        div(ng-hide='addAudio.hasLearningRecording')
+          h4 Ok, lets add some audio! Just click the microphone and read the question.
+          p Don't worry, if you make a mistake. You can just stop and retry as many times as you like.  And we won't share your recordings with anyone unless you tell us to!
+          .text-center
+            h2
+              | {{ addAudio.recordingQuestion.text.translations[session.learning] }}
+            .more-spacey
+              recorder(question='addAudio.recordingQuestion', question-type='object', context='question', auto-play='true', language='{{ session.learning }}', on-stop-record='addAudio.learningRecordStop()', on-save='addAudio.learningSaved()')
+
+      div(ng-show='addAudio.hasLearningRecording')
+        .inline-block
+          .pull-left
+            img.img-thumbnail.img-circle.audio-block-picture(ng-src="{{user.picture}}", alt="Avatar")
+          .pull-right
+            h5
+              span recorded
+            p.date-sm {{  addAudio.learningRecording._created | niceDate }}
+        .audio-bubble-left.inline-block
+          audio-player(on-play='addAudio.playerStarted()', on-stop='addAudio.playerFinished()', context='question', auto-play='false', url='{{ addAudio.learningRecordingUrl }}')
+        .inline-block
+          a.fa.fa-2x.fa-repeat.nounderline(uib-tooltip='record over', ng-click='addAudio.hasLearningRecording = !addAudio.hasLearningRecording')
+      // end learning tab
+    
+      div(ng-show='addAudio.speaksTabActive') 
+        div(ng-hide='addAudio.hasSpeaksRecording')
+          h4 Cool, now how would you say that in {{ session.speaksText }}? 
+          .text-center
+            h2
+              | {{ addAudio.recordingQuestion.text.translations[session.speaks] }}
+            .more-spacey
+              recorder(question='addAudio.recordingQuestion', question-type='object', context='question', auto-play='true', language='{{ session.speaks }}', on-stop-record='addAudio.speaksRecordStop()', on-save='addAudio.speaksSaved()')
+
+      div(ng-show='addAudio.hasSpeaksRecording')
+        .inline-block
+          .pull-left
+            img.img-thumbnail.img-circle.audio-block-picture(ng-src="{{user.picture}}", alt="Avatar")
+          .pull-right
+            h5
+              span recorded
+            p.date-sm {{  addAudio.speaksRecording._created | niceDate }}
+        .audio-bubble-left.inline-block
+          audio-player(on-play='addAudio.playerStarted()', on-stop='addAudio.playerFinished()', context='question', auto-play='false', url='{{ addAudio.speaksRecordingUrl }}')
+        .inline-block
+          a.fa.fa-2x.fa-repeat.nounderline(tooltip='record over', ng-click='addAudio.hasSpeaksRecording = !addAudio.hasSpeaksRecording')
+      // end speaks tab
+    
+      div(ng-show='addAudio.practiceSetTabActive')
+        h4 Cool, looks like you've added audio already.
+        p Click on a practice set to add this question to that set.
+        ul.practice-sets-list.list-unstyled(ng-repeat='practiceSet in addAudio.practiceSets')
+          li
+            div
+              a.fa.fa-plus-square.nounderline(tooltip='Add to {{ practiceSet.title }}', ng-click='addAudio.addToPracticeSet(practiceSet)')
+              h5.inline-block {{ practiceSet.title }}
+    // end practice set tab
+
+  // end add-question-body
+  .text-center
+    .spacey(ng-show='app.debug')
+      button.btn.btn-default(ng-click='addAudio.learningTabActive = !addAudio.learningTabActive') Learning
+      button.btn.btn-default(ng-click='addAudio.speaksTabActive = !addAudio.speaksTabActive') Speaks 
+      button.btn.btn-default(ng-click='addAudio.practiceSetTabActive = !addAudio.practiceSetTabActive') Practice Set 
+    button.btn-circle.btn.btn-danger(ng-click='$close();')
+      i.fa.fa-times
+    button.btn-circle.btn.btn-success(ng-click='$close();')
+      i.fa.fa-check

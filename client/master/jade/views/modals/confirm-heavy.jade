@@ -1,0 +1,8 @@
+.modal-body.text-center
+  h2.spacey {{title}}
+  p {{text}}
+  .text-center
+    button.btn.btn-circle.btn-danger.btn-large(ng-click='cancel()')
+      i.fa.fa-times
+    button.btn.btn-sm.btn-circle.btn-success(ng-click='ok()')
+      i.fa.fa-check

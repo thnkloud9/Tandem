@@ -1,0 +1,110 @@
+.unwrap(ng-controller="ProfileViewController as profile")
+  toaster-container(toaster-options="{'position-class': 'toast-bottom-right', 'time-out': '10000'}")
+  .bg-cover(style="background-image: url(app/img/profile-bg.jpg)")
+    .p-xl.text-center.text-white
+      a(href='', ng-click='profile.openImageCrop()')
+        img.img-thumbnail.img-circle.thumb128(ng-src="{{ user.picture }}", alt="Image")
+      h3.m0 {{ profile.user.fullName }}
+      p Learning {{ session.learningText }}
+      p.form-control-static
+        a(href='#', editable-textarea='profile.user.introduction', e-rows='3', e-cols='60', onaftersave='profile.showUpdate = true').profile-intro-editable {{ profile.user.introduction }}
+  .text-center.bg-gray-dark.p-lg.mb-xl
+    .row.row-table
+      .col-xs-4.br
+        h3.m0 {{ user.totalRecordings }}
+        p.m0 
+          span.hidden-xs Total 
+          span Recordings
+      .col-xs-4.br
+        h3.m0 {{ user.totalRatings }}
+        p.m0 Ratings
+      .col-xs-4
+        h3.m0 {{ user.totalComments }}
+        p.m0 Comments
+  .p-lg
+    .row
+      .col-lg-9
+        // START timeline
+        ul.timeline
+          // START timeline item
+          li(ng-repeat='event in profile.timeline', ng-class="{'timeline-inverted': $even && (event.action != 'separator'), 'timeline-separator': event.action == 'separator'}", data-datetime="{{event.date}}")
+            .timeline-badge(ng-class="event.color", ng-if="event.action != 'separator'")
+              em(ng-class="event.icon")
+            .timeline-panel( ng-if="event.action != 'separator'")
+              .popover(ng-class="$odd  ? 'left' : 'right'")
+                .arrow
+                .popover-content
+                  .table-grid.table-grid-align-middle.mb
+                    .col.col-xs
+                      img.media-object.img-circle.thumb48(ng-src="{{ event.profile }}", alt="Image")
+                    .col
+                      p.m0 
+                        a(href="#").text-muted: strong {{ event.submittedBy }}
+                        |  {{ event.action }}
+
+                  p: em {{ event.link }}
+          // END timeline item
+
+          // START timeline item
+          li.timeline-end
+            a(href="#").timeline-badge
+              em.fa.fa-plus
+          // END timeline item
+        // END timeline
+
+      .col-lg-3
+        .panel.panel-default
+          .panel-body
+            div.text-center
+              .radial-bar.radial-bar.radial-bar-danger.m0(ng-show="user.percentComplete < 50")
+              .radial-bar.radial-bar.radial-bar-success.m0(ng-show="user.percentComplete > 90")
+                img(src="{{ user.picture }}",alt="")
+              p
+                strong {{ user.percentComplete }}% 
+                span complete
+            .form-horizontal
+              .text-center
+                .form-group.m0
+                  h3.form-control-static
+                    a(href='#', editable-text='profile.user.fullName', onaftersave='profile.showUpdate = true') {{ profile.user.fullName }}
+            hr
+            ul.list-unstyled
+              li
+                em.fa.fa-home.fa-fw.mr-lg
+                a(href='#' editable-text='profile.user.location', onaftersave='profile.showUpdate = true') {{ profile.user.location }}
+              li
+                em.fa.fa-envelope.fa-fw.mr-lg
+                a(href='#' editable-email='profile.user.email', onaftersave='profile.showUpdate = true') {{ profile.user.email }} 
+              li
+                em.fa.fa-graduation-cap.fa-fw.mr-lg
+                a(href='#' editable-select='profile.user.learning', onaftersave='profile.showUpdate = true', e-ng-options='s.code as s.text for s in profile.languages') {{ profile.showLearningLanguage() }}
+              li
+                em.fa.fa-check.fa-fw.mr-lg
+                a(href='#' editable-select='profile.user.speaks', onaftersave='profile.showUpdate = true', e-ng-options='s.code as s.text for s in profile.languages') {{ profile.showSpeaksLanguage() }}
+            .pull-right(ng-show='profile.showUpdate')
+              button.btn.btn-danger.btn-xs(ng-click="profile.showUpdate = false") Cancel
+              button.btn.btn-success.btn-xs(ng-click="profile.update()") Save Profile
+             
+        .panel.panel-default
+          .list-group
+            a.list-group-item(href='#')
+              em.pull-right.fa.fa-volume-off.fa-lg.fa-fw.text-muted.mt
+              h4.list-group-item-heading {{ user.totalRecordings }}
+              p.list-group-item-text Recordings
+            a.list-group-item(href='#')
+              em.pull-right.fa.fa-rss.fa-lg.fa-fw.text-muted.mt
+              h4.list-group-item-heading {{ user.totalAnswers }}
+              p.list-group-item-text Answers
+            a.list-group-item(href='#')
+              em.pull-right.fa.fa-question.fa-lg.fa-fw.text-muted.mt
+              h4.list-group-item-heading {{ user.totalQuestions }}
+              p.list-group-item-text Questions
+            a.list-group-item(href='#')
+              em.pull-right.fa.fa-comments.fa-lg.fa-fw.text-muted.mt
+              h4.list-group-item-heading {{ user.totalResponses }}
+              p.list-group-item-text Responses
+            a.list-group-item(href='#')
+              em.pull-right.fa.fa-briefcase.fa-lg.fa-fw.text-muted.mt
+              h4.list-group-item-heading {{ user.totalPracticeSets }}
+              p.list-group-item-text Practice Sets
+          

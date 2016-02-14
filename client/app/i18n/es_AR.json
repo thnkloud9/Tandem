@@ -1,0 +1,27 @@
+{
+  "dashboard": {
+    "WELCOME": "Bienvenido a {{appName}}"
+  },
+  "topbar": {
+    "search": {
+      "PLACEHOLDER": "Tipea y pulsa enter.."
+    }
+  },
+  "sidebar": {
+    "WELCOME": "Bienvenido",
+    "heading": {
+      "HEADER": "Navegacion principal"
+    },
+    "nav": {
+      "SINGLEVIEW": "Vista simple",
+      "DASHBOARD": "Dashboard",
+      "PRACTICESETS": "Practice Sets",
+      "TAGS": "Tags",
+      "QUESTIONS": "Questions",
+      "menu": {
+        "MENU": "Menu",
+        "SUBMENU": "Sub Menu"
+      }
+    }
+  }
+}

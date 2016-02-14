@@ -1,0 +1,21 @@
+.content(ng-controller='QuestionsController as questions')
+
+  .text-center
+    a.spacey.btn.btn-circle.btn-default.btn-sm(ng-click="questions.openCreateQuestionModal()")
+      i.fa.fa-plus
+
+  ul.question-grid.cs-style-2(infinite-scroll='questions.loadMore()', infinite-scroll-distance='2') 
+    li(ng-repeat='question in questions.questions', ng-init="back = questions.changeCardBack($index)")
+      figure
+        img(src='app/img/cardbacks/{{ back }}.png')
+        div.cover
+          h3 {{ ::question.text.translations[questions.session.learning] }}
+          p(ng-show='app.translation.show'): small {{ ::question.text.translations[questions.session.speaks] }}
+        figcaption
+          h3 Add Audio
+          span {{ ::question.submitted_by.username }} 
+          .controls.pull-right
+            button.btn-circle.btn.btn-sm.btn-default(ng-click='questions.openAddQuestionAudioModal(question)')
+              i.fa.fa-microphone
+            button.btn-circle.btn.btn-sm.btn-default(ng-click='questions.speak(question)')
+             i.fa.fa-play 

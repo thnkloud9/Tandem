@@ -37,3 +37,5 @@ api/settings.py
 
 venv
 venv/*
+env
+env/*

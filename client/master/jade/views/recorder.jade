@@ -1,0 +1,12 @@
+a.fatty.fa.fa-4x.fa-microphone.nounderline(ng-show="recorderCtrl.showMicrophone", ng-click="recorderCtrl.startRecording()")
+a.fatty.fa.fa-4x.fa-pause.nounderline(ng-show="recorderCtrl.recording", ng-click="recorderCtrl.stopRecording('add-question-step-1', recorderCtrl.learningCode)")
+
+div#spinner.inline-block(ng-show="recorderCtrl.processing")
+  div#block_1.spinner_block
+  div#block_2.spinner_block
+  div#block_3.spinner_block
+div.player.inline-block
+  a.fatty.fa.fa-4x.fa-pause.nounderline(ng-show="recorderCtrl.previewPlaying", ng-click="recorderCtrl.pausePreview()", uib-tooltip="start recording")
+  a.fatty.fa.fa-4x.fa-play.nounderline(ng-show="recorderCtrl.showPlayPreview", ng-click="recorderCtrl.playPreview()", uib-tooltip="play recording")
+
+a.fatty.fa.fa-4x.fa-thumbs-up.nounderline(ng-click="recorderCtrl.saveRecording()", ng-show="recorderCtrl.showSave", uib-tooltip="save")

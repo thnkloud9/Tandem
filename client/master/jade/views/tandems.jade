@@ -1,0 +1,27 @@
+.content(ng-controller="TandemsController as practice") 
+
+  .text-center
+    a.spacey.btn.btn-circle.btn-default.btn-sm(ng-click="practice.openCreateTandemModal()")
+      i.fa.fa-plus
+
+
+  ul.tandem-grid.cs-style-2
+    li(ng-repeat="set in practice.sets")
+      figure
+        img(src='app/img/cardbacks/1.png')
+        div.cover
+          h3 {{ set.title }}
+          p.small {{ set.description.translations[user.speaks] }}
+        figcaption
+          h3 {{ set.played }} Plays
+          span {{ set.questions.length }}
+          .controls.pull-right
+            button.btn-circle.btn.btn-sm.btn-default(ng-show='set.questions.length > 0', ng-click='practice.playPracticeSet(set)')
+             i.fa.fa-play 
+            button.btn-circle.btn.btn-sm.btn-default(ng-click='practice.editPracticeSet(set)')
+              i.fa.fa-pencil
+            button.btn-circle.btn.btn-sm.btn-default(ng-click='practice.deletePracticeSet(set._id)')
+              i.fa.fa-times
+            button.btn-circle.btn.btn-sm.btn-default(ng-show='set.questions.length > 0', ng-click='practice.schedulePracticeSet(set._id)')
+              i.fa.fa-calendar
+         

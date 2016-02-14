@@ -1,0 +1,10 @@
+h3 Questions Admin
+  small All questionss
+
+.container-fluid(ng-controller="QuestionssAdminController as table")
+
+  .row
+    .col-lg-4.col-md-6
+      input.mb.form-control(placeholder='Filter...', type='text', ng-model='table.gridOptions.quickFilterText')
+   .ag-fresh(ag-grid='table.gridOptions', style="height: 500px;")
+

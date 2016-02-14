@@ -7,7 +7,7 @@ from .session import Session
 
 def init_app(app):
     #TODO: add proper HTTP codes and Error Handling 
-    @app.route('/login', methods=['POST'])
+    @app.route('/api/login', methods=['POST'])
     def login():
         # TODO: this only works with json data params, it should work with both
         request_json = request.get_json()
@@ -58,7 +58,7 @@ def init_app(app):
 
         return jsonify(response);
 
-    @app.route('/logout', methods=['POST'])
+    @app.route('/api/logout', methods=['POST'])
     def logout():
         # remove from sessions with username
         request_json = request.get_json()

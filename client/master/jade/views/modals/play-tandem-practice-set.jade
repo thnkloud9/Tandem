@@ -1,0 +1,33 @@
+.panel-body
+  .text-center(ng-hide='modalPlay.showComplete')
+    h3.spacey {{ modalPlay.practiceSession.currentQuestion.text.translations[modalPlay.learningCode] }}
+    span(ng-show='modalPlay.practiceSession.lastQuestion') Last Question!
+
+  .text-center(ng-hide='modalPlay.showComplete')
+    p After a question is played click the microphone to record and answer 
+
+    // START AUDIO PLAYER
+    .more-spacey
+      .player.inline-block.padded(ng-show='modalPlay.showPlayer')
+        audio-player(on-play='modalPlay.playerStarted()', on-stop='modalPlay.playerFinished()', context='question', auto-play='true', url='{{ modalPlay.audioUrl }}')
+      .recorder.inline-block(ng-show='modalPlay.showRecorder')
+        recorder(question='modalPlay.recordingQuestion', question-type='object', context='answer', auto-play='true', language='{{ modalPlay.learningCode }}', on-start-record='modalPlay.recordingStarted()', on-stop-record='modalPlay.recordingFinished()', on-save='modalPlay.audioSaved(newRecording)')
+    // END AUDIO PLAYER
+
+  // SPEECH RECOGNITION
+  .text-center.spacey
+    a.fa.fa-toggle-on.nounderline(ng-show='modalPlay.speechDetection', ng-click='modalPlay.toggleSpeechDetection()')
+    a.fa.fa-toggle-off.nounderline(ng-hide='modalPlay.speechDetection', ng-click='modalPlay.toggleSpeechDetection()')
+    span.date-sm Speech Detection
+  h5.text-center(ng-show='modalPlay.showTranscription') {{modalPlay.speechRecognitionResults}}
+  // END SPEECH RECOGNITION
+
+  .text-center(ng-show='modalPlay.showComplete')
+    h3 Nice work!
+    p Now you can submit this practice session for grading and see how well you did.
+    a.padded.fa.fa-3x.fa-thumbs-down.nounderline(ng-click='$close()')
+    a.padded.fa.fa-3x.fa-thumbs-up.nounderline(ng-click='modalPlay.savePracticeSession(); $close();')
+
+.modal-footer
+  button.btn.btn-default(ng-click='$close()') Cancel
+

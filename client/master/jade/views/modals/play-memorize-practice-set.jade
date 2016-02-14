@@ -1,0 +1,33 @@
+.panel-body
+  .col-sm-2
+    img(src='app/img/friends/yellow-tooth.png', ng-hide='modalPlay.fail')
+    img(src='app/img/friends/yellow-effed-up.png', ng-show='modalPlay.fail')
+    .text-center
+      h4.spacey(ng-class="{'text-danger': (modalPlay.attempts > 4)}") {{ 6 - modalPlay.attempts }} tries left. 
+    .text-center
+      h1.text-bold {{ modalPlay.score }}
+      em.icon-trophy.fa-4x
+      .text-uppercase Points
+  .col-sm-10
+    h4(ng-show='modalPlay.attempts === 0') Can you translate this?
+    h4(ng-show='modalPlay.fail') Hmmm, "{{ modalPlay.answer }}" doesn't sound right to me.
+    h4(ng-show='modalPlay.pass') Nice, {{ modalPlay.answer }} that works for me!
+    h3(ng-show='modalPlay.showComplete') Congrats, you finished with {{ modalPlay.score }} points
+    .panel-body(ng-hide='modalPlay.showComplete')
+      .text-center
+        h1.more-spacey {{ modalPlay.currentQuestion }}
+      .text-center
+        p.small You can type your answer, or enable speech detection and try speaking the answer.
+        a.fa.fa-2x.fa-toggle-on.nounderline(ng-show='app.audio.speechRecognition', ng-click='modalPlay.toggleSpeechRecognition()')
+        a.fa.fa-2x.fa-toggle-off.nounderline(ng-hide='app.audio.speechRecognition', ng-click='modalPlay.toggleSpeechRecognition()')
+        span Speech Recognition
+        h5.text-center(ng-show='app.audio.speechRecognition') {{ modalPlay.speechRecognitionResults }}
+      .text-center(ng-hide='app.audio.speechRecognition')
+        .panel-body
+          input.spacey.form-control(ng-model='modalPlay.answer')
+          button.btn-circle.btn.btn-success(ng-click='modalPlay.submitAnswer()')
+            i.fa.fa-2x.fa-check
+.modal-footer
+  button.btn.btn-default(ng-click='modalPlay.switchRecognition()') Switch
+  button.btn.btn-default(ng-click='modalPlay.loadNextQuestion()') Skip
+  button.btn.btn-default(ng-click='$close()') Cancel
