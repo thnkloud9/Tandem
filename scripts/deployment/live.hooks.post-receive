@@ -1,5 +1,5 @@
 #!/bin/bash
-DEPLOY_BRANCH="refactor"
+DEPLOY_BRANCH="live"
 DEPLOY_ROOT="/var/www/Tandem"
 UPDATE_CMD='cd "${DEPLOY_TO}" && ./scripts/deployment/update.sh;'
 RESTART_CMD='${DEPLOY_TO}/scripts/deployment/stop.sh;${DEPLOY_TO}/scripts/deployment/start.sh'

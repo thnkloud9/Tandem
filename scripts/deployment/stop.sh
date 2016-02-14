@@ -1,5 +1,5 @@
 #!/bin/bash
 
 sudo stop tandem-api
-sudo stop scheduler
+sudo stop tandem-scheduler
 sudo service nginx stop 
