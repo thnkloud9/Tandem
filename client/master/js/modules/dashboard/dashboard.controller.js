@@ -34,6 +34,7 @@
             function activate() {
               vm.tags = [];
               vm.tagsString = [];
+              vm.typedTags = [];
               vm.selectedTags = [];
               vm.recognition = session.speaks;
 
@@ -92,10 +93,37 @@
                 });
               };
 
+              vm.addSelectedTag = function (newTag) {
+                var selectedIds = _.pluck(vm.selectedTags, '_id');
+                // make sure we haven't already added this topiv
+                if (selectedIds.indexOf(newTag._id) === -1) {
+                  vm.selectedTags.push(newTag);
+                  // we have 2 topics, we can start a tandem session now
+                  if (vm.selectedTags.length === 2) {
+                    speechRecognition.stop();
+                    Question.searchByTag(selectedIds).then(function (questions) {
+                      // make a pracice session out of these questions?
+                      vm.createPracticeSet(questions);      
+                    }); 
+                  }
+                }
+              };
+
               // load tag list
               Tag.getSearchableTags().then(function (searchTags) {
                 vm.tagsString = searchTags.string;
                 vm.tags = searchTags.tags;
+                vm.tagOptions = searchTags.uniqueTags;
+
+                // watch for typed tag updates
+                $scope.$watch(angular.bind(vm, function() {
+                  return vm.typedTags;
+                }), function(newVal, oldVal) {
+                  if (newVal.length > 0) {
+                    var newTag = newVal[(newVal.length-1)];
+                    vm.addSelectedTag(newTag);
+                  }
+                }); // end watch
 
                 // listen for speech results
                 $scope.$watch(angular.bind(speechRecognition, function () {
@@ -109,26 +137,12 @@
                       .replace(/['.\/#!$%\^&\*;:{}=\`~()]/g,"");
                     // check if we have a match on ANY tag string
                     if (vm.tagsString.indexOf(vm.speech) > -1) {
-                      var selectedIds = _.pluck(vm.selectedTags, '_id');
                       var matchedTag = _.findWhere(vm.tags, {"string": vm.speech});
-
-                      // make sure we haven't already added this topiv
-                      if (selectedIds.indexOf(matchedTag._id) === -1) {
-                        vm.selectedTags.push(matchedTag);
-                        // we have 2 topics, we can start a tandem session now
-                        if (vm.selectedTags.length === 2) {
-                          speechRecognition.stop();
-                          Question.searchByTag(selectedIds).then(function (questions) {
-                            // make a pracice session out of these questions?
-                            vm.createPracticeSet(questions);      
-                          }); 
-                        }
-                      }
-
-
+                      vm.addSelectedTag(matchedTag);
                     }
                   }
                 }); // end watch
+
               }); // end getSearcgableTags callback
             }
 

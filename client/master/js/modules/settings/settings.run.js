@@ -15,7 +15,7 @@
         name: 'Tandem',
         description: 'Language Practice App',
         year: ((new Date()).getFullYear()),
-        debug: true,
+        debug: false,
         layout: {
           isFixed: true,
           isCollapsed: false,

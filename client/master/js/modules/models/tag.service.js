@@ -83,6 +83,7 @@
                 var deferedGet = $q.defer();
                 var searchableTags = [];
                 var tagsString = [];
+                var uniqueTags = [];
                 var sessionSpeaks = $window.sessionStorage.getItem('speaks'); 
                 var sessionLearning = $window.sessionStorage.getItem('learning'); 
 
@@ -99,6 +100,7 @@
                       .toLowerCase()
                       .replace('[-,_]', ' ')
                       .replace(/[.\/#!$%\^&\*;:{}=\`~()]/g,"");
+                    uniqueTags.push(tag);
                     tagsString.push(speaks);
                     tagsString.push(learning);
                     searchableTags.push({ _id: tag._id, text: tag.text, string: speaks });
@@ -109,7 +111,7 @@
                     });
                   });
 
-                  deferedGet.resolve({ tags: searchableTags, string: tagsString });
+                  deferedGet.resolve({ uniqueTags: uniqueTags, tags: searchableTags, string: tagsString });
                 }, function () {
                   deferedGet.reject();
                 });
