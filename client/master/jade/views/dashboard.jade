@@ -18,7 +18,7 @@
           .col-xs-10
             //input.spacey.form-control(ng-model='dashboard.answer')
             ui-select(multiple='', ng-model='dashboard.typedTags', theme='bootstrap')
-              ui-select-match(placeholder='Select topics...') {{ $item.text.translations[session.speaks] }}
+              ui-select-match(placeholder='Select 2 topics...') {{ $item.text.translations[session.speaks] }}
               ui-select-choices(repeat='tag in dashboard.tagOptions | propsFilter: { _id: $select.search}') {{ tag.text.translations[session.speaks] }}    
           .col-xs-2
             button.btn-circle.btn.btn-success(ng-click='dashboard.submitAnswer()')

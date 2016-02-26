@@ -16,11 +16,19 @@
         APP_CONFIG,
         session,
         Question) {
-          var self = this;
+          var vm = this;
 
           activate();
 
           ////////////////
+
+          function updateQuestion(questionId, questionData) {
+            Question.one(questionId).patch(questionData).then(function () {
+              Notify.alert("Question updated.", {status: 'success'});
+            }, function () {
+              Notify.alert( "Server Problem.", {status: 'danger'});
+            });
+          };
 
           function activate() {
 
@@ -31,7 +39,15 @@
               {
                 headerName: 'en Text',
                 field: 'text',
-                width: 50,
+                width: 100,
+                editable: true,
+                newValueHandler: function (params) {
+                  if (params.newValue !== params.data.text.translations.en) {
+                    var questionData = { text: { translations: { en: params.newValue } } };
+                    updateQuestion(params.data._id, questionData);
+                    params.data.text.translations.en = params.newValue;
+                  }
+                },
                 valueGetter: function (params) {
                   return params.data.text.translations.en;
                 }
@@ -39,7 +55,15 @@
               {
                 headerName: 'de Text',
                 field: 'text',
-                width: 50,
+                width: 100,
+                editable: true,
+                newValueHandler: function (params) {
+                  if (params.newValue !== params.data.text.translations.de) {
+                    var questionData = { text: { translations: { de: params.newValue } } };
+                    updateQuestion(params.data._id, questionData);
+                    params.data.text.translations.de = params.newValue;
+                  }
+                },
                 valueGetter: function (params) {
                   return params.data.text.translations.de;
                 }
@@ -71,13 +95,14 @@
                 field: '',
                 width: 25,
                 cellRenderer: function (params) {
-                    return "<button ng-click='table.deleteQuestion(\"" + params.data._id + "\")' class='btn btn-xs btn-danger'>x</button>";
+                    var html = "<button ng-click='table.deleteQuestion(\"" + params.data._id + "\")' class='btn btn-xs btn-danger fa fa-times'></button>";
+                    return html;
                 }
               }
             ];
 
             // set table options 
-            self.gridOptions = {
+            vm.gridOptions = {
               columnDefs: columnDefs,
               rowData: null,
               enableSorting: true,
@@ -90,14 +115,14 @@
             };
 
             // load data
-            self.maxResults = 9999;
-            self.questions = [];
+            vm.maxResults = 9999;
+            vm.questions = [];
             var params = {
               embedded: {
                 submitted_by: 1,
                 tags: 1
               },
-              "max_results": self.maxResults
+              "max_results": vm.maxResults
             };
             Question.getList(params).then(function (questions) {
               var fields = _.pluck(columnDefs, 'field');
@@ -108,35 +133,34 @@
                 } else {
                   question.rowHeight = 25;
                 }
-                self.questions.push(_.pick(question, fields));
+                vm.questions.push(_.pick(question, fields));
               });
               // load table data
-              self.gridOptions.api.setRowData(questions);
-              self.gridOptions.api.sizeColumnsToFit();
+              vm.gridOptions.api.setRowData(questions);
+              vm.gridOptions.api.sizeColumnsToFit();
             });
             
             // funtions
-            self.addQuestion = function () {
-              self.questions.push(angular.copy(self.editingQuestion));
+            vm.addQuestion = function () {
+              vm.questions.push(angular.copy(vm.editingQuestion));
             };
 
-            self.editQuestion = function(index) {
-              self.questions.splice(index, 1, angular.copy(self.editingQuestion));
+            vm.editQuestion = function(id) {
             };
 
-            self.deleteQuestion = function(id) {
+            vm.deleteQuestion = function(id) {
               Question.one(id).remove(id).then(function (response) {
                 Notify.alert("Question deleted", {status: 'success'});
-                self.questions = _.reject(self.questions, function(s) {
+                vm.questions = _.reject(vm.questions, function(s) {
                   return s._id === id;
                 });
-                self.gridOptions.api.setRowData(self.questions);
+                vm.gridOptions.api.setRowData(vm.questions);
               }, function (response) {
                 Notify.alert("There was a problem deleting Question", {status: 'danger'});
               });
             };
 
-          } // activate END
+          }; // activate END
       }
     ]);
 })();
