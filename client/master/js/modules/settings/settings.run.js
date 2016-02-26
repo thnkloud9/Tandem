@@ -26,7 +26,7 @@
           asideHover: false,
           theme: null,
           asideScrollbar: false,
-          userBlockVisible: true
+          userBlockHidden: false 
         },
         translation: {
           mymemory: true,

@@ -14,6 +14,7 @@
     'Notify',
     'PracticeSet',
     'Question',
+    'speechSynth',
     'session',
     'APP_CONFIG',
     'editingSet',
@@ -23,6 +24,7 @@
      Notify,
      PracticeSet,
      Question,
+     speechSynth,
      session,
      APP_CONFIG,
      editingSet) {
@@ -238,6 +240,11 @@
         }, function () {
           Notify.alert( "Server Problem.", {status: 'success'});
         });
+      };
+
+      vm.speak = function (question) {
+        var text = question.text.translations[session.learning];
+        speechSynth.speak(text, session.learning);
       };
 
     } // end activate

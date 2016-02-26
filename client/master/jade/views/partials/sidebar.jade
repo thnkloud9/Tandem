@@ -16,7 +16,7 @@ script(type='text/ng-template', id="sidebar-renderer.html")
     ul.nav
       // START user info
       li.has-user-block
-        div(uib-collapse="app.layout.userBlockVisible", ng-controller="UserBlockController")
+        div(uib-collapse="app.layout.userBlockHidden", ng-controller="UserBlockController")
           a(href='#/app/profile').user-block-profile-link
             .item.user-block
               // User picture

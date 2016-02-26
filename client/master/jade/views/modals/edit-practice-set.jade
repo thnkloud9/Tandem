@@ -3,17 +3,11 @@
     input.form-control(ng-model='modalEdit.practiceSet.title', tamodelex='1', required='')
   .form-group
     input.form-control(ng-model='modalEdit.practiceSet.description.translations[user.speaks]')
-  .form-group
-    select.form-control(ng-model='modalEdit.practiceSet.category', name='category', required='')
-      option(value='', selected='', disabled='') Category
-      option(value='memorize') Memorize
-      option(value='tandem') Tandem
-      option(value='live') Live
 
   // Add new question START
-  .add-question-widget
+  .add-question-widget.spacey
     a.fa.fa-plus-circle.nounderline(ng-click='showAddQuestion = !showAddQuestion')
-      small Add Question
+      small Add New Question
     div(ng-show='showAddQuestion')
       h4(translate-text, model='modalEdit.newQuestion.speaksText', send='true', model-translation='modalEdit.newQuestion.learningText', to='{{ session.learning }}', allow-change='false', initial-text="click here to enter english version")
       h4(translate-text, model='modalEdit.newQuestion.learningText', send='true', model-translation='modalEdit.newQuestion.speaksText', to='{{ session.speaks }}', allow-change='false', initial-text="click here to enter german version")
@@ -37,7 +31,8 @@
                       input(type='checkbox', ng-click='modalEdit.addedToggleAll()')
                       span.fa.fa-check
                 th Description
-                  .btn.btn-sm.btn-info.pull-right(ng-show='modalEdit.addedSelected.length', ng-click='modalEdit.removeAllSelected()') Remove
+                  .btn.btn-sm.btn-danger.btn-circle.pull-right(ng-show='modalEdit.addedSelected.length', ng-click='modalEdit.removeAllSelected()')
+                    i.fa.fa-times
             tbody
               tr(ng-repeat='item in modalEdit.practiceSet.questions')
                 td
@@ -48,9 +43,10 @@
                 td
                   .media-box
                       a.pull-left(href='#')
-                        img.media-box-object.img-responsive.img-rounded.thumb64(src="app/img/dummy.png", alt="")
+                        i.fa.fa-2x.fa-play(ng-click='modalEdit.speak(item)')
                       .media-box-body
-                        .pull-right.btn.btn-info.btn-sm(ng-click='modalEdit.removeQuestion(item)') Remove
+                        .pull-right.btn.btn-danger.btn-circle.btn-sm(ng-click='modalEdit.removeQuestion(item)')
+                          i.fa.fa-times
                         h4.media-box-heading {{ ::item.text.translations[user.learning] }}
                         small.text-muted(ng-if='app.translation.show') {{ ::item.text.translations[user.speaks] }}
                         p {{ ::item.description.translations[user.learning] }} 
@@ -79,7 +75,8 @@
                       input(type='checkbox', ng-click='modalEdit.toggleAll()')
                       span.fa.fa-check
                 th Description
-                  .btn.btn-sm.btn-info.pull-right(ng-show='modalEdit.selected.length', ng-click='modalEdit.addAllSelected()') Add
+                  .btn.btn-sm.btn-success.btn-circle.pull-right(ng-show='modalEdit.selected.length', ng-click='modalEdit.addAllSelected()')
+                    i.fa.fa-plus
             tbody
               tr(ng-repeat='item in modalEdit.availableQuestions')
                 td
@@ -90,9 +87,10 @@
                 td
                   .media-box
                       a.pull-left(href='#')
-                        img.media-box-object.img-responsive.img-rounded.thumb64(src="app/img/dummy.png", alt="")
+                        i.fa.fa-2x.fa-play(ng-click='modalEdit.speak(item)')
                       .media-box-body
-                        .pull-right.btn.btn-info.btn-sm(ng-click='modalEdit.addQuestion(item)') Add
+                        .pull-right.btn.btn-success.btn-circle.btn-sm(ng-click='modalEdit.addQuestion(item)')
+                          i.fa.fa-plus
                         h4.media-box-heading {{ ::item.text.translations[user.learning] }}
                         small.text-muted(ng-if='app.translation.show') {{ ::item.text.translations[user.speaks] }}
                         p {{ ::item.description.translations[user.learning] }} 
@@ -105,6 +103,8 @@
             .col-lg-9.text-right
       // END panel
 
-.modal-footer
-  button.btn.btn-success(ng-click='modalEdit.savePracticeSet(); $close()') Save
-  button.btn.btn-default(ng-click='$close()') Cancel
+  .text-center
+    button.btn.btn-danger.btn-circle.btn-large(ng-click='$close()')
+      i.fa.fa-times
+    button.btn.btn-success.btn-circle.btn-large(ng-click='modalEdit.savePracticeSet(); $close()')
+      i.fa.fa-check
