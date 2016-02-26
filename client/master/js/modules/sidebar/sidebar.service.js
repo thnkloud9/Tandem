@@ -14,32 +14,32 @@
           {
             "text": "Dashboard",
             "sref": "app.dashboard",
-            "icon": "icon-speedometer",
+            "icon": "icon-home",
             "label": "label label-info", 
             "translate": "sidebar.nav.DASHBOARD"
           },
           {
             "text": "Tandems",
             "sref": "app.tandems",
-            "icon": "fa fa-comments",
+            "icon": "icon-bubbles",
             "translate": "sidebar.nav.TANDEMS"
           },
           {
             "text": "Word Lists",
             "sref": "app.word-lists",
-            "icon": "fa fa-briefcase",
+            "icon": "icon-notebook",
             "translate": "sidebar.nav.WORDLISTS"
           },
           {
             "text": "Tags",
             "sref": "app.tags",
-            "icon": "fa fa-tag",
+            "icon": "icon-tag",
             "translate": "sidebar.nav.TAGS"
           },
           {
             "text": "Questions",
             "sref": "app.questions",
-            "icon": "fa fa-question",
+            "icon": "icon-question",
             "translate": "sidebar.nav.QUESTIONS"
           },
           {
