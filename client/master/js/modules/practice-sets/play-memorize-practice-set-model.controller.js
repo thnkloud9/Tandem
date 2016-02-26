@@ -39,7 +39,6 @@
         var self = this;
      
         self.score = 0;
-        self.failCatch = null;
         self.recognition = session.speaks;
 
         // init speech recognition engine
@@ -47,7 +46,7 @@
         // TODO:  IMPORTANT!!!!!!!!!!!!!!
         // it seems that this watch does not work unless 
         // ngAudio is loaded before, even without a url.  No idea why.
-        speechRecognition.init(session.speaks);
+        speechRecognition.answerInit(session.speaks);
         self.player = ngAudio.load('');
         if ($rootScope.app.audio.speechRecognition) {
           speechRecognition.results = '...listening';
@@ -58,28 +57,8 @@
         }), function (newVal, oldVal) {
           self.speechRecognitionResults = newVal;
           if ((self.correctAnswer) && (newVal !== '...listening')) {
-            // take out puncuation and change hyphens, commas, 
-            // and underscores to spaces for matching
-            var formatedAnswer = self.correctAnswer
-              .toLowerCase()
-              .replace('[-,_]', ' ')
-              .replace(/[.\/#!$%\^&\*;:{}=\`~()]/g,"");
-            // if we see a match catch it quick, cuz speech recognition
-            // can be a bit over anxious
-            if (newVal.toLowerCase() === self.correctAnswer.toLowerCase()) {
-              self.answer = self.correctAnswer;
+              self.answer = newVal;
               self.submitAnswer();
-              $timeout.cancel(self.failCatch);
-            } else {
-              // but wait a few seconds before jumping to a fail
-              // because the speechRecognition can take a few
-              // seconds to proces
-              $timeout.cancel(self.failCatch);
-              self.failCatch = $timeout(function () {
-                self.answer = newVal;
-                self.submitAnswer();
-              }, 1000);
-            }
           }
         });
 
@@ -92,11 +71,11 @@
             // set here just in case the user toggles
             // speech recognition on after the question has
             // been loaded
-            speechRecognition.init(session.learning);
+            speechRecognition.answerInit(session.learning);
             self.recognition = session.learning;
           } else {
             console.log('switching to', session.speaks);
-            speechRecognition.init(session.speaks);
+            speechRecognition.answerInit(session.speaks);
             self.recognition = session.speaks;
           }
           if ($rootScope.app.audio.speechRecognition) {
@@ -143,6 +122,12 @@
             self.currentQuestion = self.practiceSession.currentQuestion.text.translations[session.speaks];
             self.correctAnswer = self.practiceSession.currentQuestion.text.translations[session.learning];
           }
+          // sanitize the correct answer
+          self.correctAnswer = self.correctAnswer
+            .trim()
+            .toLowerCase()
+            .replace('[-,_]', ' ')
+            .replace(/[.\/#!$%\^&\*;:{}=\`~()]/g,"");
           self.playedQuestions.push(self.practiceSession.currentQuestion);
           self.fail = false;
           self.pass = false;
@@ -166,6 +151,12 @@
         };
 
         self.submitAnswer = function () {
+          // sanitize answer
+          self.answer = self.answer
+            .trim()
+            .toLowerCase()
+            .replace('[-,_]', ' ')
+            .replace(/[.\/#!$%\^&\*;:{}=\`~()]/g,"");
           self.attempts++;
           // add score, ro add failures
           if (self.answer === self.correctAnswer) {
@@ -214,7 +205,7 @@
         };
 
         self.finishPracticeSession = function () {
-          $timeout.cancel(self.failCatch); 
+          speechRecognition.stop();
           self.practiceSession.status = 'completed';
           self.practiceSession.score = self.score;
           PracticeSession.one(self.practiceSession._id).patch({

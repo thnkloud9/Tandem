@@ -29,6 +29,28 @@ angular.module('app.audio').service('speechRecognition', [
       }
     };
 
+    // This is better for answer checking as it will wait
+    // for pauses to send a speech string.  As far as I
+    // could tell this mustbe done at init time, hence
+    // the separate init funtion
+    self.answerInit = function (language) {
+      self.reset();
+      if ('webkitSpeechRecognition' in window) {
+        self.recognition = new webkitSpeechRecognition();
+        self.recognition.lang = self.getLanguage(language);
+        self.recognition.continuous = true;
+        self.recognition.interimResults = false;
+        self.recognition.onerror = self.onError;
+        self.recognition.onend = self.reset;
+        self.recognition.onresult = self.onResult;
+        self.status = 'initiiated';
+        return self.recognition.onstart = self.onStart;
+      } else {
+        self.recognition = {};
+        console.log('webkitSpeechRecognition not supported');
+      }
+    };
+
     // stop recognition when we change routes
     // because we can't do it with a controller
     // close function
