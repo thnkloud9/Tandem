@@ -5,6 +5,7 @@
       '$scope',
       '$q',
       '$uibModal',
+      'ngDialog',
       'RouteHelpers',
       'PracticeSet',
       'APP_CONFIG',
@@ -15,13 +16,14 @@
           $scope,
           $q,
           $uibModal,
+          ngDialog,
           helper,
           PracticeSet,
           APP_CONFIG,
           session,
           modalFactory,
           Notify) {
-            var self = this;
+            var vm = this;
 
             activate();
 
@@ -29,8 +31,8 @@
 
             function activate() {
 
-              self.session = session;
-              self.params = {
+              vm.session = session;
+              vm.params = {
                 "where": {
                   "submitted_by": session.userId,
                   "category": "memorize"
@@ -38,13 +40,13 @@
                 "sort": "_created",
               };
 
-              PracticeSet.getList(self.params).then(function (sets) {
-                self.sets = sets; 
+              PracticeSet.getList(vm.params).then(function (sets) {
+                vm.sets = sets; 
               }, function() {
                 Notify.alert('There was a problem loading your sets.', {status: 'warning'});
               });
 
-              self.playPracticeSet = function (set) {
+              vm.playPracticeSet = function (set) {
                 $uibModal.open({
                   controller: 'PlayMemorizePracticeSetModalController',
                   controllerAs: 'modalPlay',
@@ -58,7 +60,7 @@
                 });
               };
 
-              self.editPracticeSet = function (set) {
+              vm.editPracticeSet = function (set) {
                  $uibModal.open({
                   controller: 'EditPracticeSetModalController',
                   controllerAs: 'modalEdit',
@@ -72,7 +74,7 @@
                 });
               };
 
-              self.schedulePracticeSet = function (setId) {
+              vm.schedulePracticeSet = function (setId) {
                  $uibModal.open({
                   controller: 'SchedulePracticeSetModalController',
                   controllerAs: 'modalSchedule',
@@ -86,30 +88,58 @@
                 });
               };
 
-              self.createPracticeSet = function () {
+              vm.reviewPracticeSet = function (set) {
+                 $uibModal.open({
+                  controller: 'ReviewPracticeSetModalController',
+                  controllerAs: 'modalReview',
+                  templateUrl: 'app/views/modals/review-practice-set.html',
+                  resolve: {
+                    practiceSet: function () {
+                      return set;
+                    }
+                  },
+                  size: 'lg'
+                });
+              };
+
+              vm.openCreateWordListModal = function () {
+                vm.newSet = {};
+                $scope.newSet = vm.newSet;
+                ngDialog.openConfirm({
+                  template: 'app/views/modals/create-set.html',
+                  className: 'ngdialog-theme-default',
+                  scope: $scope
+                }).then(function (value) {
+                  vm.createPracticeSet();
+                }, function (reason) {
+                  console.log('cancelled create', reason);
+                });
+              };
+
+              vm.createPracticeSet = function () {
                 var newSet = PracticeSet.newEmptySet();
-                newSet.description.translations[session.speaks] = self.newSet.description;
-                newSet.title = self.newSet.title;
+                newSet.description.translations[session.speaks] = vm.newSet.description;
+                newSet.title = vm.newSet.title;
                 newSet.category = 'memorize';
 
                 PracticeSet.post(newSet).then(function (practiceSet) {
                   // TODO: not sure why we don't get all our fields back after a post
                   _.extend(practiceSet, newSet);
                   // add to the sets list
-                  self.sets.add(practiceSet);
-                  self.clearNewSet();
+                  vm.sets.add(practiceSet);
+                  vm.clearNewSet();
                   Notify.alert('Word List added.', {status: 'success'});
                 }, function (response) {
                   Notify.alert('There was a problem adding your Word List.', {status: 'error'});
                 });
               };
 
-              self.clearNewSet = function () {
-                self.newSet.title = 'Click here to enter title';
-                self.newSet.description = 'Click here to enter description';
+              vm.clearNewSet = function () {
+                vm.newSet.title = 'Click here to enter title';
+                vm.newSet.description = 'Click here to enter description';
               }
 
-              self.deletePracticeSet = function (setId) {
+              vm.deletePracticeSet = function (setId) {
                 var modal;
                 var title = 'Do you really want to delete this Word List?';
                 var text = 'Questions associated with this ' +
@@ -121,7 +151,7 @@
                 }, $q.reject)
                 .then(function () {
                   Notify.alert("Word List set deleted. However, any questions and audio assocaited with it remain on the server.");
-                  _.remove(self.sets, {_id: setId});
+                  _.remove(vm.sets, {_id: setId});
                 });
               };
 

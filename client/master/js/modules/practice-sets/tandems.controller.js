@@ -106,7 +106,7 @@
                 vm.newSet = {};
                 $scope.newSet = vm.newSet;
                 ngDialog.openConfirm({
-                  template: 'app/views/modals/create-tandem.html',
+                  template: 'app/views/modals/create-set.html',
                   className: 'ngdialog-theme-default',
                   scope: $scope
                 }).then(function (value) {
