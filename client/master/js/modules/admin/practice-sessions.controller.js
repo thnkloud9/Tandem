@@ -69,7 +69,8 @@
                 field: 'practice_set',
                 width: 35,
                 valueGetter: function (params) {
-                  return params.data.practice_set.title;
+                  
+                  return (params.data.practice_set) ? params.data.practice_set.title : null;
                 }
               },
               {
@@ -77,7 +78,7 @@
                 field: 'practice_set',
                 width: 25,
                 valueGetter: function (params) {
-                  return params.data.practice_set.category;
+                  return (params.data.practice_set) ? params.data.practice_set.category : null;
                 }
               },
               {headerName: 'Status', field: 'status', width: 25},
