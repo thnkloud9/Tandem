@@ -37,8 +37,22 @@ angular.module('app.audio').service('recorder', [
       navigator.getUserMedia({audio: true},
         // success callback 
         function startUserMedia(stream) {
+          // audio stops listening in FF without this line
+          window.persistAudioStream = stream;
+
+          // set up recorder
           recorder = new Recorder(stream, self.audioContext);
           self.recorder = recorder;
+
+          // set up analyzer
+          // TODO: provide a draw function that updates a canvas object 
+          var audioStream = self.audioContext.createMediaStreamSource(stream);
+          self.analyser = self.audioContext.createAnalyser();
+          audioStream.connect(self.analyser);
+          self.analyser.fftSize = 256;
+          self.frequencyArray = new Uint8Array(self.analyser.frequencyBinCount);
+
+
           deferedInit.resolve(recorder);
           console.log('Recorder initialised.');
         },

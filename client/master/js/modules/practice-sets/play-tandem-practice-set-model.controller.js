@@ -142,8 +142,12 @@
 
         self.savePracticeSession = function () {
           self.practiceSession.status = 'completed';
+          // TODO: these both should have error functions
           PracticeSession.one(self.practiceSession._id).patch({
             status: self.practiceSession.status
+          });
+          PracticeSet.one(playingSet._id).patch({
+            played: (playingSet.played + 1)
           });
           self.logActivity(); 
         };

@@ -24,4 +24,6 @@
               i.fa.fa-times
             button.btn-circle.btn.btn-sm.btn-default(ng-show='set.questions.length > 0', ng-click='practice.schedulePracticeSet(set._id)')
               i.fa.fa-calendar
+            button.btn-circle.btn.btn-sm.btn-default(ng-show='set.played > 0', ng-click='practice.reviewPracticeSet(set)')
+              i.fa.fa-thumbs-up
          

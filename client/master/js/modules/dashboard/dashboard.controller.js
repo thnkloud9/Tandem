@@ -69,15 +69,14 @@
               };
 
               vm.createPracticeSet = function (questions) {
-                var title = 'Topic generated Tandem';
+                var selectedTopicTitles = _.pluck(vm.selectedTags, 'text.translations.'+session.speaks);
+                var title = 'Topic generated Tandem about ' + selectedTopicTitles.join(", ");
                 var total = 6; // total number of questions in the tandem session
                 vm.tandemQuestions = questions;
                 PracticeSet.buildFromQuestions(title, questions, total).then(function (practiceSet) {
-                  // TODO: create practice session for this new practiceSet
-                  // can be done the same way its done on tandems page, and can
-                  // open in a model as well, so no duplicate code is needed
+                  // create practice session for this new practiceSet
+                  // done the same way its done on tandems page
                   vm.tandemQuestions = practiceSet.questions;
-
                   $uibModal.open({
                     controller: 'PlayTandemPracticeSetModalController',
                     controllerAs: 'modalPlay',

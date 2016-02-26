@@ -1,0 +1,13 @@
+.modal-body
+  .container-fluid.text-center
+    h4 Which session would you like to review
+    ul
+      li(ng-repeat='session in modalReview.practiceSessions')
+        span {{ session._created }}  
+
+  .text-center
+    button.btn.btn-circle.btn-danger.btn-large(ng-click='$close()')
+      i.fa.fa-times
+    button.btn.btn-circle.btn-success.btn-large(ng-click='modalSchedule.saveSchedule(); $close()')
+      i.fa.fa-check
+

@@ -92,19 +92,19 @@
                   max_results: 9999
                 }).then(function (tags) {
                   angular.forEach(tags, function (tag) {
-                    var speaks = tag.text.translations[sessionSpeaks]
+                    tag.speaks = tag.text.translations[sessionSpeaks]
                       .toLowerCase()
                       .replace('[-,_]', ' ')
                       .replace(/[.\/#!$%\^&\*;:{}=\`~()]/g,"");
-                    var learning = tag.text.translations[sessionLearning]  
+                    tag.learning = tag.text.translations[sessionLearning]  
                       .toLowerCase()
                       .replace('[-,_]', ' ')
                       .replace(/[.\/#!$%\^&\*;:{}=\`~()]/g,"");
                     uniqueTags.push(tag);
-                    tagsString.push(speaks);
-                    tagsString.push(learning);
-                    searchableTags.push({ _id: tag._id, text: tag.text, string: speaks });
-                    searchableTags.push({ _id: tag._id, text: tag.text, string: learning });
+                    tagsString.push(tag.speaks);
+                    tagsString.push(tag.learning);
+                    searchableTags.push({ _id: tag._id, text: tag.text, string: tag.speaks });
+                    searchableTags.push({ _id: tag._id, text: tag.text, string: tag.learning });
                     angular.forEach(tag.search_index, function (text) {
                       tagsString.push(text);
                       searchableTags.push({ _id: tag._id, text: tag.text, string: text });

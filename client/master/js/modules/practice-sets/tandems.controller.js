@@ -88,6 +88,20 @@
                 });
               };
 
+              vm.reviewPracticeSet = function (set) {
+                 $uibModal.open({
+                  controller: 'ReviewPracticeSetModalController',
+                  controllerAs: 'modalReview',
+                  templateUrl: 'app/views/modals/review-practice-set.html',
+                  resolve: {
+                    practiceSet: function () {
+                      return set;
+                    }
+                  },
+                  size: 'lg'
+                });
+              };
+
               vm.openCreateTandemModal = function () {
                 vm.newSet = {};
                 $scope.newSet = vm.newSet;
