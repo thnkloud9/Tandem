@@ -1,10 +1,66 @@
 .modal-body
-  .container-fluid.text-center
+  // session selection menu
+  // TODO: make this a better interface, maybe a 2 row high
+  // infinite scroll area?
+  .container-fluid.text-center(ng-hide='modalReview.reviewSession')
     h4 Which session would you like to review
-    ul
-      li(ng-repeat='session in modalReview.practiceSessions')
-        span {{ session._created }}  
+    .row-masonry.row-masonry-xl-6.row-masonry-lg-4.row-masonry-md-3.row-masonry-sm-2
+      .col-masonry(ng-repeat='session in modalReview.practiceSessions')
+        .box-placeholder.m0.text-center(ng-click='modalReview.loadSession(session)')
+          h3 {{ session.score }}
+          p.text-muted.small {{ session._created }}
 
+  // session review timeline
+  .container-fluid.text-center(ng-show='modalReview.reviewSession')
+    h3 Session Review
+    ul.timeline
+      li.timeline-separator(data-datetime='{{ modalReview.sessionStarted | niceDate }}')
+      li(ng-repeat='event in modalReview.reviewSession.timelineEvents | orderBy: step', ng-class="{'timeline-inverted': $odd}", data-datetime='{{ event.happened}}')
+        .timeline-badge.primary(ng-hide='event.audio.context == "question"')
+          em.fa.fa-microphone
+        .timeline-badge.green(ng-show='event.audio.context == "question"')
+          em.fa.fa-comment
+        .timeline-panel
+          .popover(ng-class="$even  ? 'left' : 'right'")
+            .arrow
+            .popover-content
+              .table-grid.table-grid-align-middle.mb
+                .col.col-xs
+                  img.media-object.img-circle.thumb48(ng-src="{{ event.audio.profileImage }}", alt="Image")
+                .col(ng-hide='event.audio.context == "question"')
+                  p.m0
+                    a(href="#").text-muted: strong {{ event.audio.submitted_by.username }} 
+                    | answered 
+                .col(ng-show='event.audio.context == "question"')
+                  p.m0
+                    a(href="#").text-muted: strong {{ event.audio.submitted_by.username }}
+                    | asked
+              p(ng-show='event.audio.context == "question"'): em "{{ event.audio.question_text }}"
+
+              .text-center(ng-show='event.audio.audioUrl')
+                audio-player(context='question', url='{{ event.audio.audioUrl }}')
+                p.small.text-muted: em on {{ event.audio._created | niceDate }}
+              .text-center(ng-hide='event.audio.audioUrl')
+                i.fa.fa-4x.fa-play(ng-click='modalReview.speak(event.audio.question_text)')
+            
+              // COMMENTS
+              p.text-muted.mv(ng-click='showComments = !showComments') {{ event.audio.comments.length }} Comments
+              .media.bb.p(ng-show='showComments', ng-repeat='comment in event.audio.comments')
+                // TODO: add hidden comment form here
+                small.pull-right.text-muted {{ comment._created | niceDate }} 
+                .pull-left
+                  img.media-object.img-circle.thumb32(ng-src='data:image/png;base64,{{comment.submitted_by.image}}', alt='Image', ng-show='comment.submitted_by.image')
+                  img.media-object.img-circle.thumb32(src='/app/img/default-profile.jpg', alt='Image', ng-hide='comment.submitted_by.image')
+                .media-body
+                  span.media-heading
+                    p.m0: a(href="#"): strong {{ comment.submitted_by.username }}
+                    p.m0.text-muted {{ comment.text }}
+
+      // timeline end
+      li.timeline-end
+        a(href="#").timeline-badge
+
+  
   .text-center
     button.btn.btn-circle.btn-danger.btn-large(ng-click='$close()')
       i.fa.fa-times

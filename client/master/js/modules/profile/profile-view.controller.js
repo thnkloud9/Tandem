@@ -39,6 +39,7 @@
 
             function activate() {
 
+              // setup for xeditable fields
               editableOptions.theme = 'bs3';
               editableThemes.bs3.inputClass = 'input-sm';
               editableThemes.bs3.buttonsClass = 'btn-xs';

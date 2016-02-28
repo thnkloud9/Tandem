@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    angular.module('app.utils').filter('niceDate', [
+    angular.module('app.utils').filter('shortDate', [
         '$filter',
         function ($filter) {
             return function (input) {
@@ -11,7 +11,7 @@
                 } else {
                     date = input;
                 }
-                return $filter('date')(date, 'MM-dd-yyyy HH:mm');
+                return $filter('date')(date, 'MM-dd-yyyy');
             };
         }
     ]);

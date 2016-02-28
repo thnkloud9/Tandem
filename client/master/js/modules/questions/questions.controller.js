@@ -11,6 +11,9 @@
       'Question',
       'speechSynth',
       'session',
+      'modalFactory',
+      'editableOptions',
+      'editableThemes',
       'Notify',
       function QuestionsController(
         $rootScope,
@@ -22,8 +25,22 @@
         Question,
         speechSynth,
         session,
+        modalFactory,
+        editableOptions,
+        editableThemes,
         Notify) {
           var vm = this;
+
+          // setup for xeditable fields
+          editableOptions.theme = 'bs3';
+          editableThemes.bs3.inputClass = 'input-lg';
+          editableThemes.bs3.buttonsClass = 'btn-xs';
+          editableThemes.bs3.submitTpl = '<button type="submit" class="btn btn-success">' +
+            '<span class="fa fa-check"></span></button>';
+          editableThemes.bs3.cancelTpl = '<button type="button" class="btn btn-default" ' +
+            'ng-click="$form.$cancel()">'+
+            '<span class="fa fa-times text-muted"></span>'+
+            '</button>';
 
           activate();
 
@@ -83,6 +100,7 @@
               }
             };
 
+            // used to sequentially select card background
             vm.changeCardBack = function (index) {
               vm.cardBack = (vm.cardBack > 5) ? 1 : vm.cardBack + 1;
               return vm.cardBack;
@@ -146,7 +164,7 @@
                 vm.clearNewQuestion();
                 Notify.alert('Question added.', {status: 'success'});
               }, function (response) {
-                Notify.alert('There was a problem adding your tag.', {status: 'error'});
+                Notify.alert('There was a problem adding your tag.', {status: 'danger'});
               });
             };
 
@@ -180,7 +198,25 @@
             vm.speak = function (question) {
               var text = question.text.translations[session.learning];
               speechSynth.speak(text, session.learning);
-            }
+            };
+
+            vm.updateQuestion = function (question) {
+              //  ask for confirmation first
+              var title = 'Do you really want to update this question?';
+              var modal = modalFactory.confirmLight(title, '');
+              modal.result.then(function () {
+              
+                var newText = question.text;
+                Question.one(question._id).patch({ text: newText }).then(function (question) {
+                  Notify.alert('Question updated.', {status: 'success'});
+                }, function (response) {
+                  Notify.alert('There was a problem updating the question.', {status: 'danger'});
+                });
+              }, function () {
+                Notify.alert('I think you just clicked cancel, right?', {status: 'danger'});
+              });
+            };
+ 
           } // end activate
         }
     ]);

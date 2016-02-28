@@ -19,7 +19,9 @@
           $scope.$watch(angular.bind(session, function () {
             return session.profileImage;
           }), function (newImage, oldImage) {
-            $rootScope.user.picture = 'data:image/png;base64,' + newImage;
+            if (newImage & newImage !== null) {
+              $rootScope.user.picture = 'data:image/png;base64,' + newImage;
+            }
           });
 
           $rootScope.logout = function () {

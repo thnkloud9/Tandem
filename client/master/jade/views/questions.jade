@@ -9,7 +9,10 @@
       figure
         img(src='app/img/cardbacks/{{ back }}.png')
         div.cover
-          h3 {{ ::question.text.translations[questions.session.learning] }}
+          // make this field editable for admins
+          h3(ng-show='session.roles === "admin"', editable-textarea='question.text.translations[questions.session.learning]' e-rows='10', e-cols='30', onaftersave='questions.updateQuestion(question)') {{ ::question.text.translations[questions.session.learning] }}
+          // and not editable for non admins
+          h3(ng-hide='session.roles === "admin"') {{ ::question.text.translations[questions.session.learning] }}
           p(ng-show='app.translation.show'): small {{ ::question.text.translations[questions.session.speaks] }}
         figcaption
           h3 Add Audio

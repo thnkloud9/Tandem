@@ -130,7 +130,7 @@
                   vm.clearNewSet();
                   Notify.alert('Practice set added.', {status: 'success'});
                 }, function (response) {
-                  Notify.alert('There was a problem adding your set.', {status: 'error'});
+                  Notify.alert('There was a problem adding your set.', {status: 'danger'});
                 });
               };
 
@@ -150,7 +150,7 @@
                   return PracticeSet.one(setId).remove(setId);
                 }, $q.reject)
                 .then(function () {
-                  Notify.alert("Practice set deleted. However, any questions and audio assocaited with it remain on the server.");
+                  Notify.alert("Practice set deleted. However, any questions and audio assocaited with it remain on the server.", {status: 'success'});
                   _.remove(vm.sets, {_id: setId});
                 });
               };

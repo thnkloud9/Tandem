@@ -17,6 +17,7 @@
     'PracticeSession',
     'session',
     'APP_CONFIG',
+    'speechSynth',
     'practiceSet',
     function (
       $scope,
@@ -26,11 +27,13 @@
       PracticeSession,
       session,
       APP_CONFIG,
+      speechSynth,
       practiceSet
     ) {
       var vm = this;
       vm.practiceSet = practiceSet;
       vm.practiceSessions = [];
+      vm.reviewSession = null;
 
       var params = {
         where: {
@@ -46,7 +49,6 @@
       };
       PracticeSession.getList(params).then(function (practiceSessions) {
         vm.practiceSessions = practiceSessions;
-console.log(practiceSessions);
       });
 
       activate();
@@ -55,10 +57,21 @@ console.log(practiceSessions);
 
       function activate() {
 
-        vm.selectSession = function () {
+        vm.loadSession = function (session) {
+          // load audio and all embedded objects.  by default
+          // only audio _ids are stored in the session audio array
+          session.initTimeline().then(function (s) {
+            vm.reviewSession = s;
+            // use the date of the first answer as the start date
+            vm.sessionStarted = s.timelineEvents[1].audio._created;
+          });
         };
 
         vm.saveReview = function () {
+        };
+
+        vm.speak = function (text) {
+          speechSynth.speak(text, session.learning);
         };
 
       }

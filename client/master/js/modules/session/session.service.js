@@ -46,7 +46,7 @@
                 self.learning = $window.sessionStorage.getItem('learning');
                 self.speaksText = $window.sessionStorage.getItem('speaksText');
                 self.learningText = $window.sessionStorage.getItem('learningText');
-                self.profileImage = $window.sessionStorage.getItem('profile_image');
+                self.profileImage = $window.sessionStorage.getItem('profileImage');
                 self.picture = $window.sessionStorage.getItem('picture');
                 self.name = $window.sessionStorage.getItem('name');
                 if (!self.user && self.token) {
@@ -57,9 +57,17 @@
 
                         self.setLocaleLanguages(user);
                         // now set values we got from User model
-                        $window.sessionStorage.setItem('profile_image', user.image);
-                        $window.sessionStorage.setItem('picture', 'data:image/png;base64,' + user.image);
                         $window.sessionStorage.setItem('name', user.first_name);
+                        $window.sessionStorage.setItem('profileImage', user.image);
+                        if (user.image === null) {
+                          $window.sessionStorage.setItem('picture', '/app/img/default-profile.jpg');
+                          // this is necessary, I THINK, because it doesn't get anywhere else if ther eis no image
+                          // and I got sick of trying to debug so I set it here
+                          user.picture = '/app/img/default-profile.jpg';
+                        } else {
+                          $window.sessionStorage.setItem('picture', 'data:image/png;base64,' + user.image);
+                          user.picture = 'data:image/png;base64,' + user.image;
+                        }
                         self.user = user;
 
                         // now save ALL values to this object 
@@ -153,7 +161,9 @@
 
                 User.initUser(self.userId).then(function (user) {
                     // now set values we got from User model
-                    $window.sessionStorage.setItem('profile_image', user.image);
+                    if (user.image) {
+                      $window.sessionStorage.setItem('profileImage', user.image);
+                    }
                     $window.sessionStorage.setItem('name', user.first_name);
                     self.user = user;
                     // now save ALL values to this object 
@@ -176,7 +186,9 @@
               // call User.initUser, then self.init()
               User.initUser(self.userId).then(function (user) {
                   // now set values we got from User model
-                  $window.sessionStorage.setItem('profile_image', user.image);
+                  if (user.image) {
+                    $window.sessionStorage.setItem('profileImage', user.image);
+                  }
                   $window.sessionStorage.setItem('roles', user.roles[0]);
                   $window.sessionStorage.setItem('speaks', user.speaks[0]);
                   $window.sessionStorage.setItem('learning', user.learning[0]);
@@ -201,8 +213,8 @@
 
             // Used when a logged in user updates their image
             self.updateImage = function (image) {
-                $window.sessionStorage.setItem('profile_image', image);
-                self.profileImage = $window.sessionStorage.getItem('profile_image');
+                $window.sessionStorage.setItem('profileImage', image);
+                self.profileImage = $window.sessionStorage.getItem('profileImage');
             };
 
             /**
@@ -233,7 +245,9 @@
                     $window.sessionStorage.removeItem('learning');
                     $window.sessionStorage.removeItem('learningText');
                     $window.sessionStorage.removeItem('speaksText');
-                    $window.sessionStorage.removeItem('profile_image');
+                    $window.sessionStorage.removeItem('profileImage');
+                    $window.sessionStorage.removeItem('picture');
+                    $window.sessionStorage.removeItem('name');
 
                     self.token = null; 
                     self.isAuthenticated = false; 

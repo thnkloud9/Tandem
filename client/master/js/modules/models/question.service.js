@@ -159,6 +159,7 @@
                     }
                   }
 
+                  // using num here to get a random results from mongo
                   params = {
                     "where": filter,
                     "embedded": embed,

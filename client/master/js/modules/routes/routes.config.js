@@ -53,7 +53,7 @@
               url: '/questions',
               title: 'Questions',
               templateUrl: helper.basepath('questions.html'),
-              resolve: helper.resolveFor('ngDialog', 'infinite-scroll')
+              resolve: helper.resolveFor('ngDialog', 'infinite-scroll', 'xeditable')
           })
           .state('app.tags', {
               url: '/tags',

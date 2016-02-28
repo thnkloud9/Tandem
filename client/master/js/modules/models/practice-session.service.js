@@ -11,7 +11,8 @@
             'APP_CONFIG',
             'Question',
             'Recording',
-            function ($http, $q, $window, Restangular, APP_CONFIG, Question, Recording) {
+            'Comment',
+            function ($http, $q, $window, Restangular, APP_CONFIG, Question, Recording, Comment) {
               var PracticeSession = Restangular.all('practice_sessions');
 
               // extend collection 
@@ -22,6 +23,11 @@
               // extend model
               Restangular.extendModel('practice_sessions', function(model) {
 
+                /**
+                 * Queues the current question and set up all required
+                 * subsequent questions based on the already saved 
+                 * answers
+                 */
                 model.initQuestions = function () {
                   var deferedGet = $q.defer();
                   var currentIndex = 0;
@@ -51,6 +57,9 @@
                   return deferedGet.promise;
                 };
 
+                /**
+                 * Queues the the nexxt required question to be answered
+                 */
                 model.loadNextQuestion = function () {
                   var deferedGet = $q.defer();
                   var currentQuestion = null;
@@ -72,6 +81,127 @@
                     });
                   });
                 
+                  return deferedGet.promise;
+                };
+   
+                /**
+                 * Hydrate the audio.  Used when the session is loaded
+                 * for review only.  Calling this property sessionAudio
+                 * so it is not confused with session.audio, which is
+                 * simple _id values
+                 */
+                model.initSessionAudio = function () {
+                  var deferedGet = $q.defer();
+                  var sessionAudios = [];
+                  var params = {
+                    embedded: {
+                      question: 1,
+                      submitted_by: 1,
+                      parent_audio: 1,
+                      questions: 1,
+                      affected_user: 1
+                    },
+                    sort: "_created"
+                  };
+                  
+                  model.audio.forEach(function (audio) {
+                    Recording.one(audio).get(params).then(function (a) {
+                      // get comments for this audio
+                      var params = {
+                        where: { parent: a._id },
+                        embedded: {
+                          submitted_by: 1
+                        }
+                      }
+                      Comment.getList(params).then(function (comments) { 
+                        // add comments
+                        a.comments = comments;
+                        // setup the audio url for playback in player
+                        // I would have used local url if createBlob
+                        // was available, but it is not included when using
+                        // restangular one() for some reason
+                        a.audioUrl = APP_CONFIG.API.rootURI + '/assets/audio/' + a._id;  
+                        // setup profile image
+                        if (a.submitted_by.image) {
+                          a.profileImage = APP_CONFIG.API.rootURI + '/assets/profile_images/' + a.submitted_by._id;
+                        } else {
+                          a.profileImage = '/app/img/default-profile.jpg';
+                        }
+                        // makde _created a real date
+                        a._created = new Date(a._created)
+                        sessionAudios.push(a);
+                        if (sessionAudios.length === model.audio.length) {
+                          model.sessionAudios = sessionAudios;
+                          deferedGet.resolve(model);
+                        }
+                      }); // end Comment.getList
+                    }); // end Recording one
+                  }); // end audio forEach
+                  return deferedGet.promise;
+                };
+
+                model.initTimeline = function () {
+                  var deferedGet = $q.defer();
+                  var timelineEvents = [];
+               
+                  // TODO: memorize session will not have any audio, so first check
+                  // type of session this is
+
+                  // first lets hydrate the audios (they are just ids otherwise)
+                  model.initSessionAudio().then(function (m) {
+                    var answers = _.where(m.sessionAudios, {context: 'answer'});
+                    var questions = _.where(m.sessionAudios, {context: 'question'});
+                    // here we have to order by the answers, and fake the
+                    // question time, since the question audio could have
+                    // been recorded anytime before, prehaps weeks/months/years
+                    // before.
+                    var sortedAnswers = _.sortBy(answers, function(a) { 
+                      return Math.min(a._created);
+                    });
+
+                    // these should already be in order
+                    var step = 0;
+                    sortedAnswers.forEach(function (answer) {
+                      step++;
+                      // so now find the question that does with this answer
+                      var question = _.findWhere(questions, { question: { _id: answer.question._id } });
+                      if (question) {
+                        // this was user generated audio
+                        timelineEvents.push({
+                          audio: question,
+                          happened: answer._created,
+                          step: step
+                        });
+                      } else {
+                        // this was text-to-speech audio, so we have to buidl a
+                        // fake audio object
+                        timelineEvents.push({
+                          audio: {
+                            context: 'question',
+                            question_text: answer.question_text,
+                            submitted_by: {
+                              username: 'robots!!!'
+                            },
+                            _created: answer._created,
+                            profileImage: '/app/img/default-profile.jpg',
+                          },
+                          happened: answer._created,
+                          step: step
+                        });
+                      }
+
+                      step++;
+                      timelineEvents.push({
+                        audio: answer,
+                        happened: answer._created,
+                        step: step
+                      });
+                    });
+
+                    model.timelineEvents = timelineEvents;
+
+                    deferedGet.resolve(model);
+                  });
                   return deferedGet.promise;
                 };
 
