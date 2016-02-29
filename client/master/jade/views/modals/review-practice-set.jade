@@ -40,6 +40,8 @@
               .text-center(ng-show='event.audio.audioUrl')
                 audio-player(context='question', url='{{ event.audio.audioUrl }}')
                 p.small.text-muted: em on {{ event.audio._created | niceDate }}
+                // RATINGS
+                ratings(element='event.audio', context='question')
               .text-center(ng-hide='event.audio.audioUrl')
                 i.fa.fa-4x.fa-play(ng-click='modalReview.speak(event.audio.question_text)')
             

@@ -4,8 +4,6 @@
     span(ng-show='modalPlay.practiceSession.lastQuestion') Last Question!
 
   .text-center(ng-hide='modalPlay.showComplete')
-    p After a question is played click the microphone to record and answer 
-
     // START AUDIO PLAYER
     .more-spacey
       .player.inline-block.padded(ng-show='modalPlay.showPlayer')
@@ -15,7 +13,7 @@
     // END AUDIO PLAYER
 
   // SPEECH RECOGNITION
-  .text-center.spacey
+  .text-center.spacey(ng-show='app.debug')
     a.fa.fa-toggle-on.nounderline(ng-show='modalPlay.speechDetection', ng-click='modalPlay.toggleSpeechDetection()')
     a.fa.fa-toggle-off.nounderline(ng-hide='modalPlay.speechDetection', ng-click='modalPlay.toggleSpeechDetection()')
     span.date-sm Speech Detection
@@ -24,10 +22,19 @@
 
   .text-center(ng-show='modalPlay.showComplete')
     h3 Nice work!
-    p Now you can submit this practice session for grading and see how well you did.
-    a.padded.fa.fa-3x.fa-thumbs-down.nounderline(ng-click='$close()')
-    a.padded.fa.fa-3x.fa-thumbs-up.nounderline(ng-click='modalPlay.savePracticeSession(); $close();')
+    p Now you can submit this session for reivew and feedback.
+    a.fatty.fa.fa-4x.fa-thumbs-down.nounderline(ng-click='$close()')
+    a.fatty.fa.fa-4x.fa-thumbs-up.nounderline(ng-click='modalPlay.savePracticeSession(); $close();')
 
 .modal-footer
-  button.btn.btn-default(ng-click='$close()') Cancel
+  // HELP
+  div.pull-left.text-left
+    i.fa.fa-question-circle(ng-click='showHelp = !showHelp'): small &nbsp;What do I do now?
+    .text-left(ng-show='showHelp', ng-click='showHelp = !showHelp')
+      p.text-muted.small After a question is played click the microphone icon to start recording an answer.
+      p.text-muted.small When you are done recording click the pause icon to stop recording.
+      p.text-muted.small You will have the chance to review your answer and redo as many times as you like if necessary. 
+  div.pull-right
+    button.btn.btn-danger.btn-circle.btn-large(ng-click='$close()')
+      em.fa.fa-times
 

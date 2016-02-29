@@ -33,6 +33,7 @@
             'app.translate',
             'app.settings',
             'app.admin',
+            'app.ratings',
             'app.dashboard',
             'app.notify',
             'app.charts',

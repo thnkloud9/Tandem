@@ -8,8 +8,11 @@
 
     angular.module('app.admin').controller('AudiosAdminController', [
       'Audio',
+      'APP_CONFIG',
       function AudiosAdminController(
-        Audio) {
+        Audio,
+        APP_CONFIG
+      ) {
           var self = this;
 
           activate();
@@ -21,11 +24,28 @@
             // define data, because datatables are strict
             var columnDefs = [
               {headerName: 'Id', field: '_id', width: 15},
-              {headerName: 'context', field: 'context', width: 25},
-              {headerName: 'languageCode', field: 'language_code', width: 25},
-              {headerName: 'QuestionText', field: 'question_text', width: 25},
-              {headerName: 'Audio', field: 'audio', width: 25},
-              {headerName: 'SubmittedBy', field: 'submitted_by', width: 25},
+              {headerName: 'context', field: 'context', width: 15},
+              {headerName: 'languageCode', field: 'language_code', width: 10},
+              {headerName: 'QuestionText', field: 'question_text', width: 50},
+              {
+                headerName: 'Audio',
+                field: 'audio',
+                width: 15,
+                valueGetter: function (params) {
+                  var url = APP_CONFIG.API.rootURI + '/assets/audio/' + params.data._id;
+                  // this was simpler than trying to embed the audio-player here
+                  // perhaps something like Wavesurf would be easier?
+                  return '<a href="' + url + '" target="_blank">click here</a><br>';
+                }
+              },
+              {
+                headerName: 'SubmittedBy',
+                field: 'submitted_by',
+                width: 25,
+                valueGetter: function (params) {
+                  return params.data.submitted_by.username;
+                }
+              },
               {headerName: 'Created', field: '_created', width: 25},
               {headerName: 'Updated', field: '_updated', width: 25}
             ];
@@ -34,7 +54,9 @@
             self.gridOptions = {
                 columnDefs: columnDefs,
                 rowData: null,
+                enableSorting: true,
                 enableFilter: true,
+                enableColResize: true,
                 ready: function(api){
                   api.sizeColumnsToFit();
                 }
@@ -46,7 +68,10 @@
             self.audios = [];
             var params = {
               max_results: self.maxResults,
-              page: self.page
+              page: self.page,
+              embedded: {
+                submitted_by: 1
+              }
             };
             Audio.getList(params).then(function (audios) {
               var fields = _.pluck(columnDefs, 'field');
