@@ -49,11 +49,14 @@
           function activate() {
             vm.page = 1;
             vm.maxResults = 20;
-            vm.searchParams = null;
+            vm.searchParams = { where: { category: 'phrase' } };
             vm.session = session;
             vm.cardBack = 1;
 
             Question.getList({
+              where: {
+                category: 'phrase'
+              },
               embedded: {
                 tags: 1,
                 submitted_by: 1
@@ -114,7 +117,7 @@
                 }
               };
 
-              Question.searchByText(vm.searchText, {}, params).then(function (results) {
+              Question.searchByText(vm.searchText, {category: 'phrase'}, params).then(function (results) {
                 vm.page = 1;
                 vm.questions = results.questions;
                 vm.searchParams = results.params;
