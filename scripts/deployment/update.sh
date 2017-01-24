@@ -9,6 +9,7 @@ cd $BASEDIR/../../server
 
 # TODO: find a better solution than this
 # update config for client
+cd $BASEDIR
 sed -i 's/tandem\.dev/tandem\.marklewis\.me/g' $BASEDIR/../../client/master/js/modules/core/core.constants.js
 
 cd $BASEDIR/../../client/master
