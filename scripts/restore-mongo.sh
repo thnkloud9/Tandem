@@ -7,7 +7,7 @@ read -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     mongo tandem --eval "db.dropDatabase()";
-    mongorestore --db tandem $SCRIPTATH/../data/dump/tandem/;
+    mongorestore --db tandem $SCRIPTPATH/../data/dump/tandem/;
 else
     printf "\nExiting WITHOUT restoring data from the repository.\n";
 fi
