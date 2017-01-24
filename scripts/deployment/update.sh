@@ -2,17 +2,17 @@
 
 unset GIT_WORK_TREE
 
-BASEDIR=$(dirname $0)
+SCRIPT=$(readlink -f $0)
+SCRIPTPATH=`dirname $SCRIPT`
 
-cd $BASEDIR/../../server
+cd $SCRIPTPATH/../../server
 ./scripts/virtual-env-setup.sh
 
 # TODO: find a better solution than this
 # update config for client
-cd $BASEDIR
-sed -i 's/tandem\.dev/tandem\.marklewis\.me/g' $BASEDIR/../../client/master/js/modules/core/core.constants.js
+sed -i 's/tandem\.dev/tandem\.marklewis\.me/g' $SCRIPTPATH/../../client/master/js/modules/core/core.constants.js
 
-cd $BASEDIR/../../client/master
+cd $SCRIPTPATH/../../client/master
 npm install
 bower install
 gulp build
